@@ -1,0 +1,1154 @@
+   1               		.file	"ttris.cpp"
+   2               	__SP_H__ = 0x3e
+   3               	__SP_L__ = 0x3d
+   4               	__SREG__ = 0x3f
+   5               	__tmp_reg__ = 0
+   6               	__zero_reg__ = 1
+   7               		.stabs	"/home/granthaack/avr/ttris/",100,0,4,.Ltext0
+   8               		.stabs	"ttris.cpp",100,0,4,.Ltext0
+   9               		.text
+  10               	.Ltext0:
+  11               		.stabs	"gcc2_compiled.",60,0,0,0
+  12               		.stabs	"__uint24:t(0,1)=@s24;r(0,1);0;077777777;",128,0,0,0
+  13               		.stabs	"__int24:t(0,2)=@s24;r(0,2);040000000;037777777;",128,0,0,0
+  14               		.stabs	"__builtin_va_list:t(0,3)=*(0,4)=(0,4)",128,0,0,0
+  15               		.stabs	"complex long double:t(0,5)=R3;8;0;",128,0,0,0
+  16               		.stabs	"complex double:t(0,6)=R3;8;0;",128,0,0,0
+  17               		.stabs	"complex float:t(0,7)=R3;8;0;",128,0,0,0
+  18               		.stabs	"complex int:t(0,8)=s4real:(0,9)=r(0,9);-32768;32767;,0,16;imag:(0,9),16,16;;",128,0,0,0
+  19               		.stabs	"long long unsigned int:t(0,10)=@s64;r(0,10);0;01777777777777777777777;",128,0,0,0
+  20               		.stabs	"long unsigned int:t(0,11)=@s32;r(0,11);0;037777777777;",128,0,0,0
+  21               		.stabs	"unsigned int:t(0,12)=r(0,12);0;0177777;",128,0,0,0
+  22               		.stabs	"unsigned char:t(0,13)=@s8;r(0,13);0;255;",128,0,0,0
+  23               		.stabs	"long long int:t(0,14)=@s64;r(0,14);01000000000000000000000;0777777777777777777777;",128,0,
+  24               		.stabs	"long int:t(0,15)=@s32;r(0,15);020000000000;017777777777;",128,0,0,0
+  25               		.stabs	"int:t(0,9)",128,0,0,0
+  26               		.stabs	"signed char:t(0,16)=@s8;r(0,16);-128;127;",128,0,0,0
+  27               		.stabs	"char:t(0,17)=r(0,17);0;127;",128,0,0,0
+  28               		.stabs	"signed:t(0,9)",128,0,0,0
+  29               		.stabs	"unsigned long:t(0,11)",128,0,0,0
+  30               		.stabs	"long long unsigned:t(0,10)",128,0,0,0
+  31               		.stabs	"short int:t(0,18)=r(0,18);-32768;32767;",128,0,0,0
+  32               		.stabs	"short unsigned int:t(0,19)=r(0,19);0;0177777;",128,0,0,0
+  33               		.stabs	"unsigned short:t(0,19)",128,0,0,0
+  34               		.stabs	"float:t(0,20)=r(0,9);4;0;",128,0,0,0
+  35               		.stabs	"double:t(0,21)=r(0,9);4;0;",128,0,0,0
+  36               		.stabs	"long double:t(0,22)=r(0,9);4;0;",128,0,0,0
+  37               		.stabs	"short _Fract:t(0,23)=r(0,9);1;0;",128,0,0,0
+  38               		.stabs	"long _Fract:t(0,24)=r(0,9);4;0;",128,0,0,0
+  39               		.stabs	"long long _Fract:t(0,25)=r(0,9);8;0;",128,0,0,0
+  40               		.stabs	"unsigned short _Fract:t(0,26)=r(0,9);1;0;",128,0,0,0
+  41               		.stabs	"unsigned _Fract:t(0,27)=r(0,9);2;0;",128,0,0,0
+  42               		.stabs	"unsigned long _Fract:t(0,28)=r(0,9);4;0;",128,0,0,0
+  43               		.stabs	"unsigned long long _Fract:t(0,29)=r(0,9);8;0;",128,0,0,0
+  44               		.stabs	"_Sat short _Fract:t(0,30)=r(0,9);1;0;",128,0,0,0
+  45               		.stabs	"_Sat _Fract:t(0,31)=r(0,9);2;0;",128,0,0,0
+  46               		.stabs	"_Sat long _Fract:t(0,32)=r(0,9);4;0;",128,0,0,0
+  47               		.stabs	"_Sat long long _Fract:t(0,33)=r(0,9);8;0;",128,0,0,0
+  48               		.stabs	"_Sat unsigned short _Fract:t(0,34)=r(0,9);1;0;",128,0,0,0
+  49               		.stabs	"_Sat unsigned _Fract:t(0,35)=r(0,9);2;0;",128,0,0,0
+  50               		.stabs	"_Sat unsigned long _Fract:t(0,36)=r(0,9);4;0;",128,0,0,0
+  51               		.stabs	"_Sat unsigned long long _Fract:t(0,37)=r(0,9);8;0;",128,0,0,0
+  52               		.stabs	"short _Accum:t(0,38)=r(0,9);2;0;",128,0,0,0
+  53               		.stabs	"long _Accum:t(0,39)=r(0,9);8;0;",128,0,0,0
+  54               		.stabs	"long long _Accum:t(0,40)=r(0,9);8;0;",128,0,0,0
+  55               		.stabs	"unsigned short _Accum:t(0,41)=r(0,9);2;0;",128,0,0,0
+  56               		.stabs	"unsigned _Accum:t(0,42)=r(0,9);4;0;",128,0,0,0
+  57               		.stabs	"unsigned long _Accum:t(0,43)=r(0,9);8;0;",128,0,0,0
+  58               		.stabs	"unsigned long long _Accum:t(0,44)=r(0,9);8;0;",128,0,0,0
+  59               		.stabs	"_Sat short _Accum:t(0,45)=r(0,9);2;0;",128,0,0,0
+  60               		.stabs	"_Sat _Accum:t(0,46)=r(0,9);4;0;",128,0,0,0
+  61               		.stabs	"_Sat long _Accum:t(0,47)=r(0,9);8;0;",128,0,0,0
+  62               		.stabs	"_Sat long long _Accum:t(0,48)=r(0,9);8;0;",128,0,0,0
+  63               		.stabs	"_Sat unsigned short _Accum:t(0,49)=r(0,9);2;0;",128,0,0,0
+  64               		.stabs	"_Sat unsigned _Accum:t(0,50)=r(0,9);4;0;",128,0,0,0
+  65               		.stabs	"_Sat unsigned long _Accum:t(0,51)=r(0,9);8;0;",128,0,0,0
+  66               		.stabs	"_Sat unsigned long long _Accum:t(0,52)=r(0,9);8;0;",128,0,0,0
+  67               		.stabs	"void:t(0,4)",128,0,0,0
+  68               		.stabs	"wchar_t:t(0,53)=r(0,53);-32768;32767;",128,0,0,0
+  69               		.stabs	"bool:t(0,54)=@s8;-16;",128,0,0,0
+  70               		.stabs	"__vtbl_ptr_type:t(0,55)=*(0,56)=f(0,9)",128,0,0,0
+  71               		.stabs	"decltype(nullptr):t(0,57)=(0,57)",128,0,0,0
+  72               		.stabs	"int8_t:t(0,58)=(0,16)",128,0,121,0
+  73               		.stabs	"uint8_t:t(0,59)=(0,13)",128,0,122,0
+  74               		.stabs	"int16_t:t(0,60)=(0,9)",128,0,123,0
+  75               		.stabs	"uint16_t:t(0,61)=(0,12)",128,0,124,0
+  76               		.stabs	"int32_t:t(0,62)=(0,15)",128,0,125,0
+  77               		.stabs	"uint32_t:t(0,63)=(0,11)",128,0,126,0
+  78               		.stabs	"int64_t:t(0,64)=(0,14)",128,0,128,0
+  79               		.stabs	"uint64_t:t(0,65)=(0,10)",128,0,129,0
+  80               		.stabs	"intptr_t:t(0,66)=(0,60)",128,0,142,0
+  81               		.stabs	"uintptr_t:t(0,67)=(0,61)",128,0,147,0
+  82               		.stabs	"int_least8_t:t(0,68)=(0,58)",128,0,159,0
+  83               		.stabs	"uint_least8_t:t(0,69)=(0,59)",128,0,164,0
+  84               		.stabs	"int_least16_t:t(0,70)=(0,60)",128,0,169,0
+  85               		.stabs	"uint_least16_t:t(0,71)=(0,61)",128,0,174,0
+  86               		.stabs	"int_least32_t:t(0,72)=(0,62)",128,0,179,0
+  87               		.stabs	"uint_least32_t:t(0,73)=(0,63)",128,0,184,0
+  88               		.stabs	"int_least64_t:t(0,74)=(0,64)",128,0,192,0
+  89               		.stabs	"uint_least64_t:t(0,75)=(0,65)",128,0,199,0
+  90               		.stabs	"int_fast8_t:t(0,76)=(0,58)",128,0,213,0
+  91               		.stabs	"uint_fast8_t:t(0,77)=(0,59)",128,0,218,0
+  92               		.stabs	"int_fast16_t:t(0,78)=(0,60)",128,0,223,0
+  93               		.stabs	"uint_fast16_t:t(0,79)=(0,61)",128,0,228,0
+  94               		.stabs	"int_fast32_t:t(0,80)=(0,62)",128,0,233,0
+  95               		.stabs	"uint_fast32_t:t(0,81)=(0,63)",128,0,238,0
+  96               		.stabs	"int_fast64_t:t(0,82)=(0,64)",128,0,246,0
+  97               		.stabs	"uint_fast64_t:t(0,83)=(0,65)",128,0,253,0
+  98               		.stabs	"intmax_t:t(0,84)=(0,64)",128,0,273,0
+  99               		.stabs	"uintmax_t:t(0,85)=(0,65)",128,0,278,0
+ 100               		.stabs	"int_farptr_t:t(0,86)=(0,62)",128,0,77,0
+ 101               		.stabs	"uint_farptr_t:t(0,87)=(0,63)",128,0,81,0
+ 102               		.stabs	"._0:Tt(0,88)=s3low:(0,13),0,8;high:(0,13),8,8;extended:(0,13),16,8;;",128,0,240,0
+ 103               		.stabs	"__fuse_t:t(0,88)",128,0,244,0
+ 104               		.stabs	"byte:t(0,89)=(0,13)",128,0,7,0
+ 105               		.stabs	"_Z15spi_init_masterv:F(0,4)",36,0,37,_Z15spi_init_masterv
+ 106               	.global	_Z15spi_init_masterv
+ 107               		.type	_Z15spi_init_masterv, @function
+ 108               	_Z15spi_init_masterv:
+ 109               		.stabd	46,0,0
+   1:ttris.cpp     **** #define F_CPU  16000000UL
+   2:ttris.cpp     **** 
+   3:ttris.cpp     **** #include <avr/io.h>
+   4:ttris.cpp     **** #include <util/delay.h>
+   5:ttris.cpp     **** #include <avr/interrupt.h>
+   6:ttris.cpp     **** 
+   7:ttris.cpp     **** typedef unsigned char byte;
+   8:ttris.cpp     **** 
+   9:ttris.cpp     **** #define HIGH 1
+  10:ttris.cpp     **** #define LOW 0
+  11:ttris.cpp     **** 
+  12:ttris.cpp     **** //Define the SPI Pins to communicate with the screen
+  13:ttris.cpp     **** //Define the data direction registers
+  14:ttris.cpp     **** #define DDR_SPI         DDRB
+  15:ttris.cpp     **** #define DD_SCK          DDB5
+  16:ttris.cpp     **** #define DD_MISO         DDB4
+  17:ttris.cpp     **** #define DD_MOSI         DDB3
+  18:ttris.cpp     **** #define DD_SS           DDB2
+  19:ttris.cpp     **** #define DD_DC           DDB1
+  20:ttris.cpp     **** #define DD_RST          DDB0
+  21:ttris.cpp     **** 
+  22:ttris.cpp     **** //Define the port registers
+  23:ttris.cpp     **** #define PORT_SPI        PORTB
+  24:ttris.cpp     **** #define PORT_SCK        (1 << PB5) //yellow
+  25:ttris.cpp     **** #define PORT_MISO       (1 << PB4) //green (unused)
+  26:ttris.cpp     **** #define PORT_MOSI       (1 << PB3) //white
+  27:ttris.cpp     **** #define PORT_SS         (1 << PB2) //orange
+  28:ttris.cpp     **** #define PORT_DC         (1 << PB1) //blue
+  29:ttris.cpp     **** #define PORT_RST        (1 << PB0) //green
+  30:ttris.cpp     **** 
+  31:ttris.cpp     **** //Init the video buffer
+  32:ttris.cpp     **** byte vbuff[6][84] = {
+  33:ttris.cpp     **** 0xff, 0xff, 0x03, 0x07, 0xff, 0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0x00, 0x00, 0x00, 0xe3, 0xf3, 0x7
+  34:ttris.cpp     **** };
+  35:ttris.cpp     **** 
+  36:ttris.cpp     **** // Initialize SPI Master Device (with SPI interrupt)
+  37:ttris.cpp     **** void spi_init_master (void)
+  38:ttris.cpp     **** {
+ 110               		.stabn	68,0,38,.LM0-.LFBB1
+ 111               	.LM0:
+ 112               	.LFBB1:
+ 113               	/* prologue: function */
+ 114               	/* frame size = 0 */
+ 115               	/* stack size = 0 */
+ 116               	.L__stack_usage = 0
+  39:ttris.cpp     ****     // Set MOSI, SCK, SS, DC, and RST as Output
+  40:ttris.cpp     ****     DDR_SPI=(1<<DD_MOSI)|(1<<DD_SCK)|(1<<DD_SS)|(1<<DD_DC)|(1<<DD_RST);
+ 117               		.stabn	68,0,40,.LM1-.LFBB1
+ 118               	.LM1:
+ 119 0000 8FE2      		ldi r24,lo8(47)
+ 120 0002 84B9      		out 0x4,r24
+  41:ttris.cpp     **** 
+  42:ttris.cpp     ****     // Enable SPI, Set as Master
+  43:ttris.cpp     ****     // Prescaler: Fosc/16, Enable Interrupts
+  44:ttris.cpp     ****     //The MOSI, SCK pins are as per ATMega8
+  45:ttris.cpp     ****     SPCR=(1<<SPE)|(1<<MSTR)|(1<<SPR0);
+ 121               		.stabn	68,0,45,.LM2-.LFBB1
+ 122               	.LM2:
+ 123 0004 81E5      		ldi r24,lo8(81)
+ 124 0006 8CBD      		out 0x2c,r24
+ 125 0008 0895      		ret
+ 126               		.size	_Z15spi_init_masterv, .-_Z15spi_init_masterv
+ 127               	.Lscope1:
+ 128               		.stabs	"",36,0,0,.Lscope1-.LFBB1
+ 129               		.stabd	78,0,0
+ 130               		.stabs	"_Z9send_bytehb:F(0,4)",36,0,49,_Z9send_bytehb
+ 131               		.stabs	"data:P(0,89)",64,0,49,24
+ 132               		.stabs	"dc:P(0,54)",64,0,49,22
+ 133               	.global	_Z9send_bytehb
+ 134               		.type	_Z9send_bytehb, @function
+ 135               	_Z9send_bytehb:
+ 136               		.stabd	46,0,0
+  46:ttris.cpp     **** }
+  47:ttris.cpp     **** 
+  48:ttris.cpp     **** //Function to send and receive data for both master and slave
+  49:ttris.cpp     **** void send_byte(byte data, bool dc)
+  50:ttris.cpp     **** {
+ 137               		.stabn	68,0,50,.LM3-.LFBB2
+ 138               	.LM3:
+ 139               	.LFBB2:
+ 140               	/* prologue: function */
+ 141               	/* frame size = 0 */
+ 142               	/* stack size = 0 */
+ 143               	.L__stack_usage = 0
+  51:ttris.cpp     ****     // Load data into the buffer
+  52:ttris.cpp     ****     SPDR = data;
+ 144               		.stabn	68,0,52,.LM4-.LFBB2
+ 145               	.LM4:
+ 146 000a 8EBD      		out 0x2e,r24
+  53:ttris.cpp     **** 
+  54:ttris.cpp     ****     //If DC is high, pull the pin high
+  55:ttris.cpp     ****     if(dc)
+ 147               		.stabn	68,0,55,.LM5-.LFBB2
+ 148               	.LM5:
+ 149 000c 6111      		cpse r22,__zero_reg__
+  56:ttris.cpp     ****     {
+  57:ttris.cpp     ****       PORT_SPI |= (PORT_DC);
+ 150               		.stabn	68,0,57,.LM6-.LFBB2
+ 151               	.LM6:
+ 152 000e 299A      		sbi 0x5,1
+ 153               	.L4:
+  58:ttris.cpp     ****     }
+  59:ttris.cpp     **** 
+  60:ttris.cpp     ****     //Wait until transmission complete
+  61:ttris.cpp     ****     while(!(SPSR & (1<<SPIF)));
+ 154               		.stabn	68,0,61,.LM7-.LFBB2
+ 155               	.LM7:
+ 156 0010 0DB4      		in __tmp_reg__,0x2d
+ 157 0012 07FE      		sbrs __tmp_reg__,7
+ 158 0014 00C0      		rjmp .L4
+  62:ttris.cpp     **** 
+  63:ttris.cpp     ****     //Pull DC low again if it was set high
+  64:ttris.cpp     ****     if(dc)
+ 159               		.stabn	68,0,64,.LM8-.LFBB2
+ 160               	.LM8:
+ 161 0016 6111      		cpse r22,__zero_reg__
+ 162               	.LBB7:
+ 163               	.LBB8:
+  65:ttris.cpp     ****     {
+  66:ttris.cpp     ****       PORT_SPI &= ~(PORT_DC);
+ 164               		.stabn	68,0,66,.LM9-.LFBB2
+ 165               	.LM9:
+ 166 0018 2998      		cbi 0x5,1
+ 167               	.L2:
+ 168 001a 0895      		ret
+ 169               	.LBE8:
+ 170               	.LBE7:
+ 171               		.size	_Z9send_bytehb, .-_Z9send_bytehb
+ 172               	.Lscope2:
+ 173               		.stabs	"",36,0,0,.Lscope2-.LFBB2
+ 174               		.stabd	78,0,0
+ 175               		.stabs	"_Z11init_screenv:F(0,4)",36,0,71,_Z11init_screenv
+ 176               	.global	_Z11init_screenv
+ 177               		.type	_Z11init_screenv, @function
+ 178               	_Z11init_screenv:
+ 179               		.stabd	46,0,0
+  67:ttris.cpp     ****     }
+  68:ttris.cpp     ****     return;
+  69:ttris.cpp     **** }
+  70:ttris.cpp     **** 
+  71:ttris.cpp     **** void init_screen(void)
+  72:ttris.cpp     **** {
+ 180               		.stabn	68,0,72,.LM10-.LFBB3
+ 181               	.LM10:
+ 182               	.LFBB3:
+ 183               	/* prologue: function */
+ 184               	/* frame size = 0 */
+ 185               	/* stack size = 0 */
+ 186               	.L__stack_usage = 0
+  73:ttris.cpp     ****   //Toggle the reset pin then set it high
+  74:ttris.cpp     ****   PORT_SPI |= (PORT_RST);
+ 187               		.stabn	68,0,74,.LM11-.LFBB3
+ 188               	.LM11:
+ 189 001c 289A      		sbi 0x5,0
+  75:ttris.cpp     ****   PORT_SPI &= ~(PORT_RST);
+ 190               		.stabn	68,0,75,.LM12-.LFBB3
+ 191               	.LM12:
+ 192 001e 2898      		cbi 0x5,0
+  76:ttris.cpp     ****   PORT_SPI |= (PORT_RST);
+ 193               		.stabn	68,0,76,.LM13-.LFBB3
+ 194               	.LM13:
+ 195 0020 289A      		sbi 0x5,0
+  77:ttris.cpp     **** 
+  78:ttris.cpp     ****   //send a byte to init function set
+  79:ttris.cpp     ****   send_byte(0b00100001, LOW);
+ 196               		.stabn	68,0,79,.LM14-.LFBB3
+ 197               	.LM14:
+ 198 0022 60E0      		ldi r22,0
+ 199 0024 81E2      		ldi r24,lo8(33)
+ 200 0026 0E94 0000 		call _Z9send_bytehb
+  80:ttris.cpp     ****   //send byte to init Vop
+  81:ttris.cpp     ****   send_byte(0b10010000, LOW);
+ 201               		.stabn	68,0,81,.LM15-.LFBB3
+ 202               	.LM15:
+ 203 002a 60E0      		ldi r22,0
+ 204 002c 80E9      		ldi r24,lo8(-112)
+ 205 002e 0E94 0000 		call _Z9send_bytehb
+  82:ttris.cpp     ****   //send byte to select normal instruction set
+  83:ttris.cpp     ****   send_byte(0b00100000, LOW);
+ 206               		.stabn	68,0,83,.LM16-.LFBB3
+ 207               	.LM16:
+ 208 0032 60E0      		ldi r22,0
+ 209 0034 80E2      		ldi r24,lo8(32)
+ 210 0036 0E94 0000 		call _Z9send_bytehb
+  84:ttris.cpp     ****   //send byte to set screen to normal mode
+  85:ttris.cpp     ****   send_byte(0b00001100, LOW);
+ 211               		.stabn	68,0,85,.LM17-.LFBB3
+ 212               	.LM17:
+ 213 003a 60E0      		ldi r22,0
+ 214 003c 8CE0      		ldi r24,lo8(12)
+ 215 003e 0E94 0000 		call _Z9send_bytehb
+  86:ttris.cpp     ****   //set x DDRAM address to 0
+  87:ttris.cpp     ****   send_byte(0b10000000, LOW);
+ 216               		.stabn	68,0,87,.LM18-.LFBB3
+ 217               	.LM18:
+ 218 0042 60E0      		ldi r22,0
+ 219 0044 80E8      		ldi r24,lo8(-128)
+ 220 0046 0E94 0000 		call _Z9send_bytehb
+  88:ttris.cpp     ****   //set y DDRAM address to 0
+  89:ttris.cpp     ****   send_byte(0b01000000, LOW);
+ 221               		.stabn	68,0,89,.LM19-.LFBB3
+ 222               	.LM19:
+ 223 004a 60E0      		ldi r22,0
+ 224 004c 80E4      		ldi r24,lo8(64)
+ 225 004e 0C94 0000 		jmp _Z9send_bytehb
+ 226               		.size	_Z11init_screenv, .-_Z11init_screenv
+ 227               	.Lscope3:
+ 228               		.stabs	"",36,0,0,.Lscope3-.LFBB3
+ 229               		.stabd	78,0,0
+ 230               		.stabs	"_Z10show_framev:F(0,4)",36,0,92,_Z10show_framev
+ 231               	.global	_Z10show_framev
+ 232               		.type	_Z10show_framev, @function
+ 233               	_Z10show_framev:
+ 234               		.stabd	46,0,0
+  90:ttris.cpp     **** }
+  91:ttris.cpp     **** 
+  92:ttris.cpp     **** void show_frame(){
+ 235               		.stabn	68,0,92,.LM20-.LFBB4
+ 236               	.LM20:
+ 237               	.LFBB4:
+ 238 0052 0F93      		push r16
+ 239 0054 1F93      		push r17
+ 240 0056 CF93      		push r28
+ 241 0058 DF93      		push r29
+ 242               	/* prologue: function */
+ 243               	/* frame size = 0 */
+ 244               	/* stack size = 4 */
+ 245               	.L__stack_usage = 4
+ 246 005a 00E0      		ldi r16,lo8(vbuff)
+ 247 005c 10E0      		ldi r17,hi8(vbuff)
+ 248               	.L16:
+ 249               		.stabn	68,0,92,.LM21-.LFBB4
+ 250               	.LM21:
+ 251 005e C0E0      		ldi r28,0
+ 252 0060 D0E0      		ldi r29,0
+ 253               	.L17:
+ 254 0062 F801      		movw r30,r16
+ 255 0064 EC0F      		add r30,r28
+ 256 0066 FD1F      		adc r31,r29
+ 257               	.LBB9:
+ 258               	.LBB10:
+  93:ttris.cpp     ****   for(int y = 0; y <= 5; y++)
+  94:ttris.cpp     ****   {
+  95:ttris.cpp     ****     for(int x = 0; x <= 83; x++)
+  96:ttris.cpp     ****     {
+  97:ttris.cpp     ****       send_byte(vbuff[y][x], 1);
+ 259               		.stabn	68,0,97,.LM22-.LFBB4
+ 260               	.LM22:
+ 261 0068 61E0      		ldi r22,lo8(1)
+ 262 006a 8081      		ld r24,Z
+ 263 006c 0E94 0000 		call _Z9send_bytehb
+  95:ttris.cpp     ****     {
+ 264               		.stabn	68,0,95,.LM23-.LFBB4
+ 265               	.LM23:
+ 266 0070 2196      		adiw r28,1
+ 267 0072 C435      		cpi r28,84
+ 268 0074 D105      		cpc r29,__zero_reg__
+ 269 0076 01F4      		brne .L17
+ 270 0078 0C5A      		subi r16,-84
+ 271 007a 1F4F      		sbci r17,-1
+ 272               	.LBE10:
+  93:ttris.cpp     ****   for(int y = 0; y <= 5; y++)
+ 273               		.stabn	68,0,93,.LM24-.LFBB4
+ 274               	.LM24:
+ 275 007c 80E0      		ldi r24,hi8(vbuff+504)
+ 276 007e 0030      		cpi r16,lo8(vbuff+504)
+ 277 0080 1807      		cpc r17,r24
+ 278 0082 01F4      		brne .L16
+ 279               	/* epilogue start */
+ 280               	.LBE9:
+  98:ttris.cpp     ****     }
+  99:ttris.cpp     ****   }
+ 100:ttris.cpp     **** }
+ 281               		.stabn	68,0,100,.LM25-.LFBB4
+ 282               	.LM25:
+ 283 0084 DF91      		pop r29
+ 284 0086 CF91      		pop r28
+ 285 0088 1F91      		pop r17
+ 286 008a 0F91      		pop r16
+ 287 008c 0895      		ret
+ 288               		.size	_Z10show_framev, .-_Z10show_framev
+ 289               		.stabs	"x:r(0,9)",64,0,95,28
+ 290               		.stabn	192,0,0,.LBB10-.LFBB4
+ 291               		.stabn	224,0,0,.LBE10-.LFBB4
+ 292               	.Lscope4:
+ 293               		.stabs	"",36,0,0,.Lscope4-.LFBB4
+ 294               		.stabd	78,0,0
+ 295               		.section	.text.startup,"ax",@progbits
+ 296               		.stabs	"main:F(0,9)",36,0,102,main
+ 297               	.global	main
+ 298               		.type	main, @function
+ 299               	main:
+ 300               		.stabd	46,0,0
+ 101:ttris.cpp     **** 
+ 102:ttris.cpp     **** int main(void)
+ 103:ttris.cpp     **** {
+ 301               		.stabn	68,0,103,.LM26-.LFBB5
+ 302               	.LM26:
+ 303               	.LFBB5:
+ 304               	/* prologue: function */
+ 305               	/* frame size = 0 */
+ 306               	/* stack size = 0 */
+ 307               	.L__stack_usage = 0
+ 308               	.LBB11:
+ 309               	.LBB12:
+ 310               		.stabs	"/usr/lib/avr/include/util/delay.h",132,0,0,.Ltext1
+ 311               	.Ltext1:
+   1:/usr/lib/avr/include/util/delay.h **** /* Copyright (c) 2002, Marek Michalkiewicz
+   2:/usr/lib/avr/include/util/delay.h ****    Copyright (c) 2004,2005,2007 Joerg Wunsch
+   3:/usr/lib/avr/include/util/delay.h ****    Copyright (c) 2007  Florin-Viorel Petrov
+   4:/usr/lib/avr/include/util/delay.h ****    All rights reserved.
+   5:/usr/lib/avr/include/util/delay.h **** 
+   6:/usr/lib/avr/include/util/delay.h ****    Redistribution and use in source and binary forms, with or without
+   7:/usr/lib/avr/include/util/delay.h ****    modification, are permitted provided that the following conditions are met:
+   8:/usr/lib/avr/include/util/delay.h **** 
+   9:/usr/lib/avr/include/util/delay.h ****    * Redistributions of source code must retain the above copyright
+  10:/usr/lib/avr/include/util/delay.h ****      notice, this list of conditions and the following disclaimer.
+  11:/usr/lib/avr/include/util/delay.h **** 
+  12:/usr/lib/avr/include/util/delay.h ****    * Redistributions in binary form must reproduce the above copyright
+  13:/usr/lib/avr/include/util/delay.h ****      notice, this list of conditions and the following disclaimer in
+  14:/usr/lib/avr/include/util/delay.h ****      the documentation and/or other materials provided with the
+  15:/usr/lib/avr/include/util/delay.h ****      distribution.
+  16:/usr/lib/avr/include/util/delay.h **** 
+  17:/usr/lib/avr/include/util/delay.h ****    * Neither the name of the copyright holders nor the names of
+  18:/usr/lib/avr/include/util/delay.h ****      contributors may be used to endorse or promote products derived
+  19:/usr/lib/avr/include/util/delay.h ****      from this software without specific prior written permission.
+  20:/usr/lib/avr/include/util/delay.h **** 
+  21:/usr/lib/avr/include/util/delay.h ****   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  22:/usr/lib/avr/include/util/delay.h ****   AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  23:/usr/lib/avr/include/util/delay.h ****   IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+  24:/usr/lib/avr/include/util/delay.h ****   ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+  25:/usr/lib/avr/include/util/delay.h ****   LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+  26:/usr/lib/avr/include/util/delay.h ****   CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+  27:/usr/lib/avr/include/util/delay.h ****   SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+  28:/usr/lib/avr/include/util/delay.h ****   INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+  29:/usr/lib/avr/include/util/delay.h ****   CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+  30:/usr/lib/avr/include/util/delay.h ****   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+  31:/usr/lib/avr/include/util/delay.h ****   POSSIBILITY OF SUCH DAMAGE. */
+  32:/usr/lib/avr/include/util/delay.h **** 
+  33:/usr/lib/avr/include/util/delay.h **** /* $Id$ */
+  34:/usr/lib/avr/include/util/delay.h **** 
+  35:/usr/lib/avr/include/util/delay.h **** #ifndef _UTIL_DELAY_H_
+  36:/usr/lib/avr/include/util/delay.h **** #define _UTIL_DELAY_H_ 1
+  37:/usr/lib/avr/include/util/delay.h **** 
+  38:/usr/lib/avr/include/util/delay.h **** #ifndef __HAS_DELAY_CYCLES
+  39:/usr/lib/avr/include/util/delay.h **** #define __HAS_DELAY_CYCLES 1
+  40:/usr/lib/avr/include/util/delay.h **** #endif
+  41:/usr/lib/avr/include/util/delay.h **** 
+  42:/usr/lib/avr/include/util/delay.h **** #include <inttypes.h>
+  43:/usr/lib/avr/include/util/delay.h **** #include <util/delay_basic.h>
+  44:/usr/lib/avr/include/util/delay.h **** #include <math.h>
+  45:/usr/lib/avr/include/util/delay.h **** 
+  46:/usr/lib/avr/include/util/delay.h **** /** \file */
+  47:/usr/lib/avr/include/util/delay.h **** /** \defgroup util_delay <util/delay.h>: Convenience functions for busy-wait delay loops
+  48:/usr/lib/avr/include/util/delay.h ****     \code
+  49:/usr/lib/avr/include/util/delay.h ****     #define F_CPU 1000000UL  // 1 MHz
+  50:/usr/lib/avr/include/util/delay.h ****     //#define F_CPU 14.7456E6
+  51:/usr/lib/avr/include/util/delay.h ****     #include <util/delay.h>
+  52:/usr/lib/avr/include/util/delay.h ****     \endcode
+  53:/usr/lib/avr/include/util/delay.h **** 
+  54:/usr/lib/avr/include/util/delay.h ****     \note As an alternative method, it is possible to pass the
+  55:/usr/lib/avr/include/util/delay.h ****     F_CPU macro down to the compiler from the Makefile.
+  56:/usr/lib/avr/include/util/delay.h ****     Obviously, in that case, no \c \#define statement should be
+  57:/usr/lib/avr/include/util/delay.h ****     used.
+  58:/usr/lib/avr/include/util/delay.h **** 
+  59:/usr/lib/avr/include/util/delay.h ****     The functions in this header file are wrappers around the basic
+  60:/usr/lib/avr/include/util/delay.h ****     busy-wait functions from <util/delay_basic.h>.  They are meant as
+  61:/usr/lib/avr/include/util/delay.h ****     convenience functions where actual time values can be specified
+  62:/usr/lib/avr/include/util/delay.h ****     rather than a number of cycles to wait for.  The idea behind is
+  63:/usr/lib/avr/include/util/delay.h ****     that compile-time constant expressions will be eliminated by
+  64:/usr/lib/avr/include/util/delay.h ****     compiler optimization so floating-point expressions can be used
+  65:/usr/lib/avr/include/util/delay.h ****     to calculate the number of delay cycles needed based on the CPU
+  66:/usr/lib/avr/include/util/delay.h ****     frequency passed by the macro F_CPU.
+  67:/usr/lib/avr/include/util/delay.h **** 
+  68:/usr/lib/avr/include/util/delay.h ****     \note In order for these functions to work as intended, compiler
+  69:/usr/lib/avr/include/util/delay.h ****     optimizations <em>must</em> be enabled, and the delay time
+  70:/usr/lib/avr/include/util/delay.h ****     <em>must</em> be an expression that is a known constant at
+  71:/usr/lib/avr/include/util/delay.h ****     compile-time.  If these requirements are not met, the resulting
+  72:/usr/lib/avr/include/util/delay.h ****     delay will be much longer (and basically unpredictable), and
+  73:/usr/lib/avr/include/util/delay.h ****     applications that otherwise do not use floating-point calculations
+  74:/usr/lib/avr/include/util/delay.h ****     will experience severe code bloat by the floating-point library
+  75:/usr/lib/avr/include/util/delay.h ****     routines linked into the application.
+  76:/usr/lib/avr/include/util/delay.h **** 
+  77:/usr/lib/avr/include/util/delay.h ****     The functions available allow the specification of microsecond, and
+  78:/usr/lib/avr/include/util/delay.h ****     millisecond delays directly, using the application-supplied macro
+  79:/usr/lib/avr/include/util/delay.h ****     F_CPU as the CPU clock frequency (in Hertz).
+  80:/usr/lib/avr/include/util/delay.h **** 
+  81:/usr/lib/avr/include/util/delay.h **** */
+  82:/usr/lib/avr/include/util/delay.h **** 
+  83:/usr/lib/avr/include/util/delay.h **** #if !defined(__DOXYGEN__)
+  84:/usr/lib/avr/include/util/delay.h **** static inline void _delay_us(double __us) __attribute__((always_inline));
+  85:/usr/lib/avr/include/util/delay.h **** static inline void _delay_ms(double __ms) __attribute__((always_inline));
+  86:/usr/lib/avr/include/util/delay.h **** #endif
+  87:/usr/lib/avr/include/util/delay.h **** 
+  88:/usr/lib/avr/include/util/delay.h **** #ifndef F_CPU
+  89:/usr/lib/avr/include/util/delay.h **** /* prevent compiler error by supplying a default */
+  90:/usr/lib/avr/include/util/delay.h **** # warning "F_CPU not defined for <util/delay.h>"
+  91:/usr/lib/avr/include/util/delay.h **** # define F_CPU 1000000UL
+  92:/usr/lib/avr/include/util/delay.h **** #endif
+  93:/usr/lib/avr/include/util/delay.h **** 
+  94:/usr/lib/avr/include/util/delay.h **** #ifndef __OPTIMIZE__
+  95:/usr/lib/avr/include/util/delay.h **** # warning "Compiler optimizations disabled; functions from <util/delay.h> won't work as designed"
+  96:/usr/lib/avr/include/util/delay.h **** #endif
+  97:/usr/lib/avr/include/util/delay.h **** 
+  98:/usr/lib/avr/include/util/delay.h **** #if __HAS_DELAY_CYCLES && defined(__OPTIMIZE__) && \
+  99:/usr/lib/avr/include/util/delay.h ****   !defined(__DELAY_BACKWARD_COMPATIBLE__) &&	   \
+ 100:/usr/lib/avr/include/util/delay.h ****   __STDC_HOSTED__
+ 101:/usr/lib/avr/include/util/delay.h **** #  include <math.h>
+ 102:/usr/lib/avr/include/util/delay.h **** #endif
+ 103:/usr/lib/avr/include/util/delay.h **** 
+ 104:/usr/lib/avr/include/util/delay.h **** /**
+ 105:/usr/lib/avr/include/util/delay.h ****    \ingroup util_delay
+ 106:/usr/lib/avr/include/util/delay.h **** 
+ 107:/usr/lib/avr/include/util/delay.h ****    Perform a delay of \c __ms milliseconds, using _delay_loop_2().
+ 108:/usr/lib/avr/include/util/delay.h **** 
+ 109:/usr/lib/avr/include/util/delay.h ****    The macro F_CPU is supposed to be defined to a
+ 110:/usr/lib/avr/include/util/delay.h ****    constant defining the CPU clock frequency (in Hertz).
+ 111:/usr/lib/avr/include/util/delay.h **** 
+ 112:/usr/lib/avr/include/util/delay.h ****    The maximal possible delay is 262.14 ms / F_CPU in MHz.
+ 113:/usr/lib/avr/include/util/delay.h **** 
+ 114:/usr/lib/avr/include/util/delay.h ****    When the user request delay which exceed the maximum possible one,
+ 115:/usr/lib/avr/include/util/delay.h ****    _delay_ms() provides a decreased resolution functionality. In this
+ 116:/usr/lib/avr/include/util/delay.h ****    mode _delay_ms() will work with a resolution of 1/10 ms, providing
+ 117:/usr/lib/avr/include/util/delay.h ****    delays up to 6.5535 seconds (independent from CPU frequency).  The
+ 118:/usr/lib/avr/include/util/delay.h ****    user will not be informed about decreased resolution.
+ 119:/usr/lib/avr/include/util/delay.h **** 
+ 120:/usr/lib/avr/include/util/delay.h ****    If the avr-gcc toolchain has __builtin_avr_delay_cycles(unsigned long)
+ 121:/usr/lib/avr/include/util/delay.h ****    support, maximal possible delay is 4294967.295 ms/ F_CPU in MHz. For
+ 122:/usr/lib/avr/include/util/delay.h ****    values greater than the maximal possible delay, overflows results in
+ 123:/usr/lib/avr/include/util/delay.h ****    no delay i.e., 0ms.
+ 124:/usr/lib/avr/include/util/delay.h **** 
+ 125:/usr/lib/avr/include/util/delay.h ****    Conversion of __us into clock cycles may not always result in integer.
+ 126:/usr/lib/avr/include/util/delay.h ****    By default, the clock cycles rounded up to next integer. This ensures that
+ 127:/usr/lib/avr/include/util/delay.h ****    the user gets atleast __us microseconds of delay.
+ 128:/usr/lib/avr/include/util/delay.h **** 
+ 129:/usr/lib/avr/include/util/delay.h ****    Alternatively, user can define __DELAY_ROUND_DOWN__ and __DELAY_ROUND_CLOSEST__
+ 130:/usr/lib/avr/include/util/delay.h ****    to round down and round to closest integer.
+ 131:/usr/lib/avr/include/util/delay.h **** 
+ 132:/usr/lib/avr/include/util/delay.h ****    Note: The new implementation of _delay_ms(double __ms) with 
+ 133:/usr/lib/avr/include/util/delay.h ****     __builtin_avr_delay_cycles(unsigned long) support is not backward compatible. 
+ 134:/usr/lib/avr/include/util/delay.h ****    User can define __DELAY_BACKWARD_COMPATIBLE__ to get a backward compatible delay.
+ 135:/usr/lib/avr/include/util/delay.h ****    Also, the backward compatible
+ 136:/usr/lib/avr/include/util/delay.h ****    algorithm will be chosen if the code is compiled in a <em>freestanding
+ 137:/usr/lib/avr/include/util/delay.h ****    environment</em> (GCC option \c -ffreestanding), as the math functions
+ 138:/usr/lib/avr/include/util/delay.h ****    required for rounding are not available to the compiler then.
+ 139:/usr/lib/avr/include/util/delay.h **** 
+ 140:/usr/lib/avr/include/util/delay.h ****  */
+ 141:/usr/lib/avr/include/util/delay.h **** void
+ 142:/usr/lib/avr/include/util/delay.h **** _delay_ms(double __ms)
+ 143:/usr/lib/avr/include/util/delay.h **** {
+ 144:/usr/lib/avr/include/util/delay.h **** 	double __tmp ; 
+ 145:/usr/lib/avr/include/util/delay.h **** #if __HAS_DELAY_CYCLES && defined(__OPTIMIZE__) && \
+ 146:/usr/lib/avr/include/util/delay.h ****   !defined(__DELAY_BACKWARD_COMPATIBLE__) &&	   \
+ 147:/usr/lib/avr/include/util/delay.h ****   __STDC_HOSTED__
+ 148:/usr/lib/avr/include/util/delay.h **** 	uint32_t __ticks_dc;
+ 149:/usr/lib/avr/include/util/delay.h **** 	extern void __builtin_avr_delay_cycles(unsigned long);
+ 150:/usr/lib/avr/include/util/delay.h **** 	__tmp = ((F_CPU) / 1e3) * __ms;
+ 151:/usr/lib/avr/include/util/delay.h **** 
+ 152:/usr/lib/avr/include/util/delay.h **** 	#if defined(__DELAY_ROUND_DOWN__)
+ 153:/usr/lib/avr/include/util/delay.h **** 		__ticks_dc = (uint32_t)fabs(__tmp);
+ 154:/usr/lib/avr/include/util/delay.h **** 
+ 155:/usr/lib/avr/include/util/delay.h **** 	#elif defined(__DELAY_ROUND_CLOSEST__)
+ 156:/usr/lib/avr/include/util/delay.h **** 		__ticks_dc = (uint32_t)(fabs(__tmp)+0.5);
+ 157:/usr/lib/avr/include/util/delay.h **** 
+ 158:/usr/lib/avr/include/util/delay.h **** 	#else
+ 159:/usr/lib/avr/include/util/delay.h **** 		//round up by default
+ 160:/usr/lib/avr/include/util/delay.h **** 		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+ 161:/usr/lib/avr/include/util/delay.h **** 	#endif
+ 162:/usr/lib/avr/include/util/delay.h **** 
+ 163:/usr/lib/avr/include/util/delay.h **** 	__builtin_avr_delay_cycles(__ticks_dc);
+ 312               		.stabn	68,0,163,.LM27-.LFBB5
+ 313               	.LM27:
+ 314 0000 2FEF      		ldi r18,lo8(639999)
+ 315 0002 83EC      		ldi r24,hi8(639999)
+ 316 0004 99E0      		ldi r25,hlo8(639999)
+ 317 0006 2150      	1:	subi r18,1
+ 318 0008 8040      		sbci r24,0
+ 319 000a 9040      		sbci r25,0
+ 320 000c 01F4      		brne 1b
+ 321 000e 00C0      		rjmp .
+ 322 0010 0000      		nop
+ 323               	.LBE12:
+ 324               	.LBE11:
+ 325               		.stabs	"ttris.cpp",132,0,0,.Ltext2
+ 326               	.Ltext2:
+ 104:ttris.cpp     ****   //Give the AVR a bit to boot
+ 105:ttris.cpp     ****   _delay_ms(200);
+ 106:ttris.cpp     ****   //Initialize the SPI bus
+ 107:ttris.cpp     ****   spi_init_master();
+ 327               		.stabn	68,0,107,.LM28-.LFBB5
+ 328               	.LM28:
+ 329 0012 0E94 0000 		call _Z15spi_init_masterv
+ 108:ttris.cpp     ****   //Initialize the screen
+ 109:ttris.cpp     ****   init_screen();
+ 330               		.stabn	68,0,109,.LM29-.LFBB5
+ 331               	.LM29:
+ 332 0016 0E94 0000 		call _Z11init_screenv
+ 110:ttris.cpp     ****   //send display data
+ 111:ttris.cpp     ****   show_frame();
+ 333               		.stabn	68,0,111,.LM30-.LFBB5
+ 334               	.LM30:
+ 335 001a 0E94 0000 		call _Z10show_framev
+ 112:ttris.cpp     **** 
+ 113:ttris.cpp     ****   return(0);
+ 114:ttris.cpp     **** }
+ 336               		.stabn	68,0,114,.LM31-.LFBB5
+ 337               	.LM31:
+ 338 001e 80E0      		ldi r24,0
+ 339 0020 90E0      		ldi r25,0
+ 340 0022 0895      		ret
+ 341               		.size	main, .-main
+ 342               	.Lscope5:
+ 343               		.stabs	"",36,0,0,.Lscope5-.LFBB5
+ 344               		.stabd	78,0,0
+ 345               	.global	vbuff
+ 346               		.data
+ 347               		.type	vbuff, @object
+ 348               		.size	vbuff, 504
+ 349               	vbuff:
+ 350 0000 FF        		.byte	-1
+ 351 0001 FF        		.byte	-1
+ 352 0002 03        		.byte	3
+ 353 0003 07        		.byte	7
+ 354 0004 FF        		.byte	-1
+ 355 0005 00        		.byte	0
+ 356 0006 00        		.byte	0
+ 357 0007 00        		.byte	0
+ 358 0008 00        		.byte	0
+ 359 0009 FF        		.byte	-1
+ 360 000a FF        		.byte	-1
+ 361 000b 00        		.byte	0
+ 362 000c 00        		.byte	0
+ 363 000d 00        		.byte	0
+ 364 000e E3        		.byte	-29
+ 365 000f F3        		.byte	-13
+ 366 0010 73        		.byte	115
+ 367 0011 3F        		.byte	63
+ 368 0012 3F        		.byte	63
+ 369 0013 00        		.byte	0
+ 370 0014 00        		.byte	0
+ 371 0015 23        		.byte	35
+ 372 0016 33        		.byte	51
+ 373 0017 33        		.byte	51
+ 374 0018 7F        		.byte	127
+ 375 0019 FF        		.byte	-1
+ 376 001a 00        		.byte	0
+ 377 001b 00        		.byte	0
+ 378 001c 3F        		.byte	63
+ 379 001d 3F        		.byte	63
+ 380 001e 30        		.byte	48
+ 381 001f 78        		.byte	120
+ 382 0020 FF        		.byte	-1
+ 383 0021 00        		.byte	0
+ 384 0022 00        		.byte	0
+ 385 0023 3F        		.byte	63
+ 386 0024 3F        		.byte	63
+ 387 0025 33        		.byte	51
+ 388 0026 73        		.byte	115
+ 389 0027 F3        		.byte	-13
+ 390 0028 00        		.byte	0
+ 391 0029 00        		.byte	0
+ 392 002a FF        		.byte	-1
+ 393 002b FF        		.byte	-1
+ 394 002c 73        		.byte	115
+ 395 002d 73        		.byte	115
+ 396 002e F3        		.byte	-13
+ 397 002f 00        		.byte	0
+ 398 0030 00        		.byte	0
+ 399 0031 03        		.byte	3
+ 400 0032 03        		.byte	3
+ 401 0033 03        		.byte	3
+ 402 0034 07        		.byte	7
+ 403 0035 FF        		.byte	-1
+ 404 0036 00        		.byte	0
+ 405 0037 00        		.byte	0
+ 406 0038 FF        		.byte	-1
+ 407 0039 FF        		.byte	-1
+ 408 003a 73        		.byte	115
+ 409 003b 7F        		.byte	127
+ 410 003c FF        		.byte	-1
+ 411 003d 00        		.byte	0
+ 412 003e 00        		.byte	0
+ 413 003f 3F        		.byte	63
+ 414 0040 3F        		.byte	63
+ 415 0041 33        		.byte	51
+ 416 0042 7F        		.byte	127
+ 417 0043 FF        		.byte	-1
+ 418 0044 00        		.byte	0
+ 419 0045 00        		.byte	0
+ 420 0046 FC        		.byte	-4
+ 421 0047 FC        		.byte	-4
+ 422 0048 73        		.byte	115
+ 423 0049 7B        		.byte	123
+ 424 004a FC        		.byte	-4
+ 425 004b 00        		.byte	0
+ 426 004c 00        		.byte	0
+ 427 004d FF        		.byte	-1
+ 428 004e FF        		.byte	-1
+ 429 004f 73        		.byte	115
+ 430 0050 33        		.byte	51
+ 431 0051 CC        		.byte	-52
+ 432 0052 00        		.byte	0
+ 433 0053 00        		.byte	0
+ 434 0054 87        		.byte	-121
+ 435 0055 87        		.byte	-121
+ 436 0056 67        		.byte	103
+ 437 0057 67        		.byte	103
+ 438 0058 63        		.byte	99
+ 439 0059 00        		.byte	0
+ 440 005a 00        		.byte	0
+ 441 005b E0        		.byte	-32
+ 442 005c E0        		.byte	-32
+ 443 005d 63        		.byte	99
+ 444 005e 63        		.byte	99
+ 445 005f 80        		.byte	-128
+ 446 0060 00        		.byte	0
+ 447 0061 00        		.byte	0
+ 448 0062 E3        		.byte	-29
+ 449 0063 E7        		.byte	-25
+ 450 0064 67        		.byte	103
+ 451 0065 67        		.byte	103
+ 452 0066 63        		.byte	99
+ 453 0067 00        		.byte	0
+ 454 0068 00        		.byte	0
+ 455 0069 E2        		.byte	-30
+ 456 006a E7        		.byte	-25
+ 457 006b 67        		.byte	103
+ 458 006c 67        		.byte	103
+ 459 006d 63        		.byte	99
+ 460 006e 00        		.byte	0
+ 461 006f 00        		.byte	0
+ 462 0070 80        		.byte	-128
+ 463 0071 80        		.byte	-128
+ 464 0072 60        		.byte	96
+ 465 0073 60        		.byte	96
+ 466 0074 63        		.byte	99
+ 467 0075 00        		.byte	0
+ 468 0076 00        		.byte	0
+ 469 0077 E2        		.byte	-30
+ 470 0078 E7        		.byte	-25
+ 471 0079 07        		.byte	7
+ 472 007a 07        		.byte	7
+ 473 007b E3        		.byte	-29
+ 474 007c 00        		.byte	0
+ 475 007d 00        		.byte	0
+ 476 007e 23        		.byte	35
+ 477 007f 67        		.byte	103
+ 478 0080 E7        		.byte	-25
+ 479 0081 E7        		.byte	-25
+ 480 0082 63        		.byte	99
+ 481 0083 00        		.byte	0
+ 482 0084 00        		.byte	0
+ 483 0085 00        		.byte	0
+ 484 0086 00        		.byte	0
+ 485 0087 00        		.byte	0
+ 486 0088 00        		.byte	0
+ 487 0089 E3        		.byte	-29
+ 488 008a 00        		.byte	0
+ 489 008b 00        		.byte	0
+ 490 008c E3        		.byte	-29
+ 491 008d E7        		.byte	-25
+ 492 008e 07        		.byte	7
+ 493 008f 07        		.byte	7
+ 494 0090 E3        		.byte	-29
+ 495 0091 00        		.byte	0
+ 496 0092 00        		.byte	0
+ 497 0093 E2        		.byte	-30
+ 498 0094 E7        		.byte	-25
+ 499 0095 07        		.byte	7
+ 500 0096 07        		.byte	7
+ 501 0097 03        		.byte	3
+ 502 0098 00        		.byte	0
+ 503 0099 00        		.byte	0
+ 504 009a E3        		.byte	-29
+ 505 009b E3        		.byte	-29
+ 506 009c C0        		.byte	-64
+ 507 009d C0        		.byte	-64
+ 508 009e E3        		.byte	-29
+ 509 009f 00        		.byte	0
+ 510 00a0 00        		.byte	0
+ 511 00a1 E3        		.byte	-29
+ 512 00a2 E7        		.byte	-25
+ 513 00a3 C7        		.byte	-57
+ 514 00a4 C3        		.byte	-61
+ 515 00a5 E0        		.byte	-32
+ 516 00a6 00        		.byte	0
+ 517 00a7 00        		.byte	0
+ 518 00a8 7F        		.byte	127
+ 519 00a9 7F        		.byte	127
+ 520 00aa 60        		.byte	96
+ 521 00ab 60        		.byte	96
+ 522 00ac 60        		.byte	96
+ 523 00ad 00        		.byte	0
+ 524 00ae 00        		.byte	0
+ 525 00af 7F        		.byte	127
+ 526 00b0 7F        		.byte	127
+ 527 00b1 60        		.byte	96
+ 528 00b2 70        		.byte	112
+ 529 00b3 7F        		.byte	127
+ 530 00b4 00        		.byte	0
+ 531 00b5 00        		.byte	0
+ 532 00b6 7F        		.byte	127
+ 533 00b7 7F        		.byte	127
+ 534 00b8 66        		.byte	102
+ 535 00b9 66        		.byte	102
+ 536 00ba 66        		.byte	102
+ 537 00bb 00        		.byte	0
+ 538 00bc 00        		.byte	0
+ 539 00bd 7F        		.byte	127
+ 540 00be 7F        		.byte	127
+ 541 00bf 06        		.byte	6
+ 542 00c0 00        		.byte	0
+ 543 00c1 00        		.byte	0
+ 544 00c2 00        		.byte	0
+ 545 00c3 00        		.byte	0
+ 546 00c4 7F        		.byte	127
+ 547 00c5 7F        		.byte	127
+ 548 00c6 66        		.byte	102
+ 549 00c7 7E        		.byte	126
+ 550 00c8 7E        		.byte	126
+ 551 00c9 00        		.byte	0
+ 552 00ca 00        		.byte	0
+ 553 00cb 7F        		.byte	127
+ 554 00cc 7F        		.byte	127
+ 555 00cd 06        		.byte	6
+ 556 00ce 0F        		.byte	15
+ 557 00cf 7F        		.byte	127
+ 558 00d0 00        		.byte	0
+ 559 00d1 00        		.byte	0
+ 560 00d2 60        		.byte	96
+ 561 00d3 70        		.byte	112
+ 562 00d4 7F        		.byte	127
+ 563 00d5 7F        		.byte	127
+ 564 00d6 60        		.byte	96
+ 565 00d7 00        		.byte	0
+ 566 00d8 00        		.byte	0
+ 567 00d9 18        		.byte	24
+ 568 00da 18        		.byte	24
+ 569 00db 60        		.byte	96
+ 570 00dc 70        		.byte	112
+ 571 00dd 7F        		.byte	127
+ 572 00de 00        		.byte	0
+ 573 00df 00        		.byte	0
+ 574 00e0 7F        		.byte	127
+ 575 00e1 7F        		.byte	127
+ 576 00e2 06        		.byte	6
+ 577 00e3 06        		.byte	6
+ 578 00e4 79        		.byte	121
+ 579 00e5 00        		.byte	0
+ 580 00e6 00        		.byte	0
+ 581 00e7 7F        		.byte	127
+ 582 00e8 7F        		.byte	127
+ 583 00e9 60        		.byte	96
+ 584 00ea 60        		.byte	96
+ 585 00eb 60        		.byte	96
+ 586 00ec 00        		.byte	0
+ 587 00ed 00        		.byte	0
+ 588 00ee 7F        		.byte	127
+ 589 00ef 7F        		.byte	127
+ 590 00f0 07        		.byte	7
+ 591 00f1 0F        		.byte	15
+ 592 00f2 7F        		.byte	127
+ 593 00f3 00        		.byte	0
+ 594 00f4 00        		.byte	0
+ 595 00f5 7F        		.byte	127
+ 596 00f6 7F        		.byte	127
+ 597 00f7 1F        		.byte	31
+ 598 00f8 3F        		.byte	63
+ 599 00f9 7F        		.byte	127
+ 600 00fa 00        		.byte	0
+ 601 00fb 00        		.byte	0
+ 602 00fc F8        		.byte	-8
+ 603 00fd F8        		.byte	-8
+ 604 00fe 06        		.byte	6
+ 605 00ff 04        		.byte	4
+ 606 0100 F8        		.byte	-8
+ 607 0101 00        		.byte	0
+ 608 0102 00        		.byte	0
+ 609 0103 FE        		.byte	-2
+ 610 0104 FE        		.byte	-2
+ 611 0105 E6        		.byte	-26
+ 612 0106 74        		.byte	116
+ 613 0107 78        		.byte	120
+ 614 0108 00        		.byte	0
+ 615 0109 00        		.byte	0
+ 616 010a F0        		.byte	-16
+ 617 010b F8        		.byte	-8
+ 618 010c 86        		.byte	-122
+ 619 010d 84        		.byte	-124
+ 620 010e F8        		.byte	-8
+ 621 010f 00        		.byte	0
+ 622 0110 00        		.byte	0
+ 623 0111 FE        		.byte	-2
+ 624 0112 FE        		.byte	-2
+ 625 0113 E6        		.byte	-26
+ 626 0114 F4        		.byte	-12
+ 627 0115 78        		.byte	120
+ 628 0116 00        		.byte	0
+ 629 0117 00        		.byte	0
+ 630 0118 10        		.byte	16
+ 631 0119 18        		.byte	24
+ 632 011a 66        		.byte	102
+ 633 011b 46        		.byte	70
+ 634 011c 86        		.byte	-122
+ 635 011d 00        		.byte	0
+ 636 011e 00        		.byte	0
+ 637 011f 06        		.byte	6
+ 638 0120 0E        		.byte	14
+ 639 0121 FE        		.byte	-2
+ 640 0122 FE        		.byte	-2
+ 641 0123 06        		.byte	6
+ 642 0124 00        		.byte	0
+ 643 0125 00        		.byte	0
+ 644 0126 FE        		.byte	-2
+ 645 0127 FC        		.byte	-4
+ 646 0128 00        		.byte	0
+ 647 0129 00        		.byte	0
+ 648 012a FE        		.byte	-2
+ 649 012b 00        		.byte	0
+ 650 012c 00        		.byte	0
+ 651 012d 7E        		.byte	126
+ 652 012e 7C        		.byte	124
+ 653 012f 80        		.byte	-128
+ 654 0130 80        		.byte	-128
+ 655 0131 7E        		.byte	126
+ 656 0132 00        		.byte	0
+ 657 0133 00        		.byte	0
+ 658 0134 FE        		.byte	-2
+ 659 0135 FC        		.byte	-4
+ 660 0136 E0        		.byte	-32
+ 661 0137 F0        		.byte	-16
+ 662 0138 FE        		.byte	-2
+ 663 0139 00        		.byte	0
+ 664 013a 00        		.byte	0
+ 665 013b 1E        		.byte	30
+ 666 013c 9C        		.byte	-100
+ 667 013d 60        		.byte	96
+ 668 013e 60        		.byte	96
+ 669 013f 9E        		.byte	-98
+ 670 0140 00        		.byte	0
+ 671 0141 00        		.byte	0
+ 672 0142 1E        		.byte	30
+ 673 0143 1C        		.byte	28
+ 674 0144 E0        		.byte	-32
+ 675 0145 E0        		.byte	-32
+ 676 0146 1E        		.byte	30
+ 677 0147 00        		.byte	0
+ 678 0148 00        		.byte	0
+ 679 0149 06        		.byte	6
+ 680 014a 86        		.byte	-122
+ 681 014b 66        		.byte	102
+ 682 014c 6E        		.byte	110
+ 683 014d 1E        		.byte	30
+ 684 014e 00        		.byte	0
+ 685 014f 00        		.byte	0
+ 686 0150 03        		.byte	3
+ 687 0151 03        		.byte	3
+ 688 0152 C6        		.byte	-58
+ 689 0153 C6        		.byte	-58
+ 690 0154 01        		.byte	1
+ 691 0155 00        		.byte	0
+ 692 0156 00        		.byte	0
+ 693 0157 47        		.byte	71
+ 694 0158 C7        		.byte	-57
+ 695 0159 C0        		.byte	-64
+ 696 015a C0        		.byte	-64
+ 697 015b C0        		.byte	-64
+ 698 015c 00        		.byte	0
+ 699 015d 00        		.byte	0
+ 700 015e C1        		.byte	-63
+ 701 015f C3        		.byte	-61
+ 702 0160 07        		.byte	7
+ 703 0161 0F        		.byte	15
+ 704 0162 C7        		.byte	-57
+ 705 0163 00        		.byte	0
+ 706 0164 00        		.byte	0
+ 707 0165 47        		.byte	71
+ 708 0166 C7        		.byte	-57
+ 709 0167 03        		.byte	3
+ 710 0168 03        		.byte	3
+ 711 0169 C4        		.byte	-60
+ 712 016a 00        		.byte	0
+ 713 016b 00        		.byte	0
+ 714 016c 04        		.byte	4
+ 715 016d 0E        		.byte	14
+ 716 016e 0E        		.byte	14
+ 717 016f 0E        		.byte	14
+ 718 0170 07        		.byte	7
+ 719 0171 00        		.byte	0
+ 720 0172 00        		.byte	0
+ 721 0173 00        		.byte	0
+ 722 0174 00        		.byte	0
+ 723 0175 C7        		.byte	-57
+ 724 0176 C7        		.byte	-57
+ 725 0177 00        		.byte	0
+ 726 0178 00        		.byte	0
+ 727 0179 00        		.byte	0
+ 728 017a 01        		.byte	1
+ 729 017b 03        		.byte	3
+ 730 017c C6        		.byte	-58
+ 731 017d CE        		.byte	-50
+ 732 017e 07        		.byte	7
+ 733 017f 00        		.byte	0
+ 734 0180 00        		.byte	0
+ 735 0181 00        		.byte	0
+ 736 0182 80        		.byte	-128
+ 737 0183 C7        		.byte	-57
+ 738 0184 C7        		.byte	-57
+ 739 0185 00        		.byte	0
+ 740 0186 00        		.byte	0
+ 741 0187 00        		.byte	0
+ 742 0188 47        		.byte	71
+ 743 0189 C7        		.byte	-57
+ 744 018a 03        		.byte	3
+ 745 018b 03        		.byte	3
+ 746 018c 07        		.byte	7
+ 747 018d 00        		.byte	0
+ 748 018e 00        		.byte	0
+ 749 018f 07        		.byte	7
+ 750 0190 07        		.byte	7
+ 751 0191 00        		.byte	0
+ 752 0192 00        		.byte	0
+ 753 0193 C7        		.byte	-57
+ 754 0194 00        		.byte	0
+ 755 0195 00        		.byte	0
+ 756 0196 00        		.byte	0
+ 757 0197 00        		.byte	0
+ 758 0198 07        		.byte	7
+ 759 0199 07        		.byte	7
+ 760 019a 00        		.byte	0
+ 761 019b 00        		.byte	0
+ 762 019c 00        		.byte	0
+ 763 019d 07        		.byte	7
+ 764 019e 0F        		.byte	15
+ 765 019f CE        		.byte	-50
+ 766 01a0 CE        		.byte	-50
+ 767 01a1 C4        		.byte	-60
+ 768 01a2 00        		.byte	0
+ 769 01a3 00        		.byte	0
+ 770 01a4 00        		.byte	0
+ 771 01a5 00        		.byte	0
+ 772 01a6 CF        		.byte	-49
+ 773 01a7 87        		.byte	-121
+ 774 01a8 00        		.byte	0
+ 775 01a9 00        		.byte	0
+ 776 01aa 00        		.byte	0
+ 777 01ab 00        		.byte	0
+ 778 01ac 00        		.byte	0
+ 779 01ad CC        		.byte	-52
+ 780 01ae 8F        		.byte	-113
+ 781 01af 0F        		.byte	15
+ 782 01b0 00        		.byte	0
+ 783 01b1 00        		.byte	0
+ 784 01b2 31        		.byte	49
+ 785 01b3 31        		.byte	49
+ 786 01b4 C0        		.byte	-64
+ 787 01b5 C0        		.byte	-64
+ 788 01b6 33        		.byte	51
+ 789 01b7 00        		.byte	0
+ 790 01b8 00        		.byte	0
+ 791 01b9 CC        		.byte	-52
+ 792 01ba CE        		.byte	-50
+ 793 01bb 3F        		.byte	63
+ 794 01bc 3F        		.byte	63
+ 795 01bd CC        		.byte	-52
+ 796 01be 00        		.byte	0
+ 797 01bf 00        		.byte	0
+ 798 01c0 00        		.byte	0
+ 799 01c1 00        		.byte	0
+ 800 01c2 C0        		.byte	-64
+ 801 01c3 80        		.byte	-128
+ 802 01c4 00        		.byte	0
+ 803 01c5 00        		.byte	0
+ 804 01c6 00        		.byte	0
+ 805 01c7 00        		.byte	0
+ 806 01c8 00        		.byte	0
+ 807 01c9 03        		.byte	3
+ 808 01ca 01        		.byte	1
+ 809 01cb 00        		.byte	0
+ 810 01cc 00        		.byte	0
+ 811 01cd 00        		.byte	0
+ 812 01ce 30        		.byte	48
+ 813 01cf 38        		.byte	56
+ 814 01d0 FF        		.byte	-1
+ 815 01d1 FF        		.byte	-1
+ 816 01d2 30        		.byte	48
+ 817 01d3 00        		.byte	0
+ 818 01d4 00        		.byte	0
+ 819 01d5 01        		.byte	1
+ 820 01d6 03        		.byte	3
+ 821 01d7 FF        		.byte	-1
+ 822 01d8 FF        		.byte	-1
+ 823 01d9 03        		.byte	3
+ 824 01da 00        		.byte	0
+ 825 01db 00        		.byte	0
+ 826 01dc C0        		.byte	-64
+ 827 01dd C0        		.byte	-64
+ 828 01de 33        		.byte	51
+ 829 01df 12        		.byte	18
+ 830 01e0 0C        		.byte	12
+ 831 01e1 00        		.byte	0
+ 832 01e2 00        		.byte	0
+ 833 01e3 0C        		.byte	12
+ 834 01e4 0C        		.byte	12
+ 835 01e5 33        		.byte	51
+ 836 01e6 21        		.byte	33
+ 837 01e7 C0        		.byte	-64
+ 838 01e8 00        		.byte	0
+ 839 01e9 00        		.byte	0
+ 840 01ea 00        		.byte	0
+ 841 01eb 00        		.byte	0
+ 842 01ec 00        		.byte	0
+ 843 01ed 00        		.byte	0
+ 844 01ee 00        		.byte	0
+ 845 01ef 00        		.byte	0
+ 846 01f0 00        		.byte	0
+ 847 01f1 00        		.byte	0
+ 848 01f2 00        		.byte	0
+ 849 01f3 03        		.byte	3
+ 850 01f4 03        		.byte	3
+ 851 01f5 03        		.byte	3
+ 852 01f6 00        		.byte	0
+ 853 01f7 00        		.byte	0
+ 854               		.stabs	"vbuff:G(0,90)=ar(0,91)=r(0,91);0;0177777;;0;5;(0,92)=ar(0,91);0;83;(0,89)",32,0,32,0
+ 855               		.text
+ 856               		.stabs	"",100,0,0,.Letext0
+ 857               	.Letext0:
+ 858               		.ident	"GCC: (GNU) 4.9.2"
+ 859               	.global __do_copy_data
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 ttris.cpp
+     /tmp/ccVzTsG1.s:2      *ABS*:000000000000003e __SP_H__
+     /tmp/ccVzTsG1.s:3      *ABS*:000000000000003d __SP_L__
+     /tmp/ccVzTsG1.s:4      *ABS*:000000000000003f __SREG__
+     /tmp/ccVzTsG1.s:5      *ABS*:0000000000000000 __tmp_reg__
+     /tmp/ccVzTsG1.s:6      *ABS*:0000000000000001 __zero_reg__
+     /tmp/ccVzTsG1.s:108    .text:0000000000000000 _Z15spi_init_masterv
+     /tmp/ccVzTsG1.s:135    .text:000000000000000a _Z9send_bytehb
+     /tmp/ccVzTsG1.s:178    .text:000000000000001c _Z11init_screenv
+     /tmp/ccVzTsG1.s:233    .text:0000000000000052 _Z10show_framev
+     /tmp/ccVzTsG1.s:349    .data:0000000000000000 vbuff
+     /tmp/ccVzTsG1.s:299    .text.startup:0000000000000000 main
+
+UNDEFINED SYMBOLS
+__do_copy_data
