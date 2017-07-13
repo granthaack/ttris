@@ -4,7 +4,7 @@
    4               	__SREG__ = 0x3f
    5               	__tmp_reg__ = 0
    6               	__zero_reg__ = 1
-   7               		.stabs	"/home/granthaack/avr/ttris/",100,0,4,.Ltext0
+   7               		.stabs	"/home/granthaack/Documents/ttris/",100,0,4,.Ltext0
    8               		.stabs	"ttris.cpp",100,0,4,.Ltext0
    9               		.text
   10               	.Ltext0:
@@ -102,7 +102,7 @@
  102               		.stabs	"._0:Tt(0,88)=s3low:(0,13),0,8;high:(0,13),8,8;extended:(0,13),16,8;;",128,0,240,0
  103               		.stabs	"__fuse_t:t(0,88)",128,0,244,0
  104               		.stabs	"byte:t(0,89)=(0,13)",128,0,7,0
- 105               		.stabs	"_Z15spi_init_masterv:F(0,4)",36,0,37,_Z15spi_init_masterv
+ 105               		.stabs	"_Z15spi_init_masterv:F(0,4)",36,0,51,_Z15spi_init_masterv
  106               	.global	_Z15spi_init_masterv
  107               		.type	_Z15spi_init_masterv, @function
  108               	_Z15spi_init_masterv:
@@ -118,52 +118,66 @@
    9:ttris.cpp     **** #define HIGH 1
   10:ttris.cpp     **** #define LOW 0
   11:ttris.cpp     **** 
-  12:ttris.cpp     **** //Define the SPI Pins to communicate with the screen
-  13:ttris.cpp     **** //Define the data direction registers
-  14:ttris.cpp     **** #define DDR_SPI         DDRB
-  15:ttris.cpp     **** #define DD_SCK          DDB5
-  16:ttris.cpp     **** #define DD_MISO         DDB4
-  17:ttris.cpp     **** #define DD_MOSI         DDB3
-  18:ttris.cpp     **** #define DD_SS           DDB2
-  19:ttris.cpp     **** #define DD_DC           DDB1
-  20:ttris.cpp     **** #define DD_RST          DDB0
-  21:ttris.cpp     **** 
-  22:ttris.cpp     **** //Define the port registers
-  23:ttris.cpp     **** #define PORT_SPI        PORTB
-  24:ttris.cpp     **** #define PORT_SCK        (1 << PB5) //yellow
-  25:ttris.cpp     **** #define PORT_MISO       (1 << PB4) //green (unused)
-  26:ttris.cpp     **** #define PORT_MOSI       (1 << PB3) //white
-  27:ttris.cpp     **** #define PORT_SS         (1 << PB2) //orange
-  28:ttris.cpp     **** #define PORT_DC         (1 << PB1) //blue
-  29:ttris.cpp     **** #define PORT_RST        (1 << PB0) //green
-  30:ttris.cpp     **** 
-  31:ttris.cpp     **** //Init the video buffer
-  32:ttris.cpp     **** byte vbuff[6][84] = {
-  33:ttris.cpp     **** 0xff, 0xff, 0x03, 0x07, 0xff, 0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0x00, 0x00, 0x00, 0xe3, 0xf3, 0x7
-  34:ttris.cpp     **** };
-  35:ttris.cpp     **** 
-  36:ttris.cpp     **** // Initialize SPI Master Device (with SPI interrupt)
-  37:ttris.cpp     **** void spi_init_master (void)
-  38:ttris.cpp     **** {
- 110               		.stabn	68,0,38,.LM0-.LFBB1
+  12:ttris.cpp     **** #define BLACK 1
+  13:ttris.cpp     **** #define WHITE 0
+  14:ttris.cpp     **** 
+  15:ttris.cpp     **** #define DATA 1
+  16:ttris.cpp     **** #define COMM 0
+  17:ttris.cpp     **** 
+  18:ttris.cpp     **** //Define the SPI Pins to communicate with the screen
+  19:ttris.cpp     **** //Define the data direction registers
+  20:ttris.cpp     **** #define DDR_SPI         DDRB
+  21:ttris.cpp     **** #define DD_SCK          DDB5
+  22:ttris.cpp     **** #define DD_MISO         DDB4
+  23:ttris.cpp     **** #define DD_MOSI         DDB3
+  24:ttris.cpp     **** #define DD_SS           DDB2
+  25:ttris.cpp     **** #define DD_DC           DDB1
+  26:ttris.cpp     **** #define DD_RST          DDB0
+  27:ttris.cpp     **** 
+  28:ttris.cpp     **** //Define the port registers
+  29:ttris.cpp     **** #define PORT_SPI        PORTB
+  30:ttris.cpp     **** #define PORT_SCK        (1 << PB5) //yellow
+  31:ttris.cpp     **** #define PORT_MISO       (1 << PB4) //green (unused)
+  32:ttris.cpp     **** #define PORT_MOSI       (1 << PB3) //white
+  33:ttris.cpp     **** #define PORT_SS         (1 << PB2) //orange
+  34:ttris.cpp     **** #define PORT_DC         (1 << PB1) //blue
+  35:ttris.cpp     **** #define PORT_RST        (1 << PB0) //green
+  36:ttris.cpp     **** 
+  37:ttris.cpp     **** //Init the video buffer
+  38:ttris.cpp     **** byte vbuff[6][84] = {
+  39:ttris.cpp     ****   /*
+  40:ttris.cpp     **** 0x4c, 0xaa, 0xec, 0xaa, 0xac, 0x00, 0xaa, 0xee, 0xee, 0xae, 0xaa, 0x00, 0xae, 0xa2, 0x44, 0x48, 0x4
+  41:ttris.cpp     **** */
+  42:ttris.cpp     **** 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0
+  43:ttris.cpp     **** 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0
+  44:ttris.cpp     **** 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0
+  45:ttris.cpp     **** 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0
+  46:ttris.cpp     **** 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0
+  47:ttris.cpp     **** 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0
+  48:ttris.cpp     **** };
+  49:ttris.cpp     **** 
+  50:ttris.cpp     **** // Initialize SPI Master Device (with SPI interrupt)
+  51:ttris.cpp     **** void spi_init_master (void)
+  52:ttris.cpp     **** {
+ 110               		.stabn	68,0,52,.LM0-.LFBB1
  111               	.LM0:
  112               	.LFBB1:
  113               	/* prologue: function */
  114               	/* frame size = 0 */
  115               	/* stack size = 0 */
  116               	.L__stack_usage = 0
-  39:ttris.cpp     ****     // Set MOSI, SCK, SS, DC, and RST as Output
-  40:ttris.cpp     ****     DDR_SPI=(1<<DD_MOSI)|(1<<DD_SCK)|(1<<DD_SS)|(1<<DD_DC)|(1<<DD_RST);
- 117               		.stabn	68,0,40,.LM1-.LFBB1
+  53:ttris.cpp     ****     // Set MOSI, SCK, SS, DC, and RST as Output
+  54:ttris.cpp     ****     DDR_SPI=(1<<DD_MOSI)|(1<<DD_SCK)|(1<<DD_SS)|(1<<DD_DC)|(1<<DD_RST);
+ 117               		.stabn	68,0,54,.LM1-.LFBB1
  118               	.LM1:
  119 0000 8FE2      		ldi r24,lo8(47)
  120 0002 84B9      		out 0x4,r24
-  41:ttris.cpp     **** 
-  42:ttris.cpp     ****     // Enable SPI, Set as Master
-  43:ttris.cpp     ****     // Prescaler: Fosc/16, Enable Interrupts
-  44:ttris.cpp     ****     //The MOSI, SCK pins are as per ATMega8
-  45:ttris.cpp     ****     SPCR=(1<<SPE)|(1<<MSTR)|(1<<SPR0);
- 121               		.stabn	68,0,45,.LM2-.LFBB1
+  55:ttris.cpp     **** 
+  56:ttris.cpp     ****     // Enable SPI, Set as Master
+  57:ttris.cpp     ****     // Prescaler: Fosc/16, Enable Interrupts
+  58:ttris.cpp     ****     //The MOSI, SCK pins are as per ATMega8
+  59:ttris.cpp     ****     SPCR=(1<<SPE)|(1<<MSTR)|(1<<SPR0);
+ 121               		.stabn	68,0,59,.LM2-.LFBB1
  122               	.LM2:
  123 0004 81E5      		ldi r24,lo8(81)
  124 0006 8CBD      		out 0x2c,r24
@@ -172,142 +186,142 @@
  127               	.Lscope1:
  128               		.stabs	"",36,0,0,.Lscope1-.LFBB1
  129               		.stabd	78,0,0
- 130               		.stabs	"_Z9send_bytehb:F(0,4)",36,0,49,_Z9send_bytehb
- 131               		.stabs	"data:P(0,89)",64,0,49,24
- 132               		.stabs	"dc:P(0,54)",64,0,49,22
+ 130               		.stabs	"_Z9send_bytehb:F(0,4)",36,0,63,_Z9send_bytehb
+ 131               		.stabs	"data:P(0,89)",64,0,63,24
+ 132               		.stabs	"dc:P(0,54)",64,0,63,22
  133               	.global	_Z9send_bytehb
  134               		.type	_Z9send_bytehb, @function
  135               	_Z9send_bytehb:
  136               		.stabd	46,0,0
-  46:ttris.cpp     **** }
-  47:ttris.cpp     **** 
-  48:ttris.cpp     **** //Function to send and receive data for both master and slave
-  49:ttris.cpp     **** void send_byte(byte data, bool dc)
-  50:ttris.cpp     **** {
- 137               		.stabn	68,0,50,.LM3-.LFBB2
+  60:ttris.cpp     **** }
+  61:ttris.cpp     **** 
+  62:ttris.cpp     **** //Function to send and receive data for both master and slave
+  63:ttris.cpp     **** void send_byte(byte data, bool dc)
+  64:ttris.cpp     **** {
+ 137               		.stabn	68,0,64,.LM3-.LFBB2
  138               	.LM3:
  139               	.LFBB2:
  140               	/* prologue: function */
  141               	/* frame size = 0 */
  142               	/* stack size = 0 */
  143               	.L__stack_usage = 0
-  51:ttris.cpp     ****     // Load data into the buffer
-  52:ttris.cpp     ****     SPDR = data;
- 144               		.stabn	68,0,52,.LM4-.LFBB2
+  65:ttris.cpp     ****     // Load data into the buffer
+  66:ttris.cpp     ****     SPDR = data;
+ 144               		.stabn	68,0,66,.LM4-.LFBB2
  145               	.LM4:
  146 000a 8EBD      		out 0x2e,r24
-  53:ttris.cpp     **** 
-  54:ttris.cpp     ****     //If DC is high, pull the pin high
-  55:ttris.cpp     ****     if(dc)
- 147               		.stabn	68,0,55,.LM5-.LFBB2
+  67:ttris.cpp     **** 
+  68:ttris.cpp     ****     //If DC is high, pull the pin high
+  69:ttris.cpp     ****     if(dc)
+ 147               		.stabn	68,0,69,.LM5-.LFBB2
  148               	.LM5:
  149 000c 6111      		cpse r22,__zero_reg__
-  56:ttris.cpp     ****     {
-  57:ttris.cpp     ****       PORT_SPI |= (PORT_DC);
- 150               		.stabn	68,0,57,.LM6-.LFBB2
+  70:ttris.cpp     ****     {
+  71:ttris.cpp     ****       PORT_SPI |= (PORT_DC);
+ 150               		.stabn	68,0,71,.LM6-.LFBB2
  151               	.LM6:
  152 000e 299A      		sbi 0x5,1
  153               	.L4:
-  58:ttris.cpp     ****     }
-  59:ttris.cpp     **** 
-  60:ttris.cpp     ****     //Wait until transmission complete
-  61:ttris.cpp     ****     while(!(SPSR & (1<<SPIF)));
- 154               		.stabn	68,0,61,.LM7-.LFBB2
+  72:ttris.cpp     ****     }
+  73:ttris.cpp     **** 
+  74:ttris.cpp     ****     //Wait until transmission complete
+  75:ttris.cpp     ****     while(!(SPSR & (1<<SPIF)));
+ 154               		.stabn	68,0,75,.LM7-.LFBB2
  155               	.LM7:
  156 0010 0DB4      		in __tmp_reg__,0x2d
  157 0012 07FE      		sbrs __tmp_reg__,7
  158 0014 00C0      		rjmp .L4
-  62:ttris.cpp     **** 
-  63:ttris.cpp     ****     //Pull DC low again if it was set high
-  64:ttris.cpp     ****     if(dc)
- 159               		.stabn	68,0,64,.LM8-.LFBB2
+  76:ttris.cpp     **** 
+  77:ttris.cpp     ****     //Pull DC low again if it was set high
+  78:ttris.cpp     ****     if(dc)
+ 159               		.stabn	68,0,78,.LM8-.LFBB2
  160               	.LM8:
  161 0016 6111      		cpse r22,__zero_reg__
- 162               	.LBB7:
- 163               	.LBB8:
-  65:ttris.cpp     ****     {
-  66:ttris.cpp     ****       PORT_SPI &= ~(PORT_DC);
- 164               		.stabn	68,0,66,.LM9-.LFBB2
+ 162               	.LBB14:
+ 163               	.LBB15:
+  79:ttris.cpp     ****     {
+  80:ttris.cpp     ****       PORT_SPI &= ~(PORT_DC);
+ 164               		.stabn	68,0,80,.LM9-.LFBB2
  165               	.LM9:
  166 0018 2998      		cbi 0x5,1
  167               	.L2:
  168 001a 0895      		ret
- 169               	.LBE8:
- 170               	.LBE7:
+ 169               	.LBE15:
+ 170               	.LBE14:
  171               		.size	_Z9send_bytehb, .-_Z9send_bytehb
  172               	.Lscope2:
  173               		.stabs	"",36,0,0,.Lscope2-.LFBB2
  174               		.stabd	78,0,0
- 175               		.stabs	"_Z11init_screenv:F(0,4)",36,0,71,_Z11init_screenv
+ 175               		.stabs	"_Z11init_screenv:F(0,4)",36,0,85,_Z11init_screenv
  176               	.global	_Z11init_screenv
  177               		.type	_Z11init_screenv, @function
  178               	_Z11init_screenv:
  179               		.stabd	46,0,0
-  67:ttris.cpp     ****     }
-  68:ttris.cpp     ****     return;
-  69:ttris.cpp     **** }
-  70:ttris.cpp     **** 
-  71:ttris.cpp     **** void init_screen(void)
-  72:ttris.cpp     **** {
- 180               		.stabn	68,0,72,.LM10-.LFBB3
+  81:ttris.cpp     ****     }
+  82:ttris.cpp     ****     return;
+  83:ttris.cpp     **** }
+  84:ttris.cpp     **** 
+  85:ttris.cpp     **** void init_screen(void)
+  86:ttris.cpp     **** {
+ 180               		.stabn	68,0,86,.LM10-.LFBB3
  181               	.LM10:
  182               	.LFBB3:
  183               	/* prologue: function */
  184               	/* frame size = 0 */
  185               	/* stack size = 0 */
  186               	.L__stack_usage = 0
-  73:ttris.cpp     ****   //Toggle the reset pin then set it high
-  74:ttris.cpp     ****   PORT_SPI |= (PORT_RST);
- 187               		.stabn	68,0,74,.LM11-.LFBB3
+  87:ttris.cpp     ****   //Toggle the reset pin then set it high
+  88:ttris.cpp     ****   PORT_SPI |= (PORT_RST);
+ 187               		.stabn	68,0,88,.LM11-.LFBB3
  188               	.LM11:
  189 001c 289A      		sbi 0x5,0
-  75:ttris.cpp     ****   PORT_SPI &= ~(PORT_RST);
- 190               		.stabn	68,0,75,.LM12-.LFBB3
+  89:ttris.cpp     ****   PORT_SPI &= ~(PORT_RST);
+ 190               		.stabn	68,0,89,.LM12-.LFBB3
  191               	.LM12:
  192 001e 2898      		cbi 0x5,0
-  76:ttris.cpp     ****   PORT_SPI |= (PORT_RST);
- 193               		.stabn	68,0,76,.LM13-.LFBB3
+  90:ttris.cpp     ****   PORT_SPI |= (PORT_RST);
+ 193               		.stabn	68,0,90,.LM13-.LFBB3
  194               	.LM13:
  195 0020 289A      		sbi 0x5,0
-  77:ttris.cpp     **** 
-  78:ttris.cpp     ****   //send a byte to init function set
-  79:ttris.cpp     ****   send_byte(0b00100001, LOW);
- 196               		.stabn	68,0,79,.LM14-.LFBB3
+  91:ttris.cpp     **** 
+  92:ttris.cpp     ****   //send a byte to init function set
+  93:ttris.cpp     ****   send_byte(0b00100001, COMM);
+ 196               		.stabn	68,0,93,.LM14-.LFBB3
  197               	.LM14:
  198 0022 60E0      		ldi r22,0
  199 0024 81E2      		ldi r24,lo8(33)
  200 0026 0E94 0000 		call _Z9send_bytehb
-  80:ttris.cpp     ****   //send byte to init Vop
-  81:ttris.cpp     ****   send_byte(0b10010000, LOW);
- 201               		.stabn	68,0,81,.LM15-.LFBB3
+  94:ttris.cpp     ****   //send byte to init Vop
+  95:ttris.cpp     ****   send_byte(0b10010000, COMM);
+ 201               		.stabn	68,0,95,.LM15-.LFBB3
  202               	.LM15:
  203 002a 60E0      		ldi r22,0
  204 002c 80E9      		ldi r24,lo8(-112)
  205 002e 0E94 0000 		call _Z9send_bytehb
-  82:ttris.cpp     ****   //send byte to select normal instruction set
-  83:ttris.cpp     ****   send_byte(0b00100000, LOW);
- 206               		.stabn	68,0,83,.LM16-.LFBB3
+  96:ttris.cpp     ****   //send byte to select normal instruction set
+  97:ttris.cpp     ****   send_byte(0b00100000, COMM);
+ 206               		.stabn	68,0,97,.LM16-.LFBB3
  207               	.LM16:
  208 0032 60E0      		ldi r22,0
  209 0034 80E2      		ldi r24,lo8(32)
  210 0036 0E94 0000 		call _Z9send_bytehb
-  84:ttris.cpp     ****   //send byte to set screen to normal mode
-  85:ttris.cpp     ****   send_byte(0b00001100, LOW);
- 211               		.stabn	68,0,85,.LM17-.LFBB3
+  98:ttris.cpp     ****   //send byte to set screen to normal mode
+  99:ttris.cpp     ****   send_byte(0b00001100, COMM);
+ 211               		.stabn	68,0,99,.LM17-.LFBB3
  212               	.LM17:
  213 003a 60E0      		ldi r22,0
  214 003c 8CE0      		ldi r24,lo8(12)
  215 003e 0E94 0000 		call _Z9send_bytehb
-  86:ttris.cpp     ****   //set x DDRAM address to 0
-  87:ttris.cpp     ****   send_byte(0b10000000, LOW);
- 216               		.stabn	68,0,87,.LM18-.LFBB3
+ 100:ttris.cpp     ****   //set x DDRAM address to 0
+ 101:ttris.cpp     ****   send_byte(0b10000000, COMM);
+ 216               		.stabn	68,0,101,.LM18-.LFBB3
  217               	.LM18:
  218 0042 60E0      		ldi r22,0
  219 0044 80E8      		ldi r24,lo8(-128)
  220 0046 0E94 0000 		call _Z9send_bytehb
-  88:ttris.cpp     ****   //set y DDRAM address to 0
-  89:ttris.cpp     ****   send_byte(0b01000000, LOW);
- 221               		.stabn	68,0,89,.LM19-.LFBB3
+ 102:ttris.cpp     ****   //set y DDRAM address to 0
+ 103:ttris.cpp     ****   send_byte(0b01000000, COMM);
+ 221               		.stabn	68,0,103,.LM19-.LFBB3
  222               	.LM19:
  223 004a 60E0      		ldi r22,0
  224 004c 80E4      		ldi r24,lo8(64)
@@ -316,104 +330,305 @@
  227               	.Lscope3:
  228               		.stabs	"",36,0,0,.Lscope3-.LFBB3
  229               		.stabd	78,0,0
- 230               		.stabs	"_Z10show_framev:F(0,4)",36,0,92,_Z10show_framev
- 231               	.global	_Z10show_framev
- 232               		.type	_Z10show_framev, @function
- 233               	_Z10show_framev:
- 234               		.stabd	46,0,0
-  90:ttris.cpp     **** }
-  91:ttris.cpp     **** 
-  92:ttris.cpp     **** void show_frame(){
- 235               		.stabn	68,0,92,.LM20-.LFBB4
- 236               	.LM20:
- 237               	.LFBB4:
- 238 0052 0F93      		push r16
- 239 0054 1F93      		push r17
- 240 0056 CF93      		push r28
- 241 0058 DF93      		push r29
- 242               	/* prologue: function */
- 243               	/* frame size = 0 */
- 244               	/* stack size = 4 */
- 245               	.L__stack_usage = 4
- 246 005a 00E0      		ldi r16,lo8(vbuff)
- 247 005c 10E0      		ldi r17,hi8(vbuff)
- 248               	.L16:
- 249               		.stabn	68,0,92,.LM21-.LFBB4
- 250               	.LM21:
- 251 005e C0E0      		ldi r28,0
- 252 0060 D0E0      		ldi r29,0
- 253               	.L17:
- 254 0062 F801      		movw r30,r16
- 255 0064 EC0F      		add r30,r28
- 256 0066 FD1F      		adc r31,r29
- 257               	.LBB9:
- 258               	.LBB10:
-  93:ttris.cpp     ****   for(int y = 0; y <= 5; y++)
-  94:ttris.cpp     ****   {
-  95:ttris.cpp     ****     for(int x = 0; x <= 83; x++)
-  96:ttris.cpp     ****     {
-  97:ttris.cpp     ****       send_byte(vbuff[y][x], 1);
- 259               		.stabn	68,0,97,.LM22-.LFBB4
- 260               	.LM22:
- 261 0068 61E0      		ldi r22,lo8(1)
- 262 006a 8081      		ld r24,Z
- 263 006c 0E94 0000 		call _Z9send_bytehb
-  95:ttris.cpp     ****     {
- 264               		.stabn	68,0,95,.LM23-.LFBB4
- 265               	.LM23:
- 266 0070 2196      		adiw r28,1
- 267 0072 C435      		cpi r28,84
- 268 0074 D105      		cpc r29,__zero_reg__
- 269 0076 01F4      		brne .L17
- 270 0078 0C5A      		subi r16,-84
- 271 007a 1F4F      		sbci r17,-1
- 272               	.LBE10:
-  93:ttris.cpp     ****   for(int y = 0; y <= 5; y++)
- 273               		.stabn	68,0,93,.LM24-.LFBB4
- 274               	.LM24:
- 275 007c 80E0      		ldi r24,hi8(vbuff+504)
- 276 007e 0030      		cpi r16,lo8(vbuff+504)
- 277 0080 1807      		cpc r17,r24
- 278 0082 01F4      		brne .L16
- 279               	/* epilogue start */
- 280               	.LBE9:
-  98:ttris.cpp     ****     }
-  99:ttris.cpp     ****   }
- 100:ttris.cpp     **** }
- 281               		.stabn	68,0,100,.LM25-.LFBB4
- 282               	.LM25:
- 283 0084 DF91      		pop r29
- 284 0086 CF91      		pop r28
- 285 0088 1F91      		pop r17
- 286 008a 0F91      		pop r16
- 287 008c 0895      		ret
- 288               		.size	_Z10show_framev, .-_Z10show_framev
- 289               		.stabs	"x:r(0,9)",64,0,95,28
- 290               		.stabn	192,0,0,.LBB10-.LFBB4
- 291               		.stabn	224,0,0,.LBE10-.LFBB4
- 292               	.Lscope4:
- 293               		.stabs	"",36,0,0,.Lscope4-.LFBB4
- 294               		.stabd	78,0,0
- 295               		.section	.text.startup,"ax",@progbits
- 296               		.stabs	"main:F(0,9)",36,0,102,main
- 297               	.global	main
- 298               		.type	main, @function
- 299               	main:
- 300               		.stabd	46,0,0
- 101:ttris.cpp     **** 
- 102:ttris.cpp     **** int main(void)
- 103:ttris.cpp     **** {
- 301               		.stabn	68,0,103,.LM26-.LFBB5
- 302               	.LM26:
- 303               	.LFBB5:
- 304               	/* prologue: function */
- 305               	/* frame size = 0 */
- 306               	/* stack size = 0 */
- 307               	.L__stack_usage = 0
- 308               	.LBB11:
- 309               	.LBB12:
- 310               		.stabs	"/usr/lib/avr/include/util/delay.h",132,0,0,.Ltext1
- 311               	.Ltext1:
+ 230               		.stabs	"_Z9set_pixeliib:F(0,4)",36,0,124,_Z9set_pixeliib
+ 231               		.stabs	"x:P(0,9)",64,0,124,24
+ 232               		.stabs	"y:P(0,9)",64,0,124,22
+ 233               		.stabs	"color:P(0,54)",64,0,124,20
+ 234               	.global	_Z9set_pixeliib
+ 235               		.type	_Z9set_pixeliib, @function
+ 236               	_Z9set_pixeliib:
+ 237               		.stabd	46,0,0
+ 104:ttris.cpp     **** }
+ 105:ttris.cpp     **** 
+ 106:ttris.cpp     **** //Explanation on this function and why it seems so complex:
+ 107:ttris.cpp     **** //Common sense would dictate that the way updating the display would work is
+ 108:ttris.cpp     **** //the programmer would change a value in the internal vbuff, and then the entire
+ 109:ttris.cpp     **** //vbuff would be sent to to the screen as a single frame. However, this means
+ 110:ttris.cpp     **** //that each time you render a frame, 504 bytes are sent over the wire, no matter
+ 111:ttris.cpp     **** //how small the change to the fram was. If you only changed 1 byte, this is a
+ 112:ttris.cpp     **** //huge waste of bandwidth.
+ 113:ttris.cpp     **** //
+ 114:ttris.cpp     **** //The way this function works is it only updates the pixels that actually
+ 115:ttris.cpp     **** //change. It sets the x and y location of the DDRAM in the display and then
+ 116:ttris.cpp     **** //writes the appropriate data to that single byte only. This is done in 3 bytes
+ 117:ttris.cpp     **** //instead of 504.
+ 118:ttris.cpp     **** //
+ 119:ttris.cpp     **** // vbuff must still be maintained in memory however since the display
+ 120:ttris.cpp     **** //can't send data back, and you can only update one byte at a time. If you
+ 121:ttris.cpp     **** //update a single bit, all the other bits in that byte would get overwritten on
+ 122:ttris.cpp     **** //the screen.
+ 123:ttris.cpp     **** 
+ 124:ttris.cpp     **** void set_pixel(int x, int y, bool color)
+ 125:ttris.cpp     **** {
+ 238               		.stabn	68,0,125,.LM20-.LFBB4
+ 239               	.LM20:
+ 240               	.LFBB4:
+ 241 0052 0F93      		push r16
+ 242 0054 1F93      		push r17
+ 243 0056 CF93      		push r28
+ 244 0058 DF93      		push r29
+ 245               	/* prologue: function */
+ 246               	/* frame size = 0 */
+ 247               	/* stack size = 4 */
+ 248               	.L__stack_usage = 4
+ 249               	.LBB23:
+ 126:ttris.cpp     ****   //if out of bounds
+ 127:ttris.cpp     ****   if(x > 83 || y > 47)
+ 250               		.stabn	68,0,127,.LM21-.LFBB4
+ 251               	.LM21:
+ 252 005a 8435      		cpi r24,84
+ 253 005c 9105      		cpc r25,__zero_reg__
+ 254 005e 04F4      		brge .L15
+ 255               		.stabn	68,0,127,.LM22-.LFBB4
+ 256               	.LM22:
+ 257 0060 6033      		cpi r22,48
+ 258 0062 7105      		cpc r23,__zero_reg__
+ 259 0064 04F4      		brge .L15
+ 260               	.LBE23:
+ 261               	.LBB24:
+ 262               	.LBB25:
+ 128:ttris.cpp     ****   {
+ 129:ttris.cpp     ****     return;
+ 130:ttris.cpp     ****   }
+ 131:ttris.cpp     **** 
+ 132:ttris.cpp     ****   //Which byte to manipulate
+ 133:ttris.cpp     ****   int i = y/8;
+ 263               		.stabn	68,0,133,.LM23-.LFBB4
+ 264               	.LM23:
+ 265 0066 FB01      		movw r30,r22
+ 266 0068 77FD      		sbrc r23,7
+ 267 006a 3796      		adiw r30,7
+ 268               	.L17:
+ 269 006c 9C01      		movw r18,r24
+ 270 006e 83E0      		ldi r24,3
+ 271               		1:
+ 272 0070 F595      		asr r31
+ 273 0072 E795      		ror r30
+ 274 0074 8A95      		dec r24
+ 275 0076 01F4      		brne 1b
+ 134:ttris.cpp     ****   //Which bit in the byte to manipulate
+ 135:ttris.cpp     ****   int pos = y%8;
+ 276               		.stabn	68,0,135,.LM24-.LFBB4
+ 277               	.LM24:
+ 278 0078 CB01      		movw r24,r22
+ 279 007a 68E0      		ldi r22,lo8(8)
+ 280 007c 70E0      		ldi r23,0
+ 281 007e 0E94 0000 		call __divmodhi4
+ 136:ttris.cpp     ****   //Positioning the byte for masking or oring
+ 137:ttris.cpp     ****   byte flag = 0x01;
+ 138:ttris.cpp     ****   flag = flag << pos;
+ 282               		.stabn	68,0,138,.LM25-.LFBB4
+ 283               	.LM25:
+ 284 0082 61E0      		ldi r22,lo8(1)
+ 285 0084 70E0      		ldi r23,0
+ 286 0086 00C0      		rjmp 2f
+ 287               		1:
+ 288 0088 660F      		lsl r22
+ 289               		2:
+ 290 008a 8A95      		dec r24
+ 291 008c 02F4      		brpl 1b
+ 292 008e CF01      		movw r24,r30
+ 293 0090 8064      		ori r24,64
+ 294 0092 8901      		movw r16,r18
+ 295 0094 0068      		ori r16,128
+ 296               	.LBB26:
+ 297               	.LBB27:
+ 139:ttris.cpp     **** 
+ 140:ttris.cpp     ****   //If setting it black, bitwise or
+ 141:ttris.cpp     ****   if(color)
+ 142:ttris.cpp     ****   {
+ 143:ttris.cpp     ****     //write the changes to the internal vbuff
+ 144:ttris.cpp     ****     vbuff[i][x] = vbuff[i][x] | flag;
+ 298               		.stabn	68,0,144,.LM26-.LFBB4
+ 299               	.LM26:
+ 300 0096 94E5      		ldi r25,lo8(84)
+ 301 0098 9E9F      		mul r25,r30
+ 302 009a E001      		movw r28,r0
+ 303 009c 9F9F      		mul r25,r31
+ 304 009e D00D      		add r29,r0
+ 305 00a0 1124      		clr __zero_reg__
+ 306 00a2 C20F      		add r28,r18
+ 307 00a4 D31F      		adc r29,r19
+ 308 00a6 C050      		subi r28,lo8(-(vbuff))
+ 309 00a8 D040      		sbci r29,hi8(-(vbuff))
+ 310               	.LBE27:
+ 141:ttris.cpp     ****   {
+ 311               		.stabn	68,0,141,.LM27-.LFBB4
+ 312               	.LM27:
+ 313 00aa 4423      		tst r20
+ 314 00ac 01F0      		breq .L18
+ 315               	.LBB28:
+ 316               		.stabn	68,0,144,.LM28-.LFBB4
+ 317               	.LM28:
+ 318 00ae 9881      		ld r25,Y
+ 319 00b0 692B      		or r22,r25
+ 320 00b2 00C0      		rjmp .L19
+ 321               	.L18:
+ 322               	.LBE28:
+ 323               	.LBB29:
+ 145:ttris.cpp     **** 
+ 146:ttris.cpp     ****     //update the y address
+ 147:ttris.cpp     ****     int sendy = i | 0b01000000;
+ 148:ttris.cpp     ****     send_byte(sendy, COMM);
+ 149:ttris.cpp     ****     //update the x address
+ 150:ttris.cpp     ****     int sendx = x | 0b10000000;
+ 151:ttris.cpp     ****     send_byte(sendx, COMM);
+ 152:ttris.cpp     **** 
+ 153:ttris.cpp     ****     //Send the updated byte to the screen
+ 154:ttris.cpp     ****     send_byte(vbuff[i][x], DATA);
+ 155:ttris.cpp     **** 
+ 156:ttris.cpp     ****   }
+ 157:ttris.cpp     **** 
+ 158:ttris.cpp     ****   //If setting it white, mask and bitwise and
+ 159:ttris.cpp     ****   else
+ 160:ttris.cpp     ****   {
+ 161:ttris.cpp     ****     flag = ~flag;
+ 324               		.stabn	68,0,161,.LM29-.LFBB4
+ 325               	.LM29:
+ 326 00b4 6095      		com r22
+ 162:ttris.cpp     ****     vbuff[i][x] = vbuff[i][x] & flag;
+ 327               		.stabn	68,0,162,.LM30-.LFBB4
+ 328               	.LM30:
+ 329 00b6 9881      		ld r25,Y
+ 330 00b8 6923      		and r22,r25
+ 331               	.L19:
+ 332 00ba 6883      		st Y,r22
+ 163:ttris.cpp     **** 
+ 164:ttris.cpp     ****     //update the y address
+ 165:ttris.cpp     ****     int sendy = i | 0b01000000;
+ 166:ttris.cpp     ****     send_byte(sendy, COMM);
+ 333               		.stabn	68,0,166,.LM31-.LFBB4
+ 334               	.LM31:
+ 335 00bc 60E0      		ldi r22,0
+ 336 00be 0E94 0000 		call _Z9send_bytehb
+ 167:ttris.cpp     ****     //update the x address
+ 168:ttris.cpp     ****     int sendx = x | 0b10000000;
+ 169:ttris.cpp     ****     send_byte(sendx, COMM);
+ 337               		.stabn	68,0,169,.LM32-.LFBB4
+ 338               	.LM32:
+ 339 00c2 60E0      		ldi r22,0
+ 340 00c4 802F      		mov r24,r16
+ 341 00c6 0E94 0000 		call _Z9send_bytehb
+ 170:ttris.cpp     **** 
+ 171:ttris.cpp     ****     //Send the updated byte to the screen
+ 172:ttris.cpp     ****     send_byte(vbuff[i][x], DATA);
+ 342               		.stabn	68,0,172,.LM33-.LFBB4
+ 343               	.LM33:
+ 344 00ca 61E0      		ldi r22,lo8(1)
+ 345 00cc 8881      		ld r24,Y
+ 346               	/* epilogue start */
+ 347               	.LBE29:
+ 348               	.LBE26:
+ 349               	.LBE25:
+ 350               	.LBE24:
+ 173:ttris.cpp     ****   }
+ 174:ttris.cpp     **** }
+ 351               		.stabn	68,0,174,.LM34-.LFBB4
+ 352               	.LM34:
+ 353 00ce DF91      		pop r29
+ 354 00d0 CF91      		pop r28
+ 355 00d2 1F91      		pop r17
+ 356 00d4 0F91      		pop r16
+ 357               	.LBB33:
+ 358               	.LBB32:
+ 359               	.LBB31:
+ 360               	.LBB30:
+ 172:ttris.cpp     ****   }
+ 361               		.stabn	68,0,172,.LM35-.LFBB4
+ 362               	.LM35:
+ 363 00d6 0C94 0000 		jmp _Z9send_bytehb
+ 364               	.L15:
+ 365               	/* epilogue start */
+ 366               	.LBE30:
+ 367               	.LBE31:
+ 368               	.LBE32:
+ 369               	.LBE33:
+ 370               		.stabn	68,0,174,.LM36-.LFBB4
+ 371               	.LM36:
+ 372 00da DF91      		pop r29
+ 373 00dc CF91      		pop r28
+ 374 00de 1F91      		pop r17
+ 375 00e0 0F91      		pop r16
+ 376 00e2 0895      		ret
+ 377               		.size	_Z9set_pixeliib, .-_Z9set_pixeliib
+ 378               	.Lscope4:
+ 379               		.stabs	"",36,0,0,.Lscope4-.LFBB4
+ 380               		.stabd	78,0,0
+ 381               		.stabs	"_Z13blank_displayv:F(0,4)",36,0,176,_Z13blank_displayv
+ 382               	.global	_Z13blank_displayv
+ 383               		.type	_Z13blank_displayv, @function
+ 384               	_Z13blank_displayv:
+ 385               		.stabd	46,0,0
+ 175:ttris.cpp     **** 
+ 176:ttris.cpp     **** void blank_display(){
+ 386               		.stabn	68,0,176,.LM37-.LFBB5
+ 387               	.LM37:
+ 388               	.LFBB5:
+ 389 00e4 CF93      		push r28
+ 390 00e6 DF93      		push r29
+ 391               	/* prologue: function */
+ 392               	/* frame size = 0 */
+ 393               	/* stack size = 2 */
+ 394               	.L__stack_usage = 2
+ 395               		.stabn	68,0,176,.LM38-.LFBB5
+ 396               	.LM38:
+ 397 00e8 C8EF      		ldi r28,lo8(-8)
+ 398 00ea D1E0      		ldi r29,lo8(1)
+ 399               	.L21:
+ 400               	.LBB34:
+ 177:ttris.cpp     ****   for(int i = 0; i < 504; i++)
+ 178:ttris.cpp     ****   {
+ 179:ttris.cpp     ****     send_byte(0, DATA);
+ 401               		.stabn	68,0,179,.LM39-.LFBB5
+ 402               	.LM39:
+ 403 00ec 61E0      		ldi r22,lo8(1)
+ 404 00ee 80E0      		ldi r24,0
+ 405 00f0 0E94 0000 		call _Z9send_bytehb
+ 406 00f4 2197      		sbiw r28,1
+ 177:ttris.cpp     ****   for(int i = 0; i < 504; i++)
+ 407               		.stabn	68,0,177,.LM40-.LFBB5
+ 408               	.LM40:
+ 409 00f6 01F4      		brne .L21
+ 410               	/* epilogue start */
+ 411               	.LBE34:
+ 180:ttris.cpp     ****   }
+ 181:ttris.cpp     **** }
+ 412               		.stabn	68,0,181,.LM41-.LFBB5
+ 413               	.LM41:
+ 414 00f8 DF91      		pop r29
+ 415 00fa CF91      		pop r28
+ 416 00fc 0895      		ret
+ 417               		.size	_Z13blank_displayv, .-_Z13blank_displayv
+ 418               	.Lscope5:
+ 419               		.stabs	"",36,0,0,.Lscope5-.LFBB5
+ 420               		.stabd	78,0,0
+ 421               		.section	.text.startup,"ax",@progbits
+ 422               		.stabs	"main:F(0,9)",36,0,183,main
+ 423               	.global	main
+ 424               		.type	main, @function
+ 425               	main:
+ 426               		.stabd	46,0,0
+ 182:ttris.cpp     **** 
+ 183:ttris.cpp     **** int main(void)
+ 184:ttris.cpp     **** {
+ 427               		.stabn	68,0,184,.LM42-.LFBB6
+ 428               	.LM42:
+ 429               	.LFBB6:
+ 430 0000 EF92      		push r14
+ 431 0002 FF92      		push r15
+ 432 0004 0F93      		push r16
+ 433 0006 1F93      		push r17
+ 434 0008 CF93      		push r28
+ 435 000a DF93      		push r29
+ 436               	/* prologue: function */
+ 437               	/* frame size = 0 */
+ 438               	/* stack size = 6 */
+ 439               	.L__stack_usage = 6
+ 440               	.LBB35:
+ 441               	.LBB36:
+ 442               	.LBB37:
+ 443               		.stabs	"/usr/lib/avr/include/util/delay.h",132,0,0,.Ltext1
+ 444               	.Ltext1:
    1:/usr/lib/avr/include/util/delay.h **** /* Copyright (c) 2002, Marek Michalkiewicz
    2:/usr/lib/avr/include/util/delay.h ****    Copyright (c) 2004,2005,2007 Joerg Wunsch
    3:/usr/lib/avr/include/util/delay.h ****    Copyright (c) 2007  Florin-Viorel Petrov
@@ -577,578 +792,148 @@
  161:/usr/lib/avr/include/util/delay.h **** 	#endif
  162:/usr/lib/avr/include/util/delay.h **** 
  163:/usr/lib/avr/include/util/delay.h **** 	__builtin_avr_delay_cycles(__ticks_dc);
- 312               		.stabn	68,0,163,.LM27-.LFBB5
- 313               	.LM27:
- 314 0000 2FEF      		ldi r18,lo8(639999)
- 315 0002 83EC      		ldi r24,hi8(639999)
- 316 0004 99E0      		ldi r25,hlo8(639999)
- 317 0006 2150      	1:	subi r18,1
- 318 0008 8040      		sbci r24,0
- 319 000a 9040      		sbci r25,0
- 320 000c 01F4      		brne 1b
- 321 000e 00C0      		rjmp .
- 322 0010 0000      		nop
- 323               	.LBE12:
- 324               	.LBE11:
- 325               		.stabs	"ttris.cpp",132,0,0,.Ltext2
- 326               	.Ltext2:
- 104:ttris.cpp     ****   //Give the AVR a bit to boot
- 105:ttris.cpp     ****   _delay_ms(200);
- 106:ttris.cpp     ****   //Initialize the SPI bus
- 107:ttris.cpp     ****   spi_init_master();
- 327               		.stabn	68,0,107,.LM28-.LFBB5
- 328               	.LM28:
- 329 0012 0E94 0000 		call _Z15spi_init_masterv
- 108:ttris.cpp     ****   //Initialize the screen
- 109:ttris.cpp     ****   init_screen();
- 330               		.stabn	68,0,109,.LM29-.LFBB5
- 331               	.LM29:
- 332 0016 0E94 0000 		call _Z11init_screenv
- 110:ttris.cpp     ****   //send display data
- 111:ttris.cpp     ****   show_frame();
- 333               		.stabn	68,0,111,.LM30-.LFBB5
- 334               	.LM30:
- 335 001a 0E94 0000 		call _Z10show_framev
- 112:ttris.cpp     **** 
- 113:ttris.cpp     ****   return(0);
- 114:ttris.cpp     **** }
- 336               		.stabn	68,0,114,.LM31-.LFBB5
- 337               	.LM31:
- 338 001e 80E0      		ldi r24,0
- 339 0020 90E0      		ldi r25,0
- 340 0022 0895      		ret
- 341               		.size	main, .-main
- 342               	.Lscope5:
- 343               		.stabs	"",36,0,0,.Lscope5-.LFBB5
- 344               		.stabd	78,0,0
- 345               	.global	vbuff
- 346               		.data
- 347               		.type	vbuff, @object
- 348               		.size	vbuff, 504
- 349               	vbuff:
- 350 0000 FF        		.byte	-1
- 351 0001 FF        		.byte	-1
- 352 0002 03        		.byte	3
- 353 0003 07        		.byte	7
- 354 0004 FF        		.byte	-1
- 355 0005 00        		.byte	0
- 356 0006 00        		.byte	0
- 357 0007 00        		.byte	0
- 358 0008 00        		.byte	0
- 359 0009 FF        		.byte	-1
- 360 000a FF        		.byte	-1
- 361 000b 00        		.byte	0
- 362 000c 00        		.byte	0
- 363 000d 00        		.byte	0
- 364 000e E3        		.byte	-29
- 365 000f F3        		.byte	-13
- 366 0010 73        		.byte	115
- 367 0011 3F        		.byte	63
- 368 0012 3F        		.byte	63
- 369 0013 00        		.byte	0
- 370 0014 00        		.byte	0
- 371 0015 23        		.byte	35
- 372 0016 33        		.byte	51
- 373 0017 33        		.byte	51
- 374 0018 7F        		.byte	127
- 375 0019 FF        		.byte	-1
- 376 001a 00        		.byte	0
- 377 001b 00        		.byte	0
- 378 001c 3F        		.byte	63
- 379 001d 3F        		.byte	63
- 380 001e 30        		.byte	48
- 381 001f 78        		.byte	120
- 382 0020 FF        		.byte	-1
- 383 0021 00        		.byte	0
- 384 0022 00        		.byte	0
- 385 0023 3F        		.byte	63
- 386 0024 3F        		.byte	63
- 387 0025 33        		.byte	51
- 388 0026 73        		.byte	115
- 389 0027 F3        		.byte	-13
- 390 0028 00        		.byte	0
- 391 0029 00        		.byte	0
- 392 002a FF        		.byte	-1
- 393 002b FF        		.byte	-1
- 394 002c 73        		.byte	115
- 395 002d 73        		.byte	115
- 396 002e F3        		.byte	-13
- 397 002f 00        		.byte	0
- 398 0030 00        		.byte	0
- 399 0031 03        		.byte	3
- 400 0032 03        		.byte	3
- 401 0033 03        		.byte	3
- 402 0034 07        		.byte	7
- 403 0035 FF        		.byte	-1
- 404 0036 00        		.byte	0
- 405 0037 00        		.byte	0
- 406 0038 FF        		.byte	-1
- 407 0039 FF        		.byte	-1
- 408 003a 73        		.byte	115
- 409 003b 7F        		.byte	127
- 410 003c FF        		.byte	-1
- 411 003d 00        		.byte	0
- 412 003e 00        		.byte	0
- 413 003f 3F        		.byte	63
- 414 0040 3F        		.byte	63
- 415 0041 33        		.byte	51
- 416 0042 7F        		.byte	127
- 417 0043 FF        		.byte	-1
- 418 0044 00        		.byte	0
- 419 0045 00        		.byte	0
- 420 0046 FC        		.byte	-4
- 421 0047 FC        		.byte	-4
- 422 0048 73        		.byte	115
- 423 0049 7B        		.byte	123
- 424 004a FC        		.byte	-4
- 425 004b 00        		.byte	0
- 426 004c 00        		.byte	0
- 427 004d FF        		.byte	-1
- 428 004e FF        		.byte	-1
- 429 004f 73        		.byte	115
- 430 0050 33        		.byte	51
- 431 0051 CC        		.byte	-52
- 432 0052 00        		.byte	0
- 433 0053 00        		.byte	0
- 434 0054 87        		.byte	-121
- 435 0055 87        		.byte	-121
- 436 0056 67        		.byte	103
- 437 0057 67        		.byte	103
- 438 0058 63        		.byte	99
- 439 0059 00        		.byte	0
- 440 005a 00        		.byte	0
- 441 005b E0        		.byte	-32
- 442 005c E0        		.byte	-32
- 443 005d 63        		.byte	99
- 444 005e 63        		.byte	99
- 445 005f 80        		.byte	-128
- 446 0060 00        		.byte	0
- 447 0061 00        		.byte	0
- 448 0062 E3        		.byte	-29
- 449 0063 E7        		.byte	-25
- 450 0064 67        		.byte	103
- 451 0065 67        		.byte	103
- 452 0066 63        		.byte	99
- 453 0067 00        		.byte	0
- 454 0068 00        		.byte	0
- 455 0069 E2        		.byte	-30
- 456 006a E7        		.byte	-25
- 457 006b 67        		.byte	103
- 458 006c 67        		.byte	103
- 459 006d 63        		.byte	99
- 460 006e 00        		.byte	0
- 461 006f 00        		.byte	0
- 462 0070 80        		.byte	-128
- 463 0071 80        		.byte	-128
- 464 0072 60        		.byte	96
- 465 0073 60        		.byte	96
- 466 0074 63        		.byte	99
- 467 0075 00        		.byte	0
- 468 0076 00        		.byte	0
- 469 0077 E2        		.byte	-30
- 470 0078 E7        		.byte	-25
- 471 0079 07        		.byte	7
- 472 007a 07        		.byte	7
- 473 007b E3        		.byte	-29
- 474 007c 00        		.byte	0
- 475 007d 00        		.byte	0
- 476 007e 23        		.byte	35
- 477 007f 67        		.byte	103
- 478 0080 E7        		.byte	-25
- 479 0081 E7        		.byte	-25
- 480 0082 63        		.byte	99
- 481 0083 00        		.byte	0
- 482 0084 00        		.byte	0
- 483 0085 00        		.byte	0
- 484 0086 00        		.byte	0
- 485 0087 00        		.byte	0
- 486 0088 00        		.byte	0
- 487 0089 E3        		.byte	-29
- 488 008a 00        		.byte	0
- 489 008b 00        		.byte	0
- 490 008c E3        		.byte	-29
- 491 008d E7        		.byte	-25
- 492 008e 07        		.byte	7
- 493 008f 07        		.byte	7
- 494 0090 E3        		.byte	-29
- 495 0091 00        		.byte	0
- 496 0092 00        		.byte	0
- 497 0093 E2        		.byte	-30
- 498 0094 E7        		.byte	-25
- 499 0095 07        		.byte	7
- 500 0096 07        		.byte	7
- 501 0097 03        		.byte	3
- 502 0098 00        		.byte	0
- 503 0099 00        		.byte	0
- 504 009a E3        		.byte	-29
- 505 009b E3        		.byte	-29
- 506 009c C0        		.byte	-64
- 507 009d C0        		.byte	-64
- 508 009e E3        		.byte	-29
- 509 009f 00        		.byte	0
- 510 00a0 00        		.byte	0
- 511 00a1 E3        		.byte	-29
- 512 00a2 E7        		.byte	-25
- 513 00a3 C7        		.byte	-57
- 514 00a4 C3        		.byte	-61
- 515 00a5 E0        		.byte	-32
- 516 00a6 00        		.byte	0
- 517 00a7 00        		.byte	0
- 518 00a8 7F        		.byte	127
- 519 00a9 7F        		.byte	127
- 520 00aa 60        		.byte	96
- 521 00ab 60        		.byte	96
- 522 00ac 60        		.byte	96
- 523 00ad 00        		.byte	0
- 524 00ae 00        		.byte	0
- 525 00af 7F        		.byte	127
- 526 00b0 7F        		.byte	127
- 527 00b1 60        		.byte	96
- 528 00b2 70        		.byte	112
- 529 00b3 7F        		.byte	127
- 530 00b4 00        		.byte	0
- 531 00b5 00        		.byte	0
- 532 00b6 7F        		.byte	127
- 533 00b7 7F        		.byte	127
- 534 00b8 66        		.byte	102
- 535 00b9 66        		.byte	102
- 536 00ba 66        		.byte	102
- 537 00bb 00        		.byte	0
- 538 00bc 00        		.byte	0
- 539 00bd 7F        		.byte	127
- 540 00be 7F        		.byte	127
- 541 00bf 06        		.byte	6
- 542 00c0 00        		.byte	0
- 543 00c1 00        		.byte	0
- 544 00c2 00        		.byte	0
- 545 00c3 00        		.byte	0
- 546 00c4 7F        		.byte	127
- 547 00c5 7F        		.byte	127
- 548 00c6 66        		.byte	102
- 549 00c7 7E        		.byte	126
- 550 00c8 7E        		.byte	126
- 551 00c9 00        		.byte	0
- 552 00ca 00        		.byte	0
- 553 00cb 7F        		.byte	127
- 554 00cc 7F        		.byte	127
- 555 00cd 06        		.byte	6
- 556 00ce 0F        		.byte	15
- 557 00cf 7F        		.byte	127
- 558 00d0 00        		.byte	0
- 559 00d1 00        		.byte	0
- 560 00d2 60        		.byte	96
- 561 00d3 70        		.byte	112
- 562 00d4 7F        		.byte	127
- 563 00d5 7F        		.byte	127
- 564 00d6 60        		.byte	96
- 565 00d7 00        		.byte	0
- 566 00d8 00        		.byte	0
- 567 00d9 18        		.byte	24
- 568 00da 18        		.byte	24
- 569 00db 60        		.byte	96
- 570 00dc 70        		.byte	112
- 571 00dd 7F        		.byte	127
- 572 00de 00        		.byte	0
- 573 00df 00        		.byte	0
- 574 00e0 7F        		.byte	127
- 575 00e1 7F        		.byte	127
- 576 00e2 06        		.byte	6
- 577 00e3 06        		.byte	6
- 578 00e4 79        		.byte	121
- 579 00e5 00        		.byte	0
- 580 00e6 00        		.byte	0
- 581 00e7 7F        		.byte	127
- 582 00e8 7F        		.byte	127
- 583 00e9 60        		.byte	96
- 584 00ea 60        		.byte	96
- 585 00eb 60        		.byte	96
- 586 00ec 00        		.byte	0
- 587 00ed 00        		.byte	0
- 588 00ee 7F        		.byte	127
- 589 00ef 7F        		.byte	127
- 590 00f0 07        		.byte	7
- 591 00f1 0F        		.byte	15
- 592 00f2 7F        		.byte	127
- 593 00f3 00        		.byte	0
- 594 00f4 00        		.byte	0
- 595 00f5 7F        		.byte	127
- 596 00f6 7F        		.byte	127
- 597 00f7 1F        		.byte	31
- 598 00f8 3F        		.byte	63
- 599 00f9 7F        		.byte	127
- 600 00fa 00        		.byte	0
- 601 00fb 00        		.byte	0
- 602 00fc F8        		.byte	-8
- 603 00fd F8        		.byte	-8
- 604 00fe 06        		.byte	6
- 605 00ff 04        		.byte	4
- 606 0100 F8        		.byte	-8
- 607 0101 00        		.byte	0
- 608 0102 00        		.byte	0
- 609 0103 FE        		.byte	-2
- 610 0104 FE        		.byte	-2
- 611 0105 E6        		.byte	-26
- 612 0106 74        		.byte	116
- 613 0107 78        		.byte	120
- 614 0108 00        		.byte	0
- 615 0109 00        		.byte	0
- 616 010a F0        		.byte	-16
- 617 010b F8        		.byte	-8
- 618 010c 86        		.byte	-122
- 619 010d 84        		.byte	-124
- 620 010e F8        		.byte	-8
- 621 010f 00        		.byte	0
- 622 0110 00        		.byte	0
- 623 0111 FE        		.byte	-2
- 624 0112 FE        		.byte	-2
- 625 0113 E6        		.byte	-26
- 626 0114 F4        		.byte	-12
- 627 0115 78        		.byte	120
- 628 0116 00        		.byte	0
- 629 0117 00        		.byte	0
- 630 0118 10        		.byte	16
- 631 0119 18        		.byte	24
- 632 011a 66        		.byte	102
- 633 011b 46        		.byte	70
- 634 011c 86        		.byte	-122
- 635 011d 00        		.byte	0
- 636 011e 00        		.byte	0
- 637 011f 06        		.byte	6
- 638 0120 0E        		.byte	14
- 639 0121 FE        		.byte	-2
- 640 0122 FE        		.byte	-2
- 641 0123 06        		.byte	6
- 642 0124 00        		.byte	0
- 643 0125 00        		.byte	0
- 644 0126 FE        		.byte	-2
- 645 0127 FC        		.byte	-4
- 646 0128 00        		.byte	0
- 647 0129 00        		.byte	0
- 648 012a FE        		.byte	-2
- 649 012b 00        		.byte	0
- 650 012c 00        		.byte	0
- 651 012d 7E        		.byte	126
- 652 012e 7C        		.byte	124
- 653 012f 80        		.byte	-128
- 654 0130 80        		.byte	-128
- 655 0131 7E        		.byte	126
- 656 0132 00        		.byte	0
- 657 0133 00        		.byte	0
- 658 0134 FE        		.byte	-2
- 659 0135 FC        		.byte	-4
- 660 0136 E0        		.byte	-32
- 661 0137 F0        		.byte	-16
- 662 0138 FE        		.byte	-2
- 663 0139 00        		.byte	0
- 664 013a 00        		.byte	0
- 665 013b 1E        		.byte	30
- 666 013c 9C        		.byte	-100
- 667 013d 60        		.byte	96
- 668 013e 60        		.byte	96
- 669 013f 9E        		.byte	-98
- 670 0140 00        		.byte	0
- 671 0141 00        		.byte	0
- 672 0142 1E        		.byte	30
- 673 0143 1C        		.byte	28
- 674 0144 E0        		.byte	-32
- 675 0145 E0        		.byte	-32
- 676 0146 1E        		.byte	30
- 677 0147 00        		.byte	0
- 678 0148 00        		.byte	0
- 679 0149 06        		.byte	6
- 680 014a 86        		.byte	-122
- 681 014b 66        		.byte	102
- 682 014c 6E        		.byte	110
- 683 014d 1E        		.byte	30
- 684 014e 00        		.byte	0
- 685 014f 00        		.byte	0
- 686 0150 03        		.byte	3
- 687 0151 03        		.byte	3
- 688 0152 C6        		.byte	-58
- 689 0153 C6        		.byte	-58
- 690 0154 01        		.byte	1
- 691 0155 00        		.byte	0
- 692 0156 00        		.byte	0
- 693 0157 47        		.byte	71
- 694 0158 C7        		.byte	-57
- 695 0159 C0        		.byte	-64
- 696 015a C0        		.byte	-64
- 697 015b C0        		.byte	-64
- 698 015c 00        		.byte	0
- 699 015d 00        		.byte	0
- 700 015e C1        		.byte	-63
- 701 015f C3        		.byte	-61
- 702 0160 07        		.byte	7
- 703 0161 0F        		.byte	15
- 704 0162 C7        		.byte	-57
- 705 0163 00        		.byte	0
- 706 0164 00        		.byte	0
- 707 0165 47        		.byte	71
- 708 0166 C7        		.byte	-57
- 709 0167 03        		.byte	3
- 710 0168 03        		.byte	3
- 711 0169 C4        		.byte	-60
- 712 016a 00        		.byte	0
- 713 016b 00        		.byte	0
- 714 016c 04        		.byte	4
- 715 016d 0E        		.byte	14
- 716 016e 0E        		.byte	14
- 717 016f 0E        		.byte	14
- 718 0170 07        		.byte	7
- 719 0171 00        		.byte	0
- 720 0172 00        		.byte	0
- 721 0173 00        		.byte	0
- 722 0174 00        		.byte	0
- 723 0175 C7        		.byte	-57
- 724 0176 C7        		.byte	-57
- 725 0177 00        		.byte	0
- 726 0178 00        		.byte	0
- 727 0179 00        		.byte	0
- 728 017a 01        		.byte	1
- 729 017b 03        		.byte	3
- 730 017c C6        		.byte	-58
- 731 017d CE        		.byte	-50
- 732 017e 07        		.byte	7
- 733 017f 00        		.byte	0
- 734 0180 00        		.byte	0
- 735 0181 00        		.byte	0
- 736 0182 80        		.byte	-128
- 737 0183 C7        		.byte	-57
- 738 0184 C7        		.byte	-57
- 739 0185 00        		.byte	0
- 740 0186 00        		.byte	0
- 741 0187 00        		.byte	0
- 742 0188 47        		.byte	71
- 743 0189 C7        		.byte	-57
- 744 018a 03        		.byte	3
- 745 018b 03        		.byte	3
- 746 018c 07        		.byte	7
- 747 018d 00        		.byte	0
- 748 018e 00        		.byte	0
- 749 018f 07        		.byte	7
- 750 0190 07        		.byte	7
- 751 0191 00        		.byte	0
- 752 0192 00        		.byte	0
- 753 0193 C7        		.byte	-57
- 754 0194 00        		.byte	0
- 755 0195 00        		.byte	0
- 756 0196 00        		.byte	0
- 757 0197 00        		.byte	0
- 758 0198 07        		.byte	7
- 759 0199 07        		.byte	7
- 760 019a 00        		.byte	0
- 761 019b 00        		.byte	0
- 762 019c 00        		.byte	0
- 763 019d 07        		.byte	7
- 764 019e 0F        		.byte	15
- 765 019f CE        		.byte	-50
- 766 01a0 CE        		.byte	-50
- 767 01a1 C4        		.byte	-60
- 768 01a2 00        		.byte	0
- 769 01a3 00        		.byte	0
- 770 01a4 00        		.byte	0
- 771 01a5 00        		.byte	0
- 772 01a6 CF        		.byte	-49
- 773 01a7 87        		.byte	-121
- 774 01a8 00        		.byte	0
- 775 01a9 00        		.byte	0
- 776 01aa 00        		.byte	0
- 777 01ab 00        		.byte	0
- 778 01ac 00        		.byte	0
- 779 01ad CC        		.byte	-52
- 780 01ae 8F        		.byte	-113
- 781 01af 0F        		.byte	15
- 782 01b0 00        		.byte	0
- 783 01b1 00        		.byte	0
- 784 01b2 31        		.byte	49
- 785 01b3 31        		.byte	49
- 786 01b4 C0        		.byte	-64
- 787 01b5 C0        		.byte	-64
- 788 01b6 33        		.byte	51
- 789 01b7 00        		.byte	0
- 790 01b8 00        		.byte	0
- 791 01b9 CC        		.byte	-52
- 792 01ba CE        		.byte	-50
- 793 01bb 3F        		.byte	63
- 794 01bc 3F        		.byte	63
- 795 01bd CC        		.byte	-52
- 796 01be 00        		.byte	0
- 797 01bf 00        		.byte	0
- 798 01c0 00        		.byte	0
- 799 01c1 00        		.byte	0
- 800 01c2 C0        		.byte	-64
- 801 01c3 80        		.byte	-128
- 802 01c4 00        		.byte	0
- 803 01c5 00        		.byte	0
- 804 01c6 00        		.byte	0
- 805 01c7 00        		.byte	0
- 806 01c8 00        		.byte	0
- 807 01c9 03        		.byte	3
- 808 01ca 01        		.byte	1
- 809 01cb 00        		.byte	0
- 810 01cc 00        		.byte	0
- 811 01cd 00        		.byte	0
- 812 01ce 30        		.byte	48
- 813 01cf 38        		.byte	56
- 814 01d0 FF        		.byte	-1
- 815 01d1 FF        		.byte	-1
- 816 01d2 30        		.byte	48
- 817 01d3 00        		.byte	0
- 818 01d4 00        		.byte	0
- 819 01d5 01        		.byte	1
- 820 01d6 03        		.byte	3
- 821 01d7 FF        		.byte	-1
- 822 01d8 FF        		.byte	-1
- 823 01d9 03        		.byte	3
- 824 01da 00        		.byte	0
- 825 01db 00        		.byte	0
- 826 01dc C0        		.byte	-64
- 827 01dd C0        		.byte	-64
- 828 01de 33        		.byte	51
- 829 01df 12        		.byte	18
- 830 01e0 0C        		.byte	12
- 831 01e1 00        		.byte	0
- 832 01e2 00        		.byte	0
- 833 01e3 0C        		.byte	12
- 834 01e4 0C        		.byte	12
- 835 01e5 33        		.byte	51
- 836 01e6 21        		.byte	33
- 837 01e7 C0        		.byte	-64
- 838 01e8 00        		.byte	0
- 839 01e9 00        		.byte	0
- 840 01ea 00        		.byte	0
- 841 01eb 00        		.byte	0
- 842 01ec 00        		.byte	0
- 843 01ed 00        		.byte	0
- 844 01ee 00        		.byte	0
- 845 01ef 00        		.byte	0
- 846 01f0 00        		.byte	0
- 847 01f1 00        		.byte	0
- 848 01f2 00        		.byte	0
- 849 01f3 03        		.byte	3
- 850 01f4 03        		.byte	3
- 851 01f5 03        		.byte	3
- 852 01f6 00        		.byte	0
- 853 01f7 00        		.byte	0
- 854               		.stabs	"vbuff:G(0,90)=ar(0,91)=r(0,91);0;0177777;;0;5;(0,92)=ar(0,91);0;83;(0,89)",32,0,32,0
- 855               		.text
- 856               		.stabs	"",100,0,0,.Letext0
- 857               	.Letext0:
- 858               		.ident	"GCC: (GNU) 4.9.2"
- 859               	.global __do_copy_data
+ 445               		.stabn	68,0,163,.LM43-.LFBB6
+ 446               	.LM43:
+ 447 000c 2FEF      		ldi r18,lo8(639999)
+ 448 000e 83EC      		ldi r24,hi8(639999)
+ 449 0010 99E0      		ldi r25,hlo8(639999)
+ 450 0012 2150      	1:	subi r18,1
+ 451 0014 8040      		sbci r24,0
+ 452 0016 9040      		sbci r25,0
+ 453 0018 01F4      		brne 1b
+ 454 001a 00C0      		rjmp .
+ 455 001c 0000      		nop
+ 456               	.LBE37:
+ 457               	.LBE36:
+ 458               		.stabs	"ttris.cpp",132,0,0,.Ltext2
+ 459               	.Ltext2:
+ 185:ttris.cpp     ****   //Give the AVR a bit to boot
+ 186:ttris.cpp     ****   _delay_ms(200);
+ 187:ttris.cpp     ****   //Initialize the SPI bus
+ 188:ttris.cpp     ****   spi_init_master();
+ 460               		.stabn	68,0,188,.LM44-.LFBB6
+ 461               	.LM44:
+ 462 001e 0E94 0000 		call _Z15spi_init_masterv
+ 189:ttris.cpp     ****   //Initialize the screen
+ 190:ttris.cpp     ****   init_screen();
+ 463               		.stabn	68,0,190,.LM45-.LFBB6
+ 464               	.LM45:
+ 465 0022 0E94 0000 		call _Z11init_screenv
+ 191:ttris.cpp     ****   blank_display();
+ 466               		.stabn	68,0,191,.LM46-.LFBB6
+ 467               	.LM46:
+ 468 0026 0E94 0000 		call _Z13blank_displayv
+ 469               	.LBB38:
+ 192:ttris.cpp     ****   //draw a test pattern
+ 193:ttris.cpp     ****   for(int y = 0; y < 48; y+=2)
+ 470               		.stabn	68,0,193,.LM47-.LFBB6
+ 471               	.LM47:
+ 472 002a C0E0      		ldi r28,0
+ 473 002c D0E0      		ldi r29,0
+ 474               	.L24:
+ 475               	.LBE38:
+ 476               	.LBE35:
+ 184:ttris.cpp     ****   //Give the AVR a bit to boot
+ 477               		.stabn	68,0,184,.LM48-.LFBB6
+ 478               	.LM48:
+ 479 002e 00E0      		ldi r16,0
+ 480 0030 10E0      		ldi r17,0
+ 481 0032 7E01      		movw r14,r28
+ 482 0034 2FEF      		ldi r18,-1
+ 483 0036 E21A      		sub r14,r18
+ 484 0038 F20A      		sbc r15,r18
+ 485               	.L25:
+ 486               	.LBB41:
+ 487               	.LBB40:
+ 488               	.LBB39:
+ 194:ttris.cpp     ****   {
+ 195:ttris.cpp     ****     for(int x = 0; x < 84; x = x + y + 1)
+ 196:ttris.cpp     ****     {
+ 197:ttris.cpp     ****       set_pixel(x, y, BLACK);
+ 489               		.stabn	68,0,197,.LM49-.LFBB6
+ 490               	.LM49:
+ 491 003a 41E0      		ldi r20,lo8(1)
+ 492 003c BE01      		movw r22,r28
+ 493 003e C801      		movw r24,r16
+ 494 0040 0E94 0000 		call _Z9set_pixeliib
+ 495 0044 0E0D      		add r16,r14
+ 496 0046 1F1D      		adc r17,r15
+ 195:ttris.cpp     ****     {
+ 497               		.stabn	68,0,195,.LM50-.LFBB6
+ 498               	.LM50:
+ 499 0048 0435      		cpi r16,84
+ 500 004a 1105      		cpc r17,__zero_reg__
+ 501 004c 04F0      		brlt .L25
+ 502               	.LBE39:
+ 193:ttris.cpp     ****   {
+ 503               		.stabn	68,0,193,.LM51-.LFBB6
+ 504               	.LM51:
+ 505 004e 2296      		adiw r28,2
+ 506 0050 C033      		cpi r28,48
+ 507 0052 D105      		cpc r29,__zero_reg__
+ 508 0054 01F4      		brne .L24
+ 509               	.LBE40:
+ 510               	.LBE41:
+ 198:ttris.cpp     ****     }
+ 199:ttris.cpp     ****   }
+ 200:ttris.cpp     ****   return(0);
+ 201:ttris.cpp     **** }
+ 511               		.stabn	68,0,201,.LM52-.LFBB6
+ 512               	.LM52:
+ 513 0056 80E0      		ldi r24,0
+ 514 0058 90E0      		ldi r25,0
+ 515               	/* epilogue start */
+ 516 005a DF91      		pop r29
+ 517 005c CF91      		pop r28
+ 518 005e 1F91      		pop r17
+ 519 0060 0F91      		pop r16
+ 520 0062 FF90      		pop r15
+ 521 0064 EF90      		pop r14
+ 522 0066 0895      		ret
+ 523               		.size	main, .-main
+ 524               		.stabs	"y:r(0,9)",64,0,193,28
+ 525               		.stabn	192,0,0,.LBB38-.LFBB6
+ 526               		.stabs	"x:r(0,9)",64,0,195,16
+ 527               		.stabn	192,0,0,.LBB39-.LFBB6
+ 528               		.stabn	224,0,0,.LBE39-.LFBB6
+ 529               		.stabn	224,0,0,.LBE38-.LFBB6
+ 530               		.stabs	"y:r(0,9)",64,0,193,28
+ 531               		.stabn	192,0,0,.LBB40-.LFBB6
+ 532               		.stabn	224,0,0,.LBE40-.LFBB6
+ 533               	.Lscope6:
+ 534               		.stabs	"",36,0,0,.Lscope6-.LFBB6
+ 535               		.stabd	78,0,0
+ 536               	.global	vbuff
+ 537               		.section .bss
+ 538               		.type	vbuff, @object
+ 539               		.size	vbuff, 504
+ 540               	vbuff:
+ 541 0000 0000 0000 		.zero	504
+ 541      0000 0000 
+ 541      0000 0000 
+ 541      0000 0000 
+ 541      0000 0000 
+ 542               		.stabs	"vbuff:G(0,90)=ar(0,91)=r(0,91);0;0177777;;0;5;(0,92)=ar(0,91);0;83;(0,89)",32,0,38,0
+ 543               		.text
+ 544               		.stabs	"",100,0,0,.Letext0
+ 545               	.Letext0:
+ 546               		.ident	"GCC: (GNU) 4.9.2"
+ 547               	.global __do_clear_bss
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 ttris.cpp
-     /tmp/ccVzTsG1.s:2      *ABS*:000000000000003e __SP_H__
-     /tmp/ccVzTsG1.s:3      *ABS*:000000000000003d __SP_L__
-     /tmp/ccVzTsG1.s:4      *ABS*:000000000000003f __SREG__
-     /tmp/ccVzTsG1.s:5      *ABS*:0000000000000000 __tmp_reg__
-     /tmp/ccVzTsG1.s:6      *ABS*:0000000000000001 __zero_reg__
-     /tmp/ccVzTsG1.s:108    .text:0000000000000000 _Z15spi_init_masterv
-     /tmp/ccVzTsG1.s:135    .text:000000000000000a _Z9send_bytehb
-     /tmp/ccVzTsG1.s:178    .text:000000000000001c _Z11init_screenv
-     /tmp/ccVzTsG1.s:233    .text:0000000000000052 _Z10show_framev
-     /tmp/ccVzTsG1.s:349    .data:0000000000000000 vbuff
-     /tmp/ccVzTsG1.s:299    .text.startup:0000000000000000 main
+     /tmp/ccFlDbY3.s:2      *ABS*:000000000000003e __SP_H__
+     /tmp/ccFlDbY3.s:3      *ABS*:000000000000003d __SP_L__
+     /tmp/ccFlDbY3.s:4      *ABS*:000000000000003f __SREG__
+     /tmp/ccFlDbY3.s:5      *ABS*:0000000000000000 __tmp_reg__
+     /tmp/ccFlDbY3.s:6      *ABS*:0000000000000001 __zero_reg__
+     /tmp/ccFlDbY3.s:108    .text:0000000000000000 _Z15spi_init_masterv
+     /tmp/ccFlDbY3.s:135    .text:000000000000000a _Z9send_bytehb
+     /tmp/ccFlDbY3.s:178    .text:000000000000001c _Z11init_screenv
+     /tmp/ccFlDbY3.s:236    .text:0000000000000052 _Z9set_pixeliib
+     /tmp/ccFlDbY3.s:540    .bss:0000000000000000 vbuff
+     /tmp/ccFlDbY3.s:384    .text:00000000000000e4 _Z13blank_displayv
+     /tmp/ccFlDbY3.s:425    .text.startup:0000000000000000 main
 
 UNDEFINED SYMBOLS
-__do_copy_data
+__divmodhi4
+__do_clear_bss
