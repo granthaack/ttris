@@ -76,8 +76,6 @@ flash: hex
 	avrdude -p$(avrType) -c$(programmerType) -P$(programmerDev) -b$(baud) -v -U flash:w:$(src).flash.hex
 	date
 
-run: flash
-
 backup:
 	@for memory in $(memoryTypes); do \
 		avrdude -p $(avrType) -c$(programmerType) -P$(programmerDev) -b$(baud) -v -U $$memory:r:./$(avrType).$$memory.hex:i; \
