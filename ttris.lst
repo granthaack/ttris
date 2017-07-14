@@ -102,11 +102,12 @@
  102               		.stabs	"._0:Tt(0,88)=s3low:(0,13),0,8;high:(0,13),8,8;extended:(0,13),16,8;;",128,0,240,0
  103               		.stabs	"__fuse_t:t(0,88)",128,0,244,0
  104               		.stabs	"byte:t(0,89)=(0,13)",128,0,7,0
- 105               		.stabs	"_Z15spi_init_masterv:F(0,4)",36,0,51,_Z15spi_init_masterv
- 106               	.global	_Z15spi_init_masterv
- 107               		.type	_Z15spi_init_masterv, @function
- 108               	_Z15spi_init_masterv:
- 109               		.stabd	46,0,0
+ 105               		.stabs	"sprite:Tt(0,90)=s12x_origin:(0,9),0,16;y_origin:(0,9),16,16;x_pos:(0,9),32,16;y_pos:(0,9),
+ 106               		.stabs	"_Z15spi_init_masterv:F(0,4)",36,0,72,_Z15spi_init_masterv
+ 107               	.global	_Z15spi_init_masterv
+ 108               		.type	_Z15spi_init_masterv, @function
+ 109               	_Z15spi_init_masterv:
+ 110               		.stabd	46,0,0
    1:ttris.cpp     **** #define F_CPU  16000000UL
    2:ttris.cpp     **** 
    3:ttris.cpp     **** #include <avr/io.h>
@@ -143,492 +144,697 @@
   34:ttris.cpp     **** #define PORT_DC         (1 << PB1) //blue
   35:ttris.cpp     **** #define PORT_RST        (1 << PB0) //green
   36:ttris.cpp     **** 
-  37:ttris.cpp     **** //Init the video buffer
-  38:ttris.cpp     **** byte vbuff[6][84] = {
-  39:ttris.cpp     ****   /*
-  40:ttris.cpp     **** 0x4c, 0xaa, 0xec, 0xaa, 0xac, 0x00, 0xaa, 0xee, 0xee, 0xae, 0xaa, 0x00, 0xae, 0xa2, 0x44, 0x48, 0x4
-  41:ttris.cpp     **** */
+  37:ttris.cpp     **** //Init the frame buffer
+  38:ttris.cpp     **** byte fbuff[6][84] = {
+  39:ttris.cpp     **** 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0
+  40:ttris.cpp     **** 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0
+  41:ttris.cpp     **** 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0
   42:ttris.cpp     **** 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0
   43:ttris.cpp     **** 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0
   44:ttris.cpp     **** 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0
-  45:ttris.cpp     **** 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0
-  46:ttris.cpp     **** 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0
-  47:ttris.cpp     **** 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0
-  48:ttris.cpp     **** };
-  49:ttris.cpp     **** 
-  50:ttris.cpp     **** // Initialize SPI Master Device (with SPI interrupt)
-  51:ttris.cpp     **** void spi_init_master (void)
-  52:ttris.cpp     **** {
- 110               		.stabn	68,0,52,.LM0-.LFBB1
- 111               	.LM0:
- 112               	.LFBB1:
- 113               	/* prologue: function */
- 114               	/* frame size = 0 */
- 115               	/* stack size = 0 */
- 116               	.L__stack_usage = 0
-  53:ttris.cpp     ****     // Set MOSI, SCK, SS, DC, and RST as Output
-  54:ttris.cpp     ****     DDR_SPI=(1<<DD_MOSI)|(1<<DD_SCK)|(1<<DD_SS)|(1<<DD_DC)|(1<<DD_RST);
- 117               		.stabn	68,0,54,.LM1-.LFBB1
- 118               	.LM1:
- 119 0000 8FE2      		ldi r24,lo8(47)
- 120 0002 84B9      		out 0x4,r24
-  55:ttris.cpp     **** 
-  56:ttris.cpp     ****     // Enable SPI, Set as Master
-  57:ttris.cpp     ****     // Prescaler: Fosc/16, Enable Interrupts
-  58:ttris.cpp     ****     //The MOSI, SCK pins are as per ATMega8
-  59:ttris.cpp     ****     SPCR=(1<<SPE)|(1<<MSTR)|(1<<SPR0);
- 121               		.stabn	68,0,59,.LM2-.LFBB1
- 122               	.LM2:
- 123 0004 81E5      		ldi r24,lo8(81)
- 124 0006 8CBD      		out 0x2c,r24
- 125 0008 0895      		ret
- 126               		.size	_Z15spi_init_masterv, .-_Z15spi_init_masterv
- 127               	.Lscope1:
- 128               		.stabs	"",36,0,0,.Lscope1-.LFBB1
- 129               		.stabd	78,0,0
- 130               		.stabs	"_Z9send_bytehb:F(0,4)",36,0,63,_Z9send_bytehb
- 131               		.stabs	"data:P(0,89)",64,0,63,24
- 132               		.stabs	"dc:P(0,54)",64,0,63,22
- 133               	.global	_Z9send_bytehb
- 134               		.type	_Z9send_bytehb, @function
- 135               	_Z9send_bytehb:
- 136               		.stabd	46,0,0
-  60:ttris.cpp     **** }
+  45:ttris.cpp     **** };
+  46:ttris.cpp     **** 
+  47:ttris.cpp     **** //Init the previous frame buffer. This is used to determine which pixels have
+  48:ttris.cpp     **** //changed between frames and only update the affected pixels
+  49:ttris.cpp     **** byte pfbuff[6][84] = {
+  50:ttris.cpp     **** 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0
+  51:ttris.cpp     **** 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0
+  52:ttris.cpp     **** 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0
+  53:ttris.cpp     **** 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0
+  54:ttris.cpp     **** 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0
+  55:ttris.cpp     **** 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0
+  56:ttris.cpp     **** };
+  57:ttris.cpp     **** 
+  58:ttris.cpp     **** byte spritemap[2][84] = {
+  59:ttris.cpp     **** 0x00, 0x6e, 0x8a, 0xea, 0x8a, 0xee, 0x00, 0x64, 0x84, 0xe4, 0x84, 0x84, 0x00, 0x6e, 0x82, 0xee, 0xa
+  60:ttris.cpp     **** 0x00, 0x46, 0x48, 0x44, 0x02, 0x4e, 0x00, 0xee, 0x24, 0x64, 0x04, 0x44, 0x00, 0xaa, 0xaa, 0x0a, 0xa
   61:ttris.cpp     **** 
-  62:ttris.cpp     **** //Function to send and receive data for both master and slave
-  63:ttris.cpp     **** void send_byte(byte data, bool dc)
-  64:ttris.cpp     **** {
- 137               		.stabn	68,0,64,.LM3-.LFBB2
- 138               	.LM3:
- 139               	.LFBB2:
- 140               	/* prologue: function */
- 141               	/* frame size = 0 */
- 142               	/* stack size = 0 */
- 143               	.L__stack_usage = 0
-  65:ttris.cpp     ****     // Load data into the buffer
-  66:ttris.cpp     ****     SPDR = data;
- 144               		.stabn	68,0,66,.LM4-.LFBB2
- 145               	.LM4:
- 146 000a 8EBD      		out 0x2e,r24
-  67:ttris.cpp     **** 
-  68:ttris.cpp     ****     //If DC is high, pull the pin high
-  69:ttris.cpp     ****     if(dc)
- 147               		.stabn	68,0,69,.LM5-.LFBB2
- 148               	.LM5:
- 149 000c 6111      		cpse r22,__zero_reg__
-  70:ttris.cpp     ****     {
-  71:ttris.cpp     ****       PORT_SPI |= (PORT_DC);
- 150               		.stabn	68,0,71,.LM6-.LFBB2
- 151               	.LM6:
- 152 000e 299A      		sbi 0x5,1
- 153               	.L4:
-  72:ttris.cpp     ****     }
-  73:ttris.cpp     **** 
-  74:ttris.cpp     ****     //Wait until transmission complete
-  75:ttris.cpp     ****     while(!(SPSR & (1<<SPIF)));
- 154               		.stabn	68,0,75,.LM7-.LFBB2
- 155               	.LM7:
- 156 0010 0DB4      		in __tmp_reg__,0x2d
- 157 0012 07FE      		sbrs __tmp_reg__,7
- 158 0014 00C0      		rjmp .L4
+  62:ttris.cpp     **** struct sprite{
+  63:ttris.cpp     ****   int x_origin;
+  64:ttris.cpp     ****   int y_origin;
+  65:ttris.cpp     ****   int x_pos;
+  66:ttris.cpp     ****   int y_pos;
+  67:ttris.cpp     ****   int width;
+  68:ttris.cpp     ****   int height;
+  69:ttris.cpp     **** };
+  70:ttris.cpp     **** 
+  71:ttris.cpp     **** // Initialize SPI Master Device (with SPI interrupt)
+  72:ttris.cpp     **** void spi_init_master (void)
+  73:ttris.cpp     **** {
+ 111               		.stabn	68,0,73,.LM0-.LFBB1
+ 112               	.LM0:
+ 113               	.LFBB1:
+ 114               	/* prologue: function */
+ 115               	/* frame size = 0 */
+ 116               	/* stack size = 0 */
+ 117               	.L__stack_usage = 0
+  74:ttris.cpp     ****     // Set MOSI, SCK, SS, DC, and RST as Output
+  75:ttris.cpp     ****     DDR_SPI=(1<<DD_MOSI)|(1<<DD_SCK)|(1<<DD_SS)|(1<<DD_DC)|(1<<DD_RST);
+ 118               		.stabn	68,0,75,.LM1-.LFBB1
+ 119               	.LM1:
+ 120 0000 8FE2      		ldi r24,lo8(47)
+ 121 0002 84B9      		out 0x4,r24
   76:ttris.cpp     **** 
-  77:ttris.cpp     ****     //Pull DC low again if it was set high
-  78:ttris.cpp     ****     if(dc)
- 159               		.stabn	68,0,78,.LM8-.LFBB2
- 160               	.LM8:
- 161 0016 6111      		cpse r22,__zero_reg__
- 162               	.LBB14:
- 163               	.LBB15:
-  79:ttris.cpp     ****     {
-  80:ttris.cpp     ****       PORT_SPI &= ~(PORT_DC);
- 164               		.stabn	68,0,80,.LM9-.LFBB2
- 165               	.LM9:
- 166 0018 2998      		cbi 0x5,1
- 167               	.L2:
- 168 001a 0895      		ret
- 169               	.LBE15:
- 170               	.LBE14:
- 171               		.size	_Z9send_bytehb, .-_Z9send_bytehb
- 172               	.Lscope2:
- 173               		.stabs	"",36,0,0,.Lscope2-.LFBB2
- 174               		.stabd	78,0,0
- 175               		.stabs	"_Z11init_screenv:F(0,4)",36,0,85,_Z11init_screenv
- 176               	.global	_Z11init_screenv
- 177               		.type	_Z11init_screenv, @function
- 178               	_Z11init_screenv:
- 179               		.stabd	46,0,0
-  81:ttris.cpp     ****     }
-  82:ttris.cpp     ****     return;
-  83:ttris.cpp     **** }
-  84:ttris.cpp     **** 
-  85:ttris.cpp     **** void init_screen(void)
-  86:ttris.cpp     **** {
- 180               		.stabn	68,0,86,.LM10-.LFBB3
- 181               	.LM10:
- 182               	.LFBB3:
- 183               	/* prologue: function */
- 184               	/* frame size = 0 */
- 185               	/* stack size = 0 */
- 186               	.L__stack_usage = 0
-  87:ttris.cpp     ****   //Toggle the reset pin then set it high
-  88:ttris.cpp     ****   PORT_SPI |= (PORT_RST);
- 187               		.stabn	68,0,88,.LM11-.LFBB3
- 188               	.LM11:
- 189 001c 289A      		sbi 0x5,0
-  89:ttris.cpp     ****   PORT_SPI &= ~(PORT_RST);
- 190               		.stabn	68,0,89,.LM12-.LFBB3
- 191               	.LM12:
- 192 001e 2898      		cbi 0x5,0
-  90:ttris.cpp     ****   PORT_SPI |= (PORT_RST);
- 193               		.stabn	68,0,90,.LM13-.LFBB3
- 194               	.LM13:
- 195 0020 289A      		sbi 0x5,0
-  91:ttris.cpp     **** 
-  92:ttris.cpp     ****   //send a byte to init function set
-  93:ttris.cpp     ****   send_byte(0b00100001, COMM);
- 196               		.stabn	68,0,93,.LM14-.LFBB3
- 197               	.LM14:
- 198 0022 60E0      		ldi r22,0
- 199 0024 81E2      		ldi r24,lo8(33)
- 200 0026 0E94 0000 		call _Z9send_bytehb
-  94:ttris.cpp     ****   //send byte to init Vop
-  95:ttris.cpp     ****   send_byte(0b10010000, COMM);
- 201               		.stabn	68,0,95,.LM15-.LFBB3
- 202               	.LM15:
- 203 002a 60E0      		ldi r22,0
- 204 002c 80E9      		ldi r24,lo8(-112)
- 205 002e 0E94 0000 		call _Z9send_bytehb
-  96:ttris.cpp     ****   //send byte to select normal instruction set
-  97:ttris.cpp     ****   send_byte(0b00100000, COMM);
- 206               		.stabn	68,0,97,.LM16-.LFBB3
- 207               	.LM16:
- 208 0032 60E0      		ldi r22,0
- 209 0034 80E2      		ldi r24,lo8(32)
- 210 0036 0E94 0000 		call _Z9send_bytehb
-  98:ttris.cpp     ****   //send byte to set screen to normal mode
-  99:ttris.cpp     ****   send_byte(0b00001100, COMM);
- 211               		.stabn	68,0,99,.LM17-.LFBB3
- 212               	.LM17:
- 213 003a 60E0      		ldi r22,0
- 214 003c 8CE0      		ldi r24,lo8(12)
- 215 003e 0E94 0000 		call _Z9send_bytehb
- 100:ttris.cpp     ****   //set x DDRAM address to 0
- 101:ttris.cpp     ****   send_byte(0b10000000, COMM);
- 216               		.stabn	68,0,101,.LM18-.LFBB3
- 217               	.LM18:
- 218 0042 60E0      		ldi r22,0
- 219 0044 80E8      		ldi r24,lo8(-128)
- 220 0046 0E94 0000 		call _Z9send_bytehb
- 102:ttris.cpp     ****   //set y DDRAM address to 0
- 103:ttris.cpp     ****   send_byte(0b01000000, COMM);
- 221               		.stabn	68,0,103,.LM19-.LFBB3
- 222               	.LM19:
- 223 004a 60E0      		ldi r22,0
- 224 004c 80E4      		ldi r24,lo8(64)
- 225 004e 0C94 0000 		jmp _Z9send_bytehb
- 226               		.size	_Z11init_screenv, .-_Z11init_screenv
- 227               	.Lscope3:
- 228               		.stabs	"",36,0,0,.Lscope3-.LFBB3
- 229               		.stabd	78,0,0
- 230               		.stabs	"_Z9set_pixeliib:F(0,4)",36,0,124,_Z9set_pixeliib
- 231               		.stabs	"x:P(0,9)",64,0,124,24
- 232               		.stabs	"y:P(0,9)",64,0,124,22
- 233               		.stabs	"color:P(0,54)",64,0,124,20
- 234               	.global	_Z9set_pixeliib
- 235               		.type	_Z9set_pixeliib, @function
- 236               	_Z9set_pixeliib:
- 237               		.stabd	46,0,0
+  77:ttris.cpp     ****     // Enable SPI, Set as Master
+  78:ttris.cpp     ****     // Prescaler: Fosc/16, Enable Interrupts
+  79:ttris.cpp     ****     //The MOSI, SCK pins are as per ATMega8
+  80:ttris.cpp     ****     SPCR=(1<<SPE)|(1<<MSTR)|(1<<SPR0);
+ 122               		.stabn	68,0,80,.LM2-.LFBB1
+ 123               	.LM2:
+ 124 0004 81E5      		ldi r24,lo8(81)
+ 125 0006 8CBD      		out 0x2c,r24
+ 126 0008 0895      		ret
+ 127               		.size	_Z15spi_init_masterv, .-_Z15spi_init_masterv
+ 128               	.Lscope1:
+ 129               		.stabs	"",36,0,0,.Lscope1-.LFBB1
+ 130               		.stabd	78,0,0
+ 131               		.stabs	"_Z9send_bytehb:F(0,4)",36,0,84,_Z9send_bytehb
+ 132               		.stabs	"data:P(0,89)",64,0,84,24
+ 133               		.stabs	"dc:P(0,54)",64,0,84,22
+ 134               	.global	_Z9send_bytehb
+ 135               		.type	_Z9send_bytehb, @function
+ 136               	_Z9send_bytehb:
+ 137               		.stabd	46,0,0
+  81:ttris.cpp     **** }
+  82:ttris.cpp     **** 
+  83:ttris.cpp     **** //Function to send and receive data for both master and slave
+  84:ttris.cpp     **** void send_byte(byte data, bool dc)
+  85:ttris.cpp     **** {
+ 138               		.stabn	68,0,85,.LM3-.LFBB2
+ 139               	.LM3:
+ 140               	.LFBB2:
+ 141               	/* prologue: function */
+ 142               	/* frame size = 0 */
+ 143               	/* stack size = 0 */
+ 144               	.L__stack_usage = 0
+  86:ttris.cpp     ****     // Load data into the buffer
+  87:ttris.cpp     ****     SPDR = data;
+ 145               		.stabn	68,0,87,.LM4-.LFBB2
+ 146               	.LM4:
+ 147 000a 8EBD      		out 0x2e,r24
+  88:ttris.cpp     **** 
+  89:ttris.cpp     ****     //If DC is high, pull the pin high
+  90:ttris.cpp     ****     if(dc)
+ 148               		.stabn	68,0,90,.LM5-.LFBB2
+ 149               	.LM5:
+ 150 000c 6111      		cpse r22,__zero_reg__
+  91:ttris.cpp     ****     {
+  92:ttris.cpp     ****       PORT_SPI |= (PORT_DC);
+ 151               		.stabn	68,0,92,.LM6-.LFBB2
+ 152               	.LM6:
+ 153 000e 299A      		sbi 0x5,1
+ 154               	.L4:
+  93:ttris.cpp     ****     }
+  94:ttris.cpp     **** 
+  95:ttris.cpp     ****     //Wait until transmission complete
+  96:ttris.cpp     ****     while(!(SPSR & (1<<SPIF)));
+ 155               		.stabn	68,0,96,.LM7-.LFBB2
+ 156               	.LM7:
+ 157 0010 0DB4      		in __tmp_reg__,0x2d
+ 158 0012 07FE      		sbrs __tmp_reg__,7
+ 159 0014 00C0      		rjmp .L4
+  97:ttris.cpp     **** 
+  98:ttris.cpp     ****     //Pull DC low again if it was set high
+  99:ttris.cpp     ****     if(dc)
+ 160               		.stabn	68,0,99,.LM8-.LFBB2
+ 161               	.LM8:
+ 162 0016 6111      		cpse r22,__zero_reg__
+ 163               	.LBB11:
+ 164               	.LBB12:
+ 100:ttris.cpp     ****     {
+ 101:ttris.cpp     ****       PORT_SPI &= ~(PORT_DC);
+ 165               		.stabn	68,0,101,.LM9-.LFBB2
+ 166               	.LM9:
+ 167 0018 2998      		cbi 0x5,1
+ 168               	.L2:
+ 169 001a 0895      		ret
+ 170               	.LBE12:
+ 171               	.LBE11:
+ 172               		.size	_Z9send_bytehb, .-_Z9send_bytehb
+ 173               	.Lscope2:
+ 174               		.stabs	"",36,0,0,.Lscope2-.LFBB2
+ 175               		.stabd	78,0,0
+ 176               		.stabs	"_Z11screen_initv:F(0,4)",36,0,106,_Z11screen_initv
+ 177               	.global	_Z11screen_initv
+ 178               		.type	_Z11screen_initv, @function
+ 179               	_Z11screen_initv:
+ 180               		.stabd	46,0,0
+ 102:ttris.cpp     ****     }
+ 103:ttris.cpp     ****     return;
  104:ttris.cpp     **** }
  105:ttris.cpp     **** 
- 106:ttris.cpp     **** //Explanation on this function and why it seems so complex:
- 107:ttris.cpp     **** //Common sense would dictate that the way updating the display would work is
- 108:ttris.cpp     **** //the programmer would change a value in the internal vbuff, and then the entire
- 109:ttris.cpp     **** //vbuff would be sent to to the screen as a single frame. However, this means
- 110:ttris.cpp     **** //that each time you render a frame, 504 bytes are sent over the wire, no matter
- 111:ttris.cpp     **** //how small the change to the fram was. If you only changed 1 byte, this is a
- 112:ttris.cpp     **** //huge waste of bandwidth.
- 113:ttris.cpp     **** //
- 114:ttris.cpp     **** //The way this function works is it only updates the pixels that actually
- 115:ttris.cpp     **** //change. It sets the x and y location of the DDRAM in the display and then
- 116:ttris.cpp     **** //writes the appropriate data to that single byte only. This is done in 3 bytes
- 117:ttris.cpp     **** //instead of 504.
- 118:ttris.cpp     **** //
- 119:ttris.cpp     **** // vbuff must still be maintained in memory however since the display
- 120:ttris.cpp     **** //can't send data back, and you can only update one byte at a time. If you
- 121:ttris.cpp     **** //update a single bit, all the other bits in that byte would get overwritten on
- 122:ttris.cpp     **** //the screen.
- 123:ttris.cpp     **** 
- 124:ttris.cpp     **** void set_pixel(int x, int y, bool color)
- 125:ttris.cpp     **** {
- 238               		.stabn	68,0,125,.LM20-.LFBB4
- 239               	.LM20:
- 240               	.LFBB4:
- 241 0052 0F93      		push r16
- 242 0054 1F93      		push r17
- 243 0056 CF93      		push r28
- 244 0058 DF93      		push r29
- 245               	/* prologue: function */
- 246               	/* frame size = 0 */
- 247               	/* stack size = 4 */
- 248               	.L__stack_usage = 4
- 249               	.LBB23:
- 126:ttris.cpp     ****   //if out of bounds
- 127:ttris.cpp     ****   if(x > 83 || y > 47)
- 250               		.stabn	68,0,127,.LM21-.LFBB4
- 251               	.LM21:
- 252 005a 8435      		cpi r24,84
- 253 005c 9105      		cpc r25,__zero_reg__
- 254 005e 04F4      		brge .L15
- 255               		.stabn	68,0,127,.LM22-.LFBB4
- 256               	.LM22:
- 257 0060 6033      		cpi r22,48
- 258 0062 7105      		cpc r23,__zero_reg__
- 259 0064 04F4      		brge .L15
- 260               	.LBE23:
- 261               	.LBB24:
- 262               	.LBB25:
- 128:ttris.cpp     ****   {
- 129:ttris.cpp     ****     return;
- 130:ttris.cpp     ****   }
- 131:ttris.cpp     **** 
- 132:ttris.cpp     ****   //Which byte to manipulate
- 133:ttris.cpp     ****   int i = y/8;
- 263               		.stabn	68,0,133,.LM23-.LFBB4
- 264               	.LM23:
- 265 0066 FB01      		movw r30,r22
- 266 0068 77FD      		sbrc r23,7
- 267 006a 3796      		adiw r30,7
- 268               	.L17:
- 269 006c 9C01      		movw r18,r24
- 270 006e 83E0      		ldi r24,3
+ 106:ttris.cpp     **** void screen_init()
+ 107:ttris.cpp     **** {
+ 181               		.stabn	68,0,107,.LM10-.LFBB3
+ 182               	.LM10:
+ 183               	.LFBB3:
+ 184               	/* prologue: function */
+ 185               	/* frame size = 0 */
+ 186               	/* stack size = 0 */
+ 187               	.L__stack_usage = 0
+ 108:ttris.cpp     ****   /*Enable the screen hardware*/
+ 109:ttris.cpp     ****   //Toggle the reset pin then set it high
+ 110:ttris.cpp     ****   PORT_SPI |= (PORT_RST);
+ 188               		.stabn	68,0,110,.LM11-.LFBB3
+ 189               	.LM11:
+ 190 001c 289A      		sbi 0x5,0
+ 111:ttris.cpp     ****   PORT_SPI &= ~(PORT_RST);
+ 191               		.stabn	68,0,111,.LM12-.LFBB3
+ 192               	.LM12:
+ 193 001e 2898      		cbi 0x5,0
+ 112:ttris.cpp     ****   PORT_SPI |= (PORT_RST);
+ 194               		.stabn	68,0,112,.LM13-.LFBB3
+ 195               	.LM13:
+ 196 0020 289A      		sbi 0x5,0
+ 113:ttris.cpp     **** 
+ 114:ttris.cpp     ****   //send a byte to init function set
+ 115:ttris.cpp     ****   send_byte(0b00100001, COMM);
+ 197               		.stabn	68,0,115,.LM14-.LFBB3
+ 198               	.LM14:
+ 199 0022 60E0      		ldi r22,0
+ 200 0024 81E2      		ldi r24,lo8(33)
+ 201 0026 0E94 0000 		call _Z9send_bytehb
+ 116:ttris.cpp     ****   //send byte to init Vop
+ 117:ttris.cpp     ****   send_byte(0b10010000, COMM);
+ 202               		.stabn	68,0,117,.LM15-.LFBB3
+ 203               	.LM15:
+ 204 002a 60E0      		ldi r22,0
+ 205 002c 80E9      		ldi r24,lo8(-112)
+ 206 002e 0E94 0000 		call _Z9send_bytehb
+ 118:ttris.cpp     ****   //send byte to select normal instruction set
+ 119:ttris.cpp     ****   send_byte(0b00100000, COMM);
+ 207               		.stabn	68,0,119,.LM16-.LFBB3
+ 208               	.LM16:
+ 209 0032 60E0      		ldi r22,0
+ 210 0034 80E2      		ldi r24,lo8(32)
+ 211 0036 0E94 0000 		call _Z9send_bytehb
+ 120:ttris.cpp     ****   //send byte to set screen to normal mode
+ 121:ttris.cpp     ****   send_byte(0b00001100, COMM);
+ 212               		.stabn	68,0,121,.LM17-.LFBB3
+ 213               	.LM17:
+ 214 003a 60E0      		ldi r22,0
+ 215 003c 8CE0      		ldi r24,lo8(12)
+ 216 003e 0E94 0000 		call _Z9send_bytehb
+ 122:ttris.cpp     ****   //set x DDRAM address to 0
+ 123:ttris.cpp     ****   send_byte(0b10000000, COMM);
+ 217               		.stabn	68,0,123,.LM18-.LFBB3
+ 218               	.LM18:
+ 219 0042 60E0      		ldi r22,0
+ 220 0044 80E8      		ldi r24,lo8(-128)
+ 221 0046 0E94 0000 		call _Z9send_bytehb
+ 124:ttris.cpp     ****   //set y DDRAM address to 0
+ 125:ttris.cpp     ****   send_byte(0b01000000, COMM);
+ 222               		.stabn	68,0,125,.LM19-.LFBB3
+ 223               	.LM19:
+ 224 004a 60E0      		ldi r22,0
+ 225 004c 80E4      		ldi r24,lo8(64)
+ 226 004e 0C94 0000 		jmp _Z9send_bytehb
+ 227               		.size	_Z11screen_initv, .-_Z11screen_initv
+ 228               	.Lscope3:
+ 229               		.stabs	"",36,0,0,.Lscope3-.LFBB3
+ 230               		.stabd	78,0,0
+ 231               		.stabs	"_Z9set_pixeliib:F(0,4)",36,0,128,_Z9set_pixeliib
+ 232               		.stabs	"x:P(0,9)",64,0,128,18
+ 233               		.stabs	"y:P(0,9)",64,0,128,24
+ 234               		.stabs	"color:P(0,54)",64,0,128,20
+ 235               	.global	_Z9set_pixeliib
+ 236               		.type	_Z9set_pixeliib, @function
+ 237               	_Z9set_pixeliib:
+ 238               		.stabd	46,0,0
+ 126:ttris.cpp     **** }
+ 127:ttris.cpp     **** 
+ 128:ttris.cpp     **** void set_pixel(int x, int y, bool color)
+ 129:ttris.cpp     **** {
+ 239               		.stabn	68,0,129,.LM20-.LFBB4
+ 240               	.LM20:
+ 241               	.LFBB4:
+ 242 0052 CF93      		push r28
+ 243 0054 DF93      		push r29
+ 244               	/* prologue: function */
+ 245               	/* frame size = 0 */
+ 246               	/* stack size = 2 */
+ 247               	.L__stack_usage = 2
+ 248 0056 9C01      		movw r18,r24
+ 249 0058 CB01      		movw r24,r22
+ 250               	.LBB17:
+ 130:ttris.cpp     ****   //if out of bounds
+ 131:ttris.cpp     ****   if(x > 83 || y > 47)
+ 251               		.stabn	68,0,131,.LM21-.LFBB4
+ 252               	.LM21:
+ 253 005a 2435      		cpi r18,84
+ 254 005c 3105      		cpc r19,__zero_reg__
+ 255 005e 04F4      		brge .L15
+ 256               		.stabn	68,0,131,.LM22-.LFBB4
+ 257               	.LM22:
+ 258 0060 6033      		cpi r22,48
+ 259 0062 7105      		cpc r23,__zero_reg__
+ 260 0064 04F4      		brge .L15
+ 261               	.LBE17:
+ 262               	.LBB18:
+ 263               	.LBB19:
+ 132:ttris.cpp     ****   {
+ 133:ttris.cpp     ****     return;
+ 134:ttris.cpp     ****   }
+ 135:ttris.cpp     **** 
+ 136:ttris.cpp     ****   //Which byte to manipulate
+ 137:ttris.cpp     ****   int i = y/8;
+ 264               		.stabn	68,0,137,.LM23-.LFBB4
+ 265               	.LM23:
+ 266 0066 EB01      		movw r28,r22
+ 267 0068 77FD      		sbrc r23,7
+ 268 006a 2796      		adiw r28,7
+ 269               	.L17:
+ 270 006c 53E0      		ldi r21,3
  271               		1:
- 272 0070 F595      		asr r31
- 273 0072 E795      		ror r30
- 274 0074 8A95      		dec r24
- 275 0076 01F4      		brne 1b
- 134:ttris.cpp     ****   //Which bit in the byte to manipulate
- 135:ttris.cpp     ****   int pos = y%8;
- 276               		.stabn	68,0,135,.LM24-.LFBB4
+ 272 006e D595      		asr r29
+ 273 0070 C795      		ror r28
+ 274 0072 5A95      		dec r21
+ 275 0074 01F4      		brne 1b
+ 138:ttris.cpp     ****   //Which bit in the byte to manipulate
+ 139:ttris.cpp     ****   int pos = y%8;
+ 276               		.stabn	68,0,139,.LM24-.LFBB4
  277               	.LM24:
- 278 0078 CB01      		movw r24,r22
- 279 007a 68E0      		ldi r22,lo8(8)
- 280 007c 70E0      		ldi r23,0
- 281 007e 0E94 0000 		call __divmodhi4
- 136:ttris.cpp     ****   //Positioning the byte for masking or oring
- 137:ttris.cpp     ****   byte flag = 0x01;
- 138:ttris.cpp     ****   flag = flag << pos;
- 282               		.stabn	68,0,138,.LM25-.LFBB4
- 283               	.LM25:
- 284 0082 61E0      		ldi r22,lo8(1)
- 285 0084 70E0      		ldi r23,0
- 286 0086 00C0      		rjmp 2f
+ 278 0076 68E0      		ldi r22,lo8(8)
+ 279 0078 70E0      		ldi r23,0
+ 280 007a 0E94 0000 		call __divmodhi4
+ 140:ttris.cpp     ****   //Positioning the byte for masking or oring
+ 141:ttris.cpp     ****   byte flag = 0x01;
+ 142:ttris.cpp     ****   flag = flag << pos;
+ 281               		.stabn	68,0,142,.LM25-.LFBB4
+ 282               	.LM25:
+ 283 007e 61E0      		ldi r22,lo8(1)
+ 284 0080 70E0      		ldi r23,0
+ 285 0082 FB01      		movw r30,r22
+ 286 0084 00C0      		rjmp 2f
  287               		1:
- 288 0088 660F      		lsl r22
- 289               		2:
- 290 008a 8A95      		dec r24
- 291 008c 02F4      		brpl 1b
- 292 008e CF01      		movw r24,r30
- 293 0090 8064      		ori r24,64
- 294 0092 8901      		movw r16,r18
- 295 0094 0068      		ori r16,128
- 296               	.LBB26:
- 297               	.LBB27:
- 139:ttris.cpp     **** 
- 140:ttris.cpp     ****   //If setting it black, bitwise or
- 141:ttris.cpp     ****   if(color)
- 142:ttris.cpp     ****   {
- 143:ttris.cpp     ****     //write the changes to the internal vbuff
- 144:ttris.cpp     ****     vbuff[i][x] = vbuff[i][x] | flag;
- 298               		.stabn	68,0,144,.LM26-.LFBB4
- 299               	.LM26:
- 300 0096 94E5      		ldi r25,lo8(84)
- 301 0098 9E9F      		mul r25,r30
- 302 009a E001      		movw r28,r0
- 303 009c 9F9F      		mul r25,r31
- 304 009e D00D      		add r29,r0
- 305 00a0 1124      		clr __zero_reg__
- 306 00a2 C20F      		add r28,r18
- 307 00a4 D31F      		adc r29,r19
- 308 00a6 C050      		subi r28,lo8(-(vbuff))
- 309 00a8 D040      		sbci r29,hi8(-(vbuff))
- 310               	.LBE27:
- 141:ttris.cpp     ****   {
- 311               		.stabn	68,0,141,.LM27-.LFBB4
- 312               	.LM27:
- 313 00aa 4423      		tst r20
- 314 00ac 01F0      		breq .L18
- 315               	.LBB28:
- 316               		.stabn	68,0,144,.LM28-.LFBB4
- 317               	.LM28:
- 318 00ae 9881      		ld r25,Y
- 319 00b0 692B      		or r22,r25
- 320 00b2 00C0      		rjmp .L19
- 321               	.L18:
- 322               	.LBE28:
- 323               	.LBB29:
- 145:ttris.cpp     **** 
- 146:ttris.cpp     ****     //update the y address
- 147:ttris.cpp     ****     int sendy = i | 0b01000000;
- 148:ttris.cpp     ****     send_byte(sendy, COMM);
- 149:ttris.cpp     ****     //update the x address
- 150:ttris.cpp     ****     int sendx = x | 0b10000000;
- 151:ttris.cpp     ****     send_byte(sendx, COMM);
- 152:ttris.cpp     **** 
- 153:ttris.cpp     ****     //Send the updated byte to the screen
- 154:ttris.cpp     ****     send_byte(vbuff[i][x], DATA);
- 155:ttris.cpp     **** 
+ 288 0086 EE0F      		lsl r30
+ 289 0088 FF1F      		rol r31
+ 290               		2:
+ 291 008a 8A95      		dec r24
+ 292 008c 02F4      		brpl 1b
+ 293 008e CF01      		movw r24,r30
+ 143:ttris.cpp     **** 
+ 144:ttris.cpp     ****   //If setting it black, bitwise or
+ 145:ttris.cpp     ****   if(color)
+ 146:ttris.cpp     ****   {
+ 147:ttris.cpp     ****     //write the changes to the internal fbuff
+ 148:ttris.cpp     ****     fbuff[i][x] = fbuff[i][x] | flag;
+ 294               		.stabn	68,0,148,.LM26-.LFBB4
+ 295               	.LM26:
+ 296 0090 94E5      		ldi r25,lo8(84)
+ 297 0092 9C9F      		mul r25,r28
+ 298 0094 F001      		movw r30,r0
+ 299 0096 9D9F      		mul r25,r29
+ 300 0098 F00D      		add r31,r0
+ 301 009a 1124      		clr __zero_reg__
+ 302 009c 2E0F      		add r18,r30
+ 303 009e 3F1F      		adc r19,r31
+ 304 00a0 F901      		movw r30,r18
+ 305 00a2 E050      		subi r30,lo8(-(fbuff))
+ 306 00a4 F040      		sbci r31,hi8(-(fbuff))
+ 145:ttris.cpp     ****   {
+ 307               		.stabn	68,0,145,.LM27-.LFBB4
+ 308               	.LM27:
+ 309 00a6 4423      		tst r20
+ 310 00a8 01F0      		breq .L18
+ 311               		.stabn	68,0,148,.LM28-.LFBB4
+ 312               	.LM28:
+ 313 00aa 9081      		ld r25,Z
+ 314 00ac 892B      		or r24,r25
+ 315 00ae 00C0      		rjmp .L19
+ 316               	.L18:
+ 149:ttris.cpp     ****   }
+ 150:ttris.cpp     **** 
+ 151:ttris.cpp     ****   //If setting it white, mask and bitwise and
+ 152:ttris.cpp     ****   else
+ 153:ttris.cpp     ****   {
+ 154:ttris.cpp     ****     flag = ~flag;
+ 317               		.stabn	68,0,154,.LM29-.LFBB4
+ 318               	.LM29:
+ 319 00b0 8095      		com r24
+ 155:ttris.cpp     ****     fbuff[i][x] = fbuff[i][x] & flag;
+ 320               		.stabn	68,0,155,.LM30-.LFBB4
+ 321               	.LM30:
+ 322 00b2 9081      		ld r25,Z
+ 323 00b4 8923      		and r24,r25
+ 324               	.L19:
+ 325 00b6 8083      		st Z,r24
+ 326               	.L15:
+ 327               	/* epilogue start */
+ 328               	.LBE19:
+ 329               	.LBE18:
  156:ttris.cpp     ****   }
- 157:ttris.cpp     **** 
- 158:ttris.cpp     ****   //If setting it white, mask and bitwise and
- 159:ttris.cpp     ****   else
- 160:ttris.cpp     ****   {
- 161:ttris.cpp     ****     flag = ~flag;
- 324               		.stabn	68,0,161,.LM29-.LFBB4
- 325               	.LM29:
- 326 00b4 6095      		com r22
- 162:ttris.cpp     ****     vbuff[i][x] = vbuff[i][x] & flag;
- 327               		.stabn	68,0,162,.LM30-.LFBB4
- 328               	.LM30:
- 329 00b6 9881      		ld r25,Y
- 330 00b8 6923      		and r22,r25
- 331               	.L19:
- 332 00ba 6883      		st Y,r22
- 163:ttris.cpp     **** 
- 164:ttris.cpp     ****     //update the y address
- 165:ttris.cpp     ****     int sendy = i | 0b01000000;
- 166:ttris.cpp     ****     send_byte(sendy, COMM);
- 333               		.stabn	68,0,166,.LM31-.LFBB4
- 334               	.LM31:
- 335 00bc 60E0      		ldi r22,0
- 336 00be 0E94 0000 		call _Z9send_bytehb
- 167:ttris.cpp     ****     //update the x address
- 168:ttris.cpp     ****     int sendx = x | 0b10000000;
- 169:ttris.cpp     ****     send_byte(sendx, COMM);
- 337               		.stabn	68,0,169,.LM32-.LFBB4
- 338               	.LM32:
- 339 00c2 60E0      		ldi r22,0
- 340 00c4 802F      		mov r24,r16
- 341 00c6 0E94 0000 		call _Z9send_bytehb
- 170:ttris.cpp     **** 
- 171:ttris.cpp     ****     //Send the updated byte to the screen
- 172:ttris.cpp     ****     send_byte(vbuff[i][x], DATA);
- 342               		.stabn	68,0,172,.LM33-.LFBB4
- 343               	.LM33:
- 344 00ca 61E0      		ldi r22,lo8(1)
- 345 00cc 8881      		ld r24,Y
- 346               	/* epilogue start */
- 347               	.LBE29:
- 348               	.LBE26:
- 349               	.LBE25:
- 350               	.LBE24:
- 173:ttris.cpp     ****   }
- 174:ttris.cpp     **** }
- 351               		.stabn	68,0,174,.LM34-.LFBB4
- 352               	.LM34:
- 353 00ce DF91      		pop r29
- 354 00d0 CF91      		pop r28
- 355 00d2 1F91      		pop r17
- 356 00d4 0F91      		pop r16
- 357               	.LBB33:
- 358               	.LBB32:
- 359               	.LBB31:
- 360               	.LBB30:
- 172:ttris.cpp     ****   }
- 361               		.stabn	68,0,172,.LM35-.LFBB4
- 362               	.LM35:
- 363 00d6 0C94 0000 		jmp _Z9send_bytehb
- 364               	.L15:
- 365               	/* epilogue start */
- 366               	.LBE30:
- 367               	.LBE31:
- 368               	.LBE32:
- 369               	.LBE33:
- 370               		.stabn	68,0,174,.LM36-.LFBB4
- 371               	.LM36:
- 372 00da DF91      		pop r29
- 373 00dc CF91      		pop r28
- 374 00de 1F91      		pop r17
- 375 00e0 0F91      		pop r16
- 376 00e2 0895      		ret
- 377               		.size	_Z9set_pixeliib, .-_Z9set_pixeliib
- 378               	.Lscope4:
- 379               		.stabs	"",36,0,0,.Lscope4-.LFBB4
- 380               		.stabd	78,0,0
- 381               		.stabs	"_Z13blank_displayv:F(0,4)",36,0,176,_Z13blank_displayv
- 382               	.global	_Z13blank_displayv
- 383               		.type	_Z13blank_displayv, @function
- 384               	_Z13blank_displayv:
- 385               		.stabd	46,0,0
- 175:ttris.cpp     **** 
- 176:ttris.cpp     **** void blank_display(){
- 386               		.stabn	68,0,176,.LM37-.LFBB5
- 387               	.LM37:
- 388               	.LFBB5:
- 389 00e4 CF93      		push r28
- 390 00e6 DF93      		push r29
- 391               	/* prologue: function */
- 392               	/* frame size = 0 */
- 393               	/* stack size = 2 */
- 394               	.L__stack_usage = 2
- 395               		.stabn	68,0,176,.LM38-.LFBB5
- 396               	.LM38:
- 397 00e8 C8EF      		ldi r28,lo8(-8)
- 398 00ea D1E0      		ldi r29,lo8(1)
- 399               	.L21:
- 400               	.LBB34:
- 177:ttris.cpp     ****   for(int i = 0; i < 504; i++)
- 178:ttris.cpp     ****   {
- 179:ttris.cpp     ****     send_byte(0, DATA);
- 401               		.stabn	68,0,179,.LM39-.LFBB5
- 402               	.LM39:
- 403 00ec 61E0      		ldi r22,lo8(1)
- 404 00ee 80E0      		ldi r24,0
- 405 00f0 0E94 0000 		call _Z9send_bytehb
- 406 00f4 2197      		sbiw r28,1
- 177:ttris.cpp     ****   for(int i = 0; i < 504; i++)
- 407               		.stabn	68,0,177,.LM40-.LFBB5
- 408               	.LM40:
- 409 00f6 01F4      		brne .L21
- 410               	/* epilogue start */
- 411               	.LBE34:
- 180:ttris.cpp     ****   }
- 181:ttris.cpp     **** }
- 412               		.stabn	68,0,181,.LM41-.LFBB5
- 413               	.LM41:
- 414 00f8 DF91      		pop r29
- 415 00fa CF91      		pop r28
- 416 00fc 0895      		ret
- 417               		.size	_Z13blank_displayv, .-_Z13blank_displayv
- 418               	.Lscope5:
- 419               		.stabs	"",36,0,0,.Lscope5-.LFBB5
- 420               		.stabd	78,0,0
- 421               		.section	.text.startup,"ax",@progbits
- 422               		.stabs	"main:F(0,9)",36,0,183,main
- 423               	.global	main
- 424               		.type	main, @function
- 425               	main:
- 426               		.stabd	46,0,0
- 182:ttris.cpp     **** 
- 183:ttris.cpp     **** int main(void)
- 184:ttris.cpp     **** {
- 427               		.stabn	68,0,184,.LM42-.LFBB6
- 428               	.LM42:
- 429               	.LFBB6:
- 430 0000 EF92      		push r14
- 431 0002 FF92      		push r15
- 432 0004 0F93      		push r16
- 433 0006 1F93      		push r17
- 434 0008 CF93      		push r28
- 435 000a DF93      		push r29
- 436               	/* prologue: function */
- 437               	/* frame size = 0 */
- 438               	/* stack size = 6 */
- 439               	.L__stack_usage = 6
- 440               	.LBB35:
- 441               	.LBB36:
- 442               	.LBB37:
- 443               		.stabs	"/usr/lib/avr/include/util/delay.h",132,0,0,.Ltext1
- 444               	.Ltext1:
+ 157:ttris.cpp     **** }
+ 330               		.stabn	68,0,157,.LM31-.LFBB4
+ 331               	.LM31:
+ 332 00b8 DF91      		pop r29
+ 333 00ba CF91      		pop r28
+ 334 00bc 0895      		ret
+ 335               		.size	_Z9set_pixeliib, .-_Z9set_pixeliib
+ 336               	.Lscope4:
+ 337               		.stabs	"",36,0,0,.Lscope4-.LFBB4
+ 338               		.stabd	78,0,0
+ 339               		.stabs	"_Z11blank_fbuffv:F(0,4)",36,0,159,_Z11blank_fbuffv
+ 340               	.global	_Z11blank_fbuffv
+ 341               		.type	_Z11blank_fbuffv, @function
+ 342               	_Z11blank_fbuffv:
+ 343               		.stabd	46,0,0
+ 158:ttris.cpp     **** 
+ 159:ttris.cpp     **** void blank_fbuff(){
+ 344               		.stabn	68,0,159,.LM32-.LFBB5
+ 345               	.LM32:
+ 346               	.LFBB5:
+ 347 00be 0F93      		push r16
+ 348 00c0 1F93      		push r17
+ 349 00c2 CF93      		push r28
+ 350 00c4 DF93      		push r29
+ 351               	/* prologue: function */
+ 352               	/* frame size = 0 */
+ 353               	/* stack size = 4 */
+ 354               	.L__stack_usage = 4
+ 355               		.stabn	68,0,159,.LM33-.LFBB5
+ 356               	.LM33:
+ 357 00c6 06E0      		ldi r16,lo8(6)
+ 358 00c8 10E0      		ldi r17,0
+ 359               	.L21:
+ 360 00ca C4E5      		ldi r28,lo8(84)
+ 361 00cc D0E0      		ldi r29,0
+ 362               	.L22:
+ 363               	.LBB20:
+ 364               	.LBB21:
+ 160:ttris.cpp     ****   for(int y = 0; y < 6; y++)
+ 161:ttris.cpp     ****   {
+ 162:ttris.cpp     ****     for(int x = 0; x < 84; x++)
+ 163:ttris.cpp     ****     {
+ 164:ttris.cpp     ****       send_byte(0, DATA);
+ 365               		.stabn	68,0,164,.LM34-.LFBB5
+ 366               	.LM34:
+ 367 00ce 61E0      		ldi r22,lo8(1)
+ 368 00d0 80E0      		ldi r24,0
+ 369 00d2 0E94 0000 		call _Z9send_bytehb
+ 370 00d6 2197      		sbiw r28,1
+ 162:ttris.cpp     ****     {
+ 371               		.stabn	68,0,162,.LM35-.LFBB5
+ 372               	.LM35:
+ 373 00d8 01F4      		brne .L22
+ 374 00da 0150      		subi r16,1
+ 375 00dc 1109      		sbc r17,__zero_reg__
+ 376               	.LBE21:
+ 160:ttris.cpp     ****   for(int y = 0; y < 6; y++)
+ 377               		.stabn	68,0,160,.LM36-.LFBB5
+ 378               	.LM36:
+ 379 00de 01F4      		brne .L21
+ 380               	/* epilogue start */
+ 381               	.LBE20:
+ 165:ttris.cpp     ****     }
+ 166:ttris.cpp     ****   }
+ 167:ttris.cpp     **** }
+ 382               		.stabn	68,0,167,.LM37-.LFBB5
+ 383               	.LM37:
+ 384 00e0 DF91      		pop r29
+ 385 00e2 CF91      		pop r28
+ 386 00e4 1F91      		pop r17
+ 387 00e6 0F91      		pop r16
+ 388 00e8 0895      		ret
+ 389               		.size	_Z11blank_fbuffv, .-_Z11blank_fbuffv
+ 390               	.Lscope5:
+ 391               		.stabs	"",36,0,0,.Lscope5-.LFBB5
+ 392               		.stabd	78,0,0
+ 393               		.stabs	"_Z12update_framev:F(0,4)",36,0,169,_Z12update_framev
+ 394               	.global	_Z12update_framev
+ 395               		.type	_Z12update_framev, @function
+ 396               	_Z12update_framev:
+ 397               		.stabd	46,0,0
+ 168:ttris.cpp     **** 
+ 169:ttris.cpp     **** void update_frame()
+ 170:ttris.cpp     **** {
+ 398               		.stabn	68,0,170,.LM38-.LFBB6
+ 399               	.LM38:
+ 400               	.LFBB6:
+ 401 00ea AF92      		push r10
+ 402 00ec BF92      		push r11
+ 403 00ee CF92      		push r12
+ 404 00f0 DF92      		push r13
+ 405 00f2 EF92      		push r14
+ 406 00f4 FF92      		push r15
+ 407 00f6 0F93      		push r16
+ 408 00f8 1F93      		push r17
+ 409 00fa CF93      		push r28
+ 410 00fc DF93      		push r29
+ 411               	/* prologue: function */
+ 412               	/* frame size = 0 */
+ 413               	/* stack size = 10 */
+ 414               	.L__stack_usage = 10
+ 415 00fe 20E0      		ldi r18,lo8(pfbuff)
+ 416 0100 30E0      		ldi r19,hi8(pfbuff)
+ 417 0102 40E0      		ldi r20,lo8(fbuff)
+ 418 0104 50E0      		ldi r21,hi8(fbuff)
+ 419               	.L26:
+ 420               		.stabn	68,0,170,.LM39-.LFBB6
+ 421               	.LM39:
+ 422 0106 80E0      		ldi r24,0
+ 423 0108 90E0      		ldi r25,0
+ 424               	.L27:
+ 425 010a F901      		movw r30,r18
+ 426 010c E80F      		add r30,r24
+ 427 010e F91F      		adc r31,r25
+ 428 0110 DA01      		movw r26,r20
+ 429 0112 A80F      		add r26,r24
+ 430 0114 B91F      		adc r27,r25
+ 431               	.LBB22:
+ 432               	.LBB23:
+ 171:ttris.cpp     ****   //XOR all the bytes in pfbuff with the corresponding byte in fbuff and store
+ 172:ttris.cpp     ****   //the result in pfbuff
+ 173:ttris.cpp     ****   for(int y = 0; y < 6; y++)
+ 174:ttris.cpp     ****   {
+ 175:ttris.cpp     ****     for(int x = 0; x < 84; x++)
+ 176:ttris.cpp     ****     {
+ 177:ttris.cpp     ****       pfbuff[y][x] = pfbuff[y][x] ^ fbuff[y][x];
+ 433               		.stabn	68,0,177,.LM40-.LFBB6
+ 434               	.LM40:
+ 435 0116 7081      		ld r23,Z
+ 436 0118 6C91      		ld r22,X
+ 437 011a 6727      		eor r22,r23
+ 438 011c 6083      		st Z,r22
+ 175:ttris.cpp     ****     {
+ 439               		.stabn	68,0,175,.LM41-.LFBB6
+ 440               	.LM41:
+ 441 011e 0196      		adiw r24,1
+ 442 0120 8435      		cpi r24,84
+ 443 0122 9105      		cpc r25,__zero_reg__
+ 444 0124 01F4      		brne .L27
+ 445 0126 2C5A      		subi r18,-84
+ 446 0128 3F4F      		sbci r19,-1
+ 447 012a 4C5A      		subi r20,-84
+ 448 012c 5F4F      		sbci r21,-1
+ 449               	.LBE23:
+ 173:ttris.cpp     ****   {
+ 450               		.stabn	68,0,173,.LM42-.LFBB6
+ 451               	.LM42:
+ 452 012e 80E0      		ldi r24,hi8(pfbuff+504)
+ 453 0130 2030      		cpi r18,lo8(pfbuff+504)
+ 454 0132 3807      		cpc r19,r24
+ 455 0134 01F4      		brne .L26
+ 456 0136 C12C      		mov r12,__zero_reg__
+ 457 0138 D12C      		mov r13,__zero_reg__
+ 458 013a 00E0      		ldi r16,0
+ 459 013c 10E0      		ldi r17,0
+ 460               	.L28:
+ 461               	.LBE22:
+ 170:ttris.cpp     ****   //XOR all the bytes in pfbuff with the corresponding byte in fbuff and store
+ 462               		.stabn	68,0,170,.LM43-.LFBB6
+ 463               	.LM43:
+ 464 013e C0E0      		ldi r28,0
+ 465 0140 D0E0      		ldi r29,0
+ 466               	.LBB24:
+ 467               	.LBB25:
+ 468               	.LBB26:
+ 469               	.LBB27:
+ 178:ttris.cpp     ****     }
+ 179:ttris.cpp     ****   }
+ 180:ttris.cpp     ****   /*Send only the changed pixels to the screen*/
+ 181:ttris.cpp     ****   for(int y = 0; y < 6; y++)
+ 182:ttris.cpp     ****   {
+ 183:ttris.cpp     ****     for(int x = 0; x < 84; x++)
+ 184:ttris.cpp     ****     {
+ 185:ttris.cpp     ****       //If the current byte is not 0, a pixel has changed
+ 186:ttris.cpp     ****       if(pfbuff[y][x])
+ 187:ttris.cpp     ****       {
+ 188:ttris.cpp     ****         //update the y address in the screen
+ 189:ttris.cpp     ****         int sendy = y | 0b01000000;
+ 470               		.stabn	68,0,189,.LM44-.LFBB6
+ 471               	.LM44:
+ 472 0142 5801      		movw r10,r16
+ 473 0144 6894      		set
+ 474 0146 A6F8      		bld r10,6
+ 475               	.L30:
+ 476 0148 7E01      		movw r14,r28
+ 477 014a EC0C      		add r14,r12
+ 478 014c FD1C      		adc r15,r13
+ 479 014e F701      		movw r30,r14
+ 480 0150 E050      		subi r30,lo8(-(pfbuff))
+ 481 0152 F040      		sbci r31,hi8(-(pfbuff))
+ 482               	.LBE27:
+ 186:ttris.cpp     ****       {
+ 483               		.stabn	68,0,186,.LM45-.LFBB6
+ 484               	.LM45:
+ 485 0154 8081      		ld r24,Z
+ 486 0156 8823      		tst r24
+ 487 0158 01F0      		breq .L29
+ 488               	.LBB28:
+ 190:ttris.cpp     ****         send_byte(sendy, COMM);
+ 489               		.stabn	68,0,190,.LM46-.LFBB6
+ 490               	.LM46:
+ 491 015a 60E0      		ldi r22,0
+ 492 015c 8A2D      		mov r24,r10
+ 493 015e 0E94 0000 		call _Z9send_bytehb
+ 191:ttris.cpp     ****         //update the x address in the screen
+ 192:ttris.cpp     ****         int sendx = x | 0b10000000;
+ 193:ttris.cpp     ****         send_byte(sendx, COMM);
+ 494               		.stabn	68,0,193,.LM47-.LFBB6
+ 495               	.LM47:
+ 496 0162 60E0      		ldi r22,0
+ 497 0164 8C2F      		mov r24,r28
+ 498 0166 8068      		ori r24,lo8(-128)
+ 499 0168 0E94 0000 		call _Z9send_bytehb
+ 500 016c F701      		movw r30,r14
+ 501 016e E050      		subi r30,lo8(-(fbuff))
+ 502 0170 F040      		sbci r31,hi8(-(fbuff))
+ 194:ttris.cpp     ****         //Send the actual data from the current frame buffer
+ 195:ttris.cpp     ****         send_byte(fbuff[y][x], DATA);
+ 503               		.stabn	68,0,195,.LM48-.LFBB6
+ 504               	.LM48:
+ 505 0172 61E0      		ldi r22,lo8(1)
+ 506 0174 8081      		ld r24,Z
+ 507 0176 0E94 0000 		call _Z9send_bytehb
+ 508               	.L29:
+ 509               	.LBE28:
+ 510               	.LBE26:
+ 183:ttris.cpp     ****     {
+ 511               		.stabn	68,0,183,.LM49-.LFBB6
+ 512               	.LM49:
+ 513 017a 2196      		adiw r28,1
+ 514 017c C435      		cpi r28,84
+ 515 017e D105      		cpc r29,__zero_reg__
+ 516 0180 01F4      		brne .L30
+ 517               	.LBE25:
+ 181:ttris.cpp     ****   {
+ 518               		.stabn	68,0,181,.LM50-.LFBB6
+ 519               	.LM50:
+ 520 0182 0F5F      		subi r16,-1
+ 521 0184 1F4F      		sbci r17,-1
+ 522 0186 84E5      		ldi r24,84
+ 523 0188 C80E      		add r12,r24
+ 524 018a D11C      		adc r13,__zero_reg__
+ 525 018c 0630      		cpi r16,6
+ 526 018e 1105      		cpc r17,__zero_reg__
+ 527 0190 01F4      		brne .L28
+ 528 0192 20E0      		ldi r18,0
+ 529 0194 30E0      		ldi r19,0
+ 530               	.L31:
+ 531               	.LBE24:
+ 532               	.LBB29:
+ 533 0196 80E0      		ldi r24,0
+ 534 0198 90E0      		ldi r25,0
+ 535               	.L32:
+ 536 019a AC01      		movw r20,r24
+ 537 019c 420F      		add r20,r18
+ 538 019e 531F      		adc r21,r19
+ 539 01a0 FA01      		movw r30,r20
+ 540 01a2 E050      		subi r30,lo8(-(pfbuff))
+ 541 01a4 F040      		sbci r31,hi8(-(pfbuff))
+ 542 01a6 DA01      		movw r26,r20
+ 543 01a8 A050      		subi r26,lo8(-(fbuff))
+ 544 01aa B040      		sbci r27,hi8(-(fbuff))
+ 545               	.LBE29:
+ 546               	.LBB30:
+ 547               	.LBB31:
+ 196:ttris.cpp     ****       }
+ 197:ttris.cpp     ****     }
+ 198:ttris.cpp     ****   }
+ 199:ttris.cpp     **** 
+ 200:ttris.cpp     ****   //Copy the current frame to pfbuff for future comparisons
+ 201:ttris.cpp     ****   for(int y = 0; y < 6; y++)
+ 202:ttris.cpp     ****   {
+ 203:ttris.cpp     ****     for(int x = 0; x < 84; x++)
+ 204:ttris.cpp     ****     {
+ 205:ttris.cpp     ****       pfbuff[y][x] = fbuff[y][x];
+ 548               		.stabn	68,0,205,.LM51-.LFBB6
+ 549               	.LM51:
+ 550 01ac 4C91      		ld r20,X
+ 551 01ae 4083      		st Z,r20
+ 203:ttris.cpp     ****     {
+ 552               		.stabn	68,0,203,.LM52-.LFBB6
+ 553               	.LM52:
+ 554 01b0 0196      		adiw r24,1
+ 555 01b2 8435      		cpi r24,84
+ 556 01b4 9105      		cpc r25,__zero_reg__
+ 557 01b6 01F4      		brne .L32
+ 558 01b8 2C5A      		subi r18,-84
+ 559 01ba 3F4F      		sbci r19,-1
+ 560               	.LBE31:
+ 201:ttris.cpp     ****   {
+ 561               		.stabn	68,0,201,.LM53-.LFBB6
+ 562               	.LM53:
+ 563 01bc 283F      		cpi r18,-8
+ 564 01be 81E0      		ldi r24,1
+ 565 01c0 3807      		cpc r19,r24
+ 566 01c2 01F4      		brne .L31
+ 567               	/* epilogue start */
+ 568               	.LBE30:
+ 206:ttris.cpp     ****     }
+ 207:ttris.cpp     ****   }
+ 208:ttris.cpp     **** }
+ 569               		.stabn	68,0,208,.LM54-.LFBB6
+ 570               	.LM54:
+ 571 01c4 DF91      		pop r29
+ 572 01c6 CF91      		pop r28
+ 573 01c8 1F91      		pop r17
+ 574 01ca 0F91      		pop r16
+ 575 01cc FF90      		pop r15
+ 576 01ce EF90      		pop r14
+ 577 01d0 DF90      		pop r13
+ 578 01d2 CF90      		pop r12
+ 579 01d4 BF90      		pop r11
+ 580 01d6 AF90      		pop r10
+ 581 01d8 0895      		ret
+ 582               		.size	_Z12update_framev, .-_Z12update_framev
+ 583               		.stabs	"x:r(0,9)",64,0,175,24
+ 584               		.stabn	192,0,0,.LBB23-.LFBB6
+ 585               		.stabn	224,0,0,.LBE23-.LFBB6
+ 586               		.stabs	"y:r(0,9)",64,0,181,16
+ 587               		.stabn	192,0,0,.LBB24-.LFBB6
+ 588               		.stabs	"x:r(0,9)",64,0,183,28
+ 589               		.stabn	192,0,0,.LBB25-.LFBB6
+ 590               		.stabn	224,0,0,.LBE25-.LFBB6
+ 591               		.stabn	224,0,0,.LBE24-.LFBB6
+ 592               		.stabs	"x:r(0,9)",64,0,203,24
+ 593               		.stabn	192,0,0,.LBB31-.LFBB6
+ 594               		.stabn	224,0,0,.LBE31-.LFBB6
+ 595               	.Lscope6:
+ 596               		.stabs	"",36,0,0,.Lscope6-.LFBB6
+ 597               		.stabd	78,0,0
+ 598               		.section	.text.startup,"ax",@progbits
+ 599               		.stabs	"main:F(0,9)",36,0,210,main
+ 600               	.global	main
+ 601               		.type	main, @function
+ 602               	main:
+ 603               		.stabd	46,0,0
+ 209:ttris.cpp     **** 
+ 210:ttris.cpp     **** int main(void)
+ 211:ttris.cpp     **** {
+ 604               		.stabn	68,0,211,.LM55-.LFBB7
+ 605               	.LM55:
+ 606               	.LFBB7:
+ 607               	/* prologue: function */
+ 608               	/* frame size = 0 */
+ 609               	/* stack size = 0 */
+ 610               	.L__stack_usage = 0
+ 611               	.LBB32:
+ 612               	.LBB33:
+ 613               	.LBB34:
+ 614               		.stabs	"/usr/lib/avr/include/util/delay.h",132,0,0,.Ltext1
+ 615               	.Ltext1:
    1:/usr/lib/avr/include/util/delay.h **** /* Copyright (c) 2002, Marek Michalkiewicz
    2:/usr/lib/avr/include/util/delay.h ****    Copyright (c) 2004,2005,2007 Joerg Wunsch
    3:/usr/lib/avr/include/util/delay.h ****    Copyright (c) 2007  Florin-Viorel Petrov
@@ -792,148 +998,326 @@
  161:/usr/lib/avr/include/util/delay.h **** 	#endif
  162:/usr/lib/avr/include/util/delay.h **** 
  163:/usr/lib/avr/include/util/delay.h **** 	__builtin_avr_delay_cycles(__ticks_dc);
- 445               		.stabn	68,0,163,.LM43-.LFBB6
- 446               	.LM43:
- 447 000c 2FEF      		ldi r18,lo8(639999)
- 448 000e 83EC      		ldi r24,hi8(639999)
- 449 0010 99E0      		ldi r25,hlo8(639999)
- 450 0012 2150      	1:	subi r18,1
- 451 0014 8040      		sbci r24,0
- 452 0016 9040      		sbci r25,0
- 453 0018 01F4      		brne 1b
- 454 001a 00C0      		rjmp .
- 455 001c 0000      		nop
- 456               	.LBE37:
- 457               	.LBE36:
- 458               		.stabs	"ttris.cpp",132,0,0,.Ltext2
- 459               	.Ltext2:
- 185:ttris.cpp     ****   //Give the AVR a bit to boot
- 186:ttris.cpp     ****   _delay_ms(200);
- 187:ttris.cpp     ****   //Initialize the SPI bus
- 188:ttris.cpp     ****   spi_init_master();
- 460               		.stabn	68,0,188,.LM44-.LFBB6
- 461               	.LM44:
- 462 001e 0E94 0000 		call _Z15spi_init_masterv
- 189:ttris.cpp     ****   //Initialize the screen
- 190:ttris.cpp     ****   init_screen();
- 463               		.stabn	68,0,190,.LM45-.LFBB6
- 464               	.LM45:
- 465 0022 0E94 0000 		call _Z11init_screenv
- 191:ttris.cpp     ****   blank_display();
- 466               		.stabn	68,0,191,.LM46-.LFBB6
- 467               	.LM46:
- 468 0026 0E94 0000 		call _Z13blank_displayv
- 469               	.LBB38:
- 192:ttris.cpp     ****   //draw a test pattern
- 193:ttris.cpp     ****   for(int y = 0; y < 48; y+=2)
- 470               		.stabn	68,0,193,.LM47-.LFBB6
- 471               	.LM47:
- 472 002a C0E0      		ldi r28,0
- 473 002c D0E0      		ldi r29,0
- 474               	.L24:
- 475               	.LBE38:
- 476               	.LBE35:
- 184:ttris.cpp     ****   //Give the AVR a bit to boot
- 477               		.stabn	68,0,184,.LM48-.LFBB6
- 478               	.LM48:
- 479 002e 00E0      		ldi r16,0
- 480 0030 10E0      		ldi r17,0
- 481 0032 7E01      		movw r14,r28
- 482 0034 2FEF      		ldi r18,-1
- 483 0036 E21A      		sub r14,r18
- 484 0038 F20A      		sbc r15,r18
- 485               	.L25:
- 486               	.LBB41:
- 487               	.LBB40:
- 488               	.LBB39:
- 194:ttris.cpp     ****   {
- 195:ttris.cpp     ****     for(int x = 0; x < 84; x = x + y + 1)
- 196:ttris.cpp     ****     {
- 197:ttris.cpp     ****       set_pixel(x, y, BLACK);
- 489               		.stabn	68,0,197,.LM49-.LFBB6
- 490               	.LM49:
- 491 003a 41E0      		ldi r20,lo8(1)
- 492 003c BE01      		movw r22,r28
- 493 003e C801      		movw r24,r16
- 494 0040 0E94 0000 		call _Z9set_pixeliib
- 495 0044 0E0D      		add r16,r14
- 496 0046 1F1D      		adc r17,r15
- 195:ttris.cpp     ****     {
- 497               		.stabn	68,0,195,.LM50-.LFBB6
- 498               	.LM50:
- 499 0048 0435      		cpi r16,84
- 500 004a 1105      		cpc r17,__zero_reg__
- 501 004c 04F0      		brlt .L25
- 502               	.LBE39:
- 193:ttris.cpp     ****   {
- 503               		.stabn	68,0,193,.LM51-.LFBB6
- 504               	.LM51:
- 505 004e 2296      		adiw r28,2
- 506 0050 C033      		cpi r28,48
- 507 0052 D105      		cpc r29,__zero_reg__
- 508 0054 01F4      		brne .L24
- 509               	.LBE40:
- 510               	.LBE41:
- 198:ttris.cpp     ****     }
- 199:ttris.cpp     ****   }
- 200:ttris.cpp     ****   return(0);
- 201:ttris.cpp     **** }
- 511               		.stabn	68,0,201,.LM52-.LFBB6
- 512               	.LM52:
- 513 0056 80E0      		ldi r24,0
- 514 0058 90E0      		ldi r25,0
- 515               	/* epilogue start */
- 516 005a DF91      		pop r29
- 517 005c CF91      		pop r28
- 518 005e 1F91      		pop r17
- 519 0060 0F91      		pop r16
- 520 0062 FF90      		pop r15
- 521 0064 EF90      		pop r14
- 522 0066 0895      		ret
- 523               		.size	main, .-main
- 524               		.stabs	"y:r(0,9)",64,0,193,28
- 525               		.stabn	192,0,0,.LBB38-.LFBB6
- 526               		.stabs	"x:r(0,9)",64,0,195,16
- 527               		.stabn	192,0,0,.LBB39-.LFBB6
- 528               		.stabn	224,0,0,.LBE39-.LFBB6
- 529               		.stabn	224,0,0,.LBE38-.LFBB6
- 530               		.stabs	"y:r(0,9)",64,0,193,28
- 531               		.stabn	192,0,0,.LBB40-.LFBB6
- 532               		.stabn	224,0,0,.LBE40-.LFBB6
- 533               	.Lscope6:
- 534               		.stabs	"",36,0,0,.Lscope6-.LFBB6
- 535               		.stabd	78,0,0
- 536               	.global	vbuff
- 537               		.section .bss
- 538               		.type	vbuff, @object
- 539               		.size	vbuff, 504
- 540               	vbuff:
- 541 0000 0000 0000 		.zero	504
- 541      0000 0000 
- 541      0000 0000 
- 541      0000 0000 
- 541      0000 0000 
- 542               		.stabs	"vbuff:G(0,90)=ar(0,91)=r(0,91);0;0177777;;0;5;(0,92)=ar(0,91);0;83;(0,89)",32,0,38,0
- 543               		.text
- 544               		.stabs	"",100,0,0,.Letext0
- 545               	.Letext0:
- 546               		.ident	"GCC: (GNU) 4.9.2"
- 547               	.global __do_clear_bss
+ 616               		.stabn	68,0,163,.LM56-.LFBB7
+ 617               	.LM56:
+ 618 0000 2FEF      		ldi r18,lo8(639999)
+ 619 0002 83EC      		ldi r24,hi8(639999)
+ 620 0004 99E0      		ldi r25,hlo8(639999)
+ 621 0006 2150      	1:	subi r18,1
+ 622 0008 8040      		sbci r24,0
+ 623 000a 9040      		sbci r25,0
+ 624 000c 01F4      		brne 1b
+ 625 000e 00C0      		rjmp .
+ 626 0010 0000      		nop
+ 627               	.LBE34:
+ 628               	.LBE33:
+ 629               		.stabs	"ttris.cpp",132,0,0,.Ltext2
+ 630               	.Ltext2:
+ 212:ttris.cpp     ****   //Give the AVR a bit to boot
+ 213:ttris.cpp     ****   _delay_ms(200);
+ 214:ttris.cpp     ****   //Initialize the SPI bus
+ 215:ttris.cpp     ****   spi_init_master();
+ 631               		.stabn	68,0,215,.LM57-.LFBB7
+ 632               	.LM57:
+ 633 0012 0E94 0000 		call _Z15spi_init_masterv
+ 216:ttris.cpp     ****   //Initialize the screen
+ 217:ttris.cpp     ****   screen_init();
+ 634               		.stabn	68,0,217,.LM58-.LFBB7
+ 635               	.LM58:
+ 636 0016 0E94 0000 		call _Z11screen_initv
+ 218:ttris.cpp     ****   //Blank out the screen
+ 219:ttris.cpp     ****   blank_fbuff();
+ 637               		.stabn	68,0,219,.LM59-.LFBB7
+ 638               	.LM59:
+ 639 001a 0E94 0000 		call _Z11blank_fbuffv
+ 640               	.L45:
+ 641               	.LBB35:
+ 220:ttris.cpp     ****   //Update the frame
+ 221:ttris.cpp     ****   while(1)
+ 222:ttris.cpp     ****   {
+ 223:ttris.cpp     ****     for(int x = 0; x < 83; x++)
+ 642               		.stabn	68,0,223,.LM60-.LFBB7
+ 643               	.LM60:
+ 644 001e 00E0      		ldi r16,0
+ 645 0020 10E0      		ldi r17,0
+ 646               	.L43:
+ 647               	.LBE35:
+ 648               	.LBE32:
+ 211:ttris.cpp     ****   //Give the AVR a bit to boot
+ 649               		.stabn	68,0,211,.LM61-.LFBB7
+ 650               	.LM61:
+ 651 0022 C0E0      		ldi r28,0
+ 652 0024 D0E0      		ldi r29,0
+ 653               	.L44:
+ 654               	.LBB38:
+ 655               	.LBB37:
+ 656               	.LBB36:
+ 224:ttris.cpp     ****     {
+ 225:ttris.cpp     ****       for(int y = 0; y < 48; y++)
+ 226:ttris.cpp     ****       {
+ 227:ttris.cpp     ****         set_pixel(x, y, BLACK);
+ 657               		.stabn	68,0,227,.LM62-.LFBB7
+ 658               	.LM62:
+ 659 0026 41E0      		ldi r20,lo8(1)
+ 660 0028 BE01      		movw r22,r28
+ 661 002a C801      		movw r24,r16
+ 662 002c 0E94 0000 		call _Z9set_pixeliib
+ 228:ttris.cpp     ****         update_frame();
+ 663               		.stabn	68,0,228,.LM63-.LFBB7
+ 664               	.LM63:
+ 665 0030 0E94 0000 		call _Z12update_framev
+ 225:ttris.cpp     ****       {
+ 666               		.stabn	68,0,225,.LM64-.LFBB7
+ 667               	.LM64:
+ 668 0034 2196      		adiw r28,1
+ 669 0036 C033      		cpi r28,48
+ 670 0038 D105      		cpc r29,__zero_reg__
+ 671 003a 01F4      		brne .L44
+ 672               	.LBE36:
+ 223:ttris.cpp     ****     {
+ 673               		.stabn	68,0,223,.LM65-.LFBB7
+ 674               	.LM65:
+ 675 003c 0F5F      		subi r16,-1
+ 676 003e 1F4F      		sbci r17,-1
+ 677 0040 0335      		cpi r16,83
+ 678 0042 1105      		cpc r17,__zero_reg__
+ 679 0044 01F4      		brne .L43
+ 680 0046 00C0      		rjmp .L45
+ 681               	.LBE37:
+ 682               	.LBE38:
+ 683               		.size	main, .-main
+ 684               		.stabs	"x:r(0,9)",64,0,223,16
+ 685               		.stabn	192,0,0,.LBB35-.LFBB7
+ 686               		.stabs	"y:r(0,9)",64,0,225,28
+ 687               		.stabn	192,0,0,.LBB36-.LFBB7
+ 688               		.stabn	224,0,0,.LBE36-.LFBB7
+ 689               		.stabn	224,0,0,.LBE35-.LFBB7
+ 690               		.stabs	"x:r(0,9)",64,0,223,16
+ 691               		.stabn	192,0,0,.LBB37-.LFBB7
+ 692               		.stabn	224,0,0,.LBE37-.LFBB7
+ 693               	.Lscope7:
+ 694               		.stabs	"",36,0,0,.Lscope7-.LFBB7
+ 695               		.stabd	78,0,0
+ 696               	.global	spritemap
+ 697               		.data
+ 698               		.type	spritemap, @object
+ 699               		.size	spritemap, 168
+ 700               	spritemap:
+ 701 0000 00        		.byte	0
+ 702 0001 6E        		.byte	110
+ 703 0002 8A        		.byte	-118
+ 704 0003 EA        		.byte	-22
+ 705 0004 8A        		.byte	-118
+ 706 0005 EE        		.byte	-18
+ 707 0006 00        		.byte	0
+ 708 0007 64        		.byte	100
+ 709 0008 84        		.byte	-124
+ 710 0009 E4        		.byte	-28
+ 711 000a 84        		.byte	-124
+ 712 000b 84        		.byte	-124
+ 713 000c 00        		.byte	0
+ 714 000d 6E        		.byte	110
+ 715 000e 82        		.byte	-126
+ 716 000f EE        		.byte	-18
+ 717 0010 A8        		.byte	-88
+ 718 0011 EE        		.byte	-18
+ 719 0012 00        		.byte	0
+ 720 0013 AE        		.byte	-82
+ 721 0014 A2        		.byte	-94
+ 722 0015 EE        		.byte	-18
+ 723 0016 A2        		.byte	-94
+ 724 0017 AE        		.byte	-82
+ 725 0018 00        		.byte	0
+ 726 0019 EA        		.byte	-22
+ 727 001a 4A        		.byte	74
+ 728 001b 4E        		.byte	78
+ 729 001c 42        		.byte	66
+ 730 001d E2        		.byte	-30
+ 731 001e 00        		.byte	0
+ 732 001f 2E        		.byte	46
+ 733 0020 28        		.byte	40
+ 734 0021 2E        		.byte	46
+ 735 0022 A2        		.byte	-94
+ 736 0023 6E        		.byte	110
+ 737 0024 00        		.byte	0
+ 738 0025 AE        		.byte	-82
+ 739 0026 A8        		.byte	-88
+ 740 0027 CE        		.byte	-50
+ 741 0028 AA        		.byte	-86
+ 742 0029 AE        		.byte	-82
+ 743 002a 00        		.byte	0
+ 744 002b 8E        		.byte	-114
+ 745 002c 82        		.byte	-126
+ 746 002d 82        		.byte	-126
+ 747 002e 82        		.byte	-126
+ 748 002f E2        		.byte	-30
+ 749 0030 00        		.byte	0
+ 750 0031 AE        		.byte	-82
+ 751 0032 EA        		.byte	-22
+ 752 0033 EE        		.byte	-18
+ 753 0034 AA        		.byte	-86
+ 754 0035 AE        		.byte	-82
+ 755 0036 00        		.byte	0
+ 756 0037 AE        		.byte	-82
+ 757 0038 EA        		.byte	-22
+ 758 0039 EE        		.byte	-18
+ 759 003a E2        		.byte	-30
+ 760 003b AE        		.byte	-82
+ 761 003c 00        		.byte	0
+ 762 003d 44        		.byte	68
+ 763 003e AA        		.byte	-86
+ 764 003f AE        		.byte	-82
+ 765 0040 AA        		.byte	-86
+ 766 0041 4A        		.byte	74
+ 767 0042 00        		.byte	0
+ 768 0043 CC        		.byte	-52
+ 769 0044 AA        		.byte	-86
+ 770 0045 EC        		.byte	-20
+ 771 0046 8A        		.byte	-118
+ 772 0047 8E        		.byte	-114
+ 773 0048 00        		.byte	0
+ 774 0049 46        		.byte	70
+ 775 004a A8        		.byte	-88
+ 776 004b A8        		.byte	-88
+ 777 004c E8        		.byte	-24
+ 778 004d 6E        		.byte	110
+ 779 004e 00        		.byte	0
+ 780 004f CC        		.byte	-52
+ 781 0050 AA        		.byte	-86
+ 782 0051 EA        		.byte	-22
+ 783 0052 CA        		.byte	-54
+ 784 0053 AE        		.byte	-82
+ 785 0054 00        		.byte	0
+ 786 0055 46        		.byte	70
+ 787 0056 48        		.byte	72
+ 788 0057 44        		.byte	68
+ 789 0058 02        		.byte	2
+ 790 0059 4E        		.byte	78
+ 791 005a 00        		.byte	0
+ 792 005b EE        		.byte	-18
+ 793 005c 24        		.byte	36
+ 794 005d 64        		.byte	100
+ 795 005e 04        		.byte	4
+ 796 005f 44        		.byte	68
+ 797 0060 00        		.byte	0
+ 798 0061 AA        		.byte	-86
+ 799 0062 AA        		.byte	-86
+ 800 0063 0A        		.byte	10
+ 801 0064 AA        		.byte	-86
+ 802 0065 46        		.byte	70
+ 803 0066 00        		.byte	0
+ 804 0067 AA        		.byte	-86
+ 805 0068 4A        		.byte	74
+ 806 0069 EA        		.byte	-22
+ 807 006a 44        		.byte	68
+ 808 006b A4        		.byte	-92
+ 809 006c 00        		.byte	0
+ 810 006d 0A        		.byte	10
+ 811 006e 0A        		.byte	10
+ 812 006f 0E        		.byte	14
+ 813 0070 0E        		.byte	14
+ 814 0071 4A        		.byte	74
+ 815 0072 00        		.byte	0
+ 816 0073 4A        		.byte	74
+ 817 0074 4A        		.byte	74
+ 818 0075 04        		.byte	4
+ 819 0076 0A        		.byte	10
+ 820 0077 0A        		.byte	10
+ 821 0078 00        		.byte	0
+ 822 0079 EA        		.byte	-22
+ 823 007a EA        		.byte	-22
+ 824 007b E4        		.byte	-28
+ 825 007c E4        		.byte	-28
+ 826 007d E4        		.byte	-28
+ 827 007e 00        		.byte	0
+ 828 007f 0E        		.byte	14
+ 829 0080 02        		.byte	2
+ 830 0081 04        		.byte	4
+ 831 0082 08        		.byte	8
+ 832 0083 0E        		.byte	14
+ 833 0084 00        		.byte	0
+ 834 0085 06        		.byte	6
+ 835 0086 06        		.byte	6
+ 836 0087 1E        		.byte	30
+ 837 0088 1E        		.byte	30
+ 838 0089 18        		.byte	24
+ 839 008a 18        		.byte	24
+ 840 008b 00        		.byte	0
+ 841 008c 18        		.byte	24
+ 842 008d 18        		.byte	24
+ 843 008e 1E        		.byte	30
+ 844 008f 1E        		.byte	30
+ 845 0090 06        		.byte	6
+ 846 0091 06        		.byte	6
+ 847 0092 C0        		.byte	-64
+ 848 0093 C6        		.byte	-58
+ 849 0094 F6        		.byte	-10
+ 850 0095 F6        		.byte	-10
+ 851 0096 C6        		.byte	-58
+ 852 0097 C6        		.byte	-58
+ 853 0098 06        		.byte	6
+ 854 0099 C6        		.byte	-58
+ 855 009a C6        		.byte	-58
+ 856 009b C0        		.byte	-64
+ 857 009c C6        		.byte	-58
+ 858 009d F6        		.byte	-10
+ 859 009e F6        		.byte	-10
+ 860 009f 06        		.byte	6
+ 861 00a0 1E        		.byte	30
+ 862 00a1 1E        		.byte	30
+ 863 00a2 00        		.byte	0
+ 864 00a3 1E        		.byte	30
+ 865 00a4 1E        		.byte	30
+ 866 00a5 1E        		.byte	30
+ 867 00a6 1E        		.byte	30
+ 868 00a7 00        		.byte	0
+ 869               	.global	pfbuff
+ 870               		.section .bss
+ 871               		.type	pfbuff, @object
+ 872               		.size	pfbuff, 504
+ 873               	pfbuff:
+ 874 0000 0000 0000 		.zero	504
+ 874      0000 0000 
+ 874      0000 0000 
+ 874      0000 0000 
+ 874      0000 0000 
+ 875               	.global	fbuff
+ 876               		.type	fbuff, @object
+ 877               		.size	fbuff, 504
+ 878               	fbuff:
+ 879 01f8 0000 0000 		.zero	504
+ 879      0000 0000 
+ 879      0000 0000 
+ 879      0000 0000 
+ 879      0000 0000 
+ 880               		.stabs	"fbuff:G(0,91)=ar(0,92)=r(0,92);0;0177777;;0;5;(0,93)=ar(0,92);0;83;(0,89)",32,0,38,0
+ 881               		.stabs	"pfbuff:G(0,91)",32,0,49,0
+ 882               		.stabs	"spritemap:G(0,94)=ar(0,92);0;1;(0,93)",32,0,58,0
+ 883               		.text
+ 884               		.stabs	"",100,0,0,.Letext0
+ 885               	.Letext0:
+ 886               		.ident	"GCC: (GNU) 4.9.2"
+ 887               	.global __do_copy_data
+ 888               	.global __do_clear_bss
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 ttris.cpp
-     /tmp/ccFlDbY3.s:2      *ABS*:000000000000003e __SP_H__
-     /tmp/ccFlDbY3.s:3      *ABS*:000000000000003d __SP_L__
-     /tmp/ccFlDbY3.s:4      *ABS*:000000000000003f __SREG__
-     /tmp/ccFlDbY3.s:5      *ABS*:0000000000000000 __tmp_reg__
-     /tmp/ccFlDbY3.s:6      *ABS*:0000000000000001 __zero_reg__
-     /tmp/ccFlDbY3.s:108    .text:0000000000000000 _Z15spi_init_masterv
-     /tmp/ccFlDbY3.s:135    .text:000000000000000a _Z9send_bytehb
-     /tmp/ccFlDbY3.s:178    .text:000000000000001c _Z11init_screenv
-     /tmp/ccFlDbY3.s:236    .text:0000000000000052 _Z9set_pixeliib
-     /tmp/ccFlDbY3.s:540    .bss:0000000000000000 vbuff
-     /tmp/ccFlDbY3.s:384    .text:00000000000000e4 _Z13blank_displayv
-     /tmp/ccFlDbY3.s:425    .text.startup:0000000000000000 main
+     /tmp/ccKMMYWm.s:2      *ABS*:000000000000003e __SP_H__
+     /tmp/ccKMMYWm.s:3      *ABS*:000000000000003d __SP_L__
+     /tmp/ccKMMYWm.s:4      *ABS*:000000000000003f __SREG__
+     /tmp/ccKMMYWm.s:5      *ABS*:0000000000000000 __tmp_reg__
+     /tmp/ccKMMYWm.s:6      *ABS*:0000000000000001 __zero_reg__
+     /tmp/ccKMMYWm.s:109    .text:0000000000000000 _Z15spi_init_masterv
+     /tmp/ccKMMYWm.s:136    .text:000000000000000a _Z9send_bytehb
+     /tmp/ccKMMYWm.s:179    .text:000000000000001c _Z11screen_initv
+     /tmp/ccKMMYWm.s:237    .text:0000000000000052 _Z9set_pixeliib
+     /tmp/ccKMMYWm.s:878    .bss:00000000000001f8 fbuff
+     /tmp/ccKMMYWm.s:342    .text:00000000000000be _Z11blank_fbuffv
+     /tmp/ccKMMYWm.s:396    .text:00000000000000ea _Z12update_framev
+     /tmp/ccKMMYWm.s:873    .bss:0000000000000000 pfbuff
+     /tmp/ccKMMYWm.s:602    .text.startup:0000000000000000 main
+     /tmp/ccKMMYWm.s:700    .data:0000000000000000 spritemap
 
 UNDEFINED SYMBOLS
 __divmodhi4
+__do_copy_data
 __do_clear_bss
