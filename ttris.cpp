@@ -47,6 +47,13 @@ struct sprite
   int hght;
 };
 
+struct string_sprite
+{
+  int x_pos;
+  int y_pos;
+  char* str;
+};
+
 //Init the video buffer
 byte fbuff[6][84] = {
 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -212,6 +219,78 @@ void draw_sprite(sprite* spr)
   }
 }
 
+int get_sprite_char_y_map(char c)
+{
+  if (((c >= '0') && (c <= '9')) || ((c >= 'A') && (c <= 'D')))
+  {
+    return 0;
+  }
+
+  if((c >= 'E') && (c <= 'R'))
+  {
+    return 4;
+  }
+
+  if((c >= 'S') && (c <= 'Z'))
+  {
+    return 8;
+  }
+  if(c == ' ')
+  {
+    return 13;
+  }
+  else
+  {
+    return 0;
+  }
+}
+
+int get_sprite_char_x_map(char c)
+{
+  if((c >= '0') && (c <= '9'))
+  {
+    return ((c-'0')*6);
+  }
+
+  if((c >= 'A') && (c <= 'D'))
+  {
+    return ((c-'A'+10)*6);
+  }
+
+  if((c >= 'E') && (c <= 'R'))
+  {
+    return ((c-'E')*6);
+  }
+
+  if((c >= 'S') && (c <= 'Z'))
+  {
+    return ((c-'S')*6);
+  }
+  if(c == ' ')
+  {
+    return 43;
+  }
+  else
+  {
+    return 0;
+  }
+}
+
+void draw_string(string_sprite* str)
+{
+  struct sprite c;
+  c.x_pos = str->x_pos;
+  c.wdth = 6;
+  c.hght = 4;
+  for(int i = 0; str->str[i] != '\0'; i++)
+  {
+    c.x_map = get_sprite_char_x_map(str->str[i]);
+    c.y_map = get_sprite_char_y_map(str->str[i]);
+    c.y_pos = ((str->y_pos - (i*4))-4);
+    draw_sprite(&c);
+  }
+}
+
 int main(void)
 {
   struct sprite zero;
@@ -221,6 +300,17 @@ int main(void)
   zero.y_pos = 0;
   zero.wdth = 6;
   zero.hght = 4;
+
+  struct string_sprite tetris;
+  struct string_sprite sjsu;
+  char tetris_s[] = "TETRIS";
+  char sjsu_s[] = "SJSU GAMEDEV";
+  tetris.str = tetris_s;
+  tetris.x_pos = 0;
+  tetris.y_pos = 48;
+  sjsu.str = sjsu_s;
+  sjsu.x_pos = 6;
+  sjsu.y_pos = 48;
   //Give the AVR a bit to boot
   _delay_ms(200);
   //Initialize the SPI bus
@@ -229,6 +319,8 @@ int main(void)
   init_screen();
   blank_display();
   //draw a test pattern
-  draw_sprite(&zero);
+  //draw_sprite(&zero);
+  draw_string(&tetris);
+  draw_string(&sjsu);
   return(0);
 }
