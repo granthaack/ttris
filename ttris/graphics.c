@@ -183,10 +183,6 @@ void draw_sprite(struct sprite* spr)
 			{
 				set_pixel(spr->x_pos + x, spr->y_pos + y, BLACK);
 			}
-			//else
-			//{
-			//	set_pixel(spr->x_pos + x, spr->y_pos + y, WHITE);
-			//}
 		}
 	}
 	spr->x_ppos = spr->x_pos;

@@ -39,7 +39,11 @@ int main(void)
 	set_ddram_x_addr(10);
 	set_ddram_y_addr(0/8);
 	set_pixel(10, 2, BLACK);
+	set_ddram_x_addr(10);
+	set_ddram_y_addr(0/8);
 	set_pixel(10, 3, BLACK);
+	set_ddram_x_addr(10);
+	set_ddram_y_addr(0/8);
 	set_pixel(10, 4, BLACK);
 	draw_sprite(&tmino);
 	//draw_string(&tetris);

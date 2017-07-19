@@ -3,31 +3,31 @@ ttris.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .data         000000a8  00800100  00000548  000005dc  2**0
+  0 .data         000000a8  00800100  00000560  000005f4  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  1 .text         00000548  00000000  00000000  00000094  2**1
+  1 .text         00000560  00000000  00000000  00000094  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .bss          000001f8  008001a8  008001a8  00000684  2**0
+  2 .bss          000001f8  008001a8  008001a8  0000069c  2**0
                   ALLOC
-  3 .comment      00000030  00000000  00000000  00000684  2**0
+  3 .comment      00000030  00000000  00000000  0000069c  2**0
                   CONTENTS, READONLY
-  4 .note.gnu.avr.deviceinfo 00000040  00000000  00000000  000006b4  2**2
+  4 .note.gnu.avr.deviceinfo 00000040  00000000  00000000  000006cc  2**2
                   CONTENTS, READONLY
-  5 .debug_aranges 000000d8  00000000  00000000  000006f4  2**0
+  5 .debug_aranges 000000d8  00000000  00000000  0000070c  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_info   00001703  00000000  00000000  000007cc  2**0
+  6 .debug_info   0000174c  00000000  00000000  000007e4  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_abbrev 00000afc  00000000  00000000  00001ecf  2**0
+  7 .debug_abbrev 00000ad3  00000000  00000000  00001f30  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   00000a3f  00000000  00000000  000029cb  2**0
+  8 .debug_line   00000a57  00000000  00000000  00002a03  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_frame  000001b0  00000000  00000000  0000340c  2**2
+  9 .debug_frame  000001b0  00000000  00000000  0000345c  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    00000501  00000000  00000000  000035bc  2**0
+ 10 .debug_str    00000501  00000000  00000000  0000360c  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    00000f2b  00000000  00000000  00003abd  2**0
+ 11 .debug_loc    00000f2b  00000000  00000000  00003b0d  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 00000268  00000000  00000000  000049e8  2**0
+ 12 .debug_ranges 00000268  00000000  00000000  00004a38  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -72,7 +72,7 @@ Disassembly of section .text:
   74:	11 e0       	ldi	r17, 0x01	; 1
   76:	a0 e0       	ldi	r26, 0x00	; 0
   78:	b1 e0       	ldi	r27, 0x01	; 1
-  7a:	e8 e4       	ldi	r30, 0x48	; 72
+  7a:	e0 e6       	ldi	r30, 0x60	; 96
   7c:	f5 e0       	ldi	r31, 0x05	; 5
   7e:	02 c0       	rjmp	.+4      	; 0x84 <__do_copy_data+0x10>
   80:	05 90       	lpm	r0, Z+
@@ -95,7 +95,7 @@ Disassembly of section .text:
   96:	b2 07       	cpc	r27, r18
   98:	e1 f7       	brne	.-8      	; 0x92 <.do_clear_bss_loop>
   9a:	0e 94 45 02 	call	0x48a	; 0x48a <main>
-  9e:	0c 94 a2 02 	jmp	0x544	; 0x544 <_exit>
+  9e:	0c 94 ae 02 	jmp	0x55c	; 0x55c <_exit>
 
 000000a2 <__bad_interrupt>:
   a2:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
@@ -1173,9 +1173,9 @@ void draw_sprite(struct sprite* spr)
  438:	68 17       	cp	r22, r24
  43a:	08 f4       	brcc	.+2      	; 0x43e <__LOCK_REGION_LENGTH__+0x3e>
  43c:	bb cf       	rjmp	.-138    	; 0x3b4 <draw_sprite+0x1a>
-			//{
-			//	set_pixel(spr->x_pos + x, spr->y_pos + y, WHITE);
-			//}
+			{
+				set_pixel(spr->x_pos + x, spr->y_pos + y, BLACK);
+			}
 		}
 	}
 	spr->x_ppos = spr->x_pos;
@@ -1299,7 +1299,7 @@ int main(void)
 */
 	//Initialize the SPI bus
 	spi_init_master();
- 4b8:	0e 94 9d 02 	call	0x53a	; 0x53a <spi_init_master>
+ 4b8:	0e 94 a9 02 	call	0x552	; 0x552 <spi_init_master>
 	//Initialize the screen
 	init_screen();
  4bc:	0e 94 bf 00 	call	0x17e	; 0x17e <init_screen>
@@ -1317,102 +1317,114 @@ int main(void)
  4d2:	62 e0       	ldi	r22, 0x02	; 2
  4d4:	8a e0       	ldi	r24, 0x0A	; 10
  4d6:	0e 94 f0 00 	call	0x1e0	; 0x1e0 <set_pixel>
+	set_ddram_x_addr(10);
+ 4da:	8a e0       	ldi	r24, 0x0A	; 10
+ 4dc:	0e 94 e4 00 	call	0x1c8	; 0x1c8 <set_ddram_x_addr>
+	set_ddram_y_addr(0/8);
+ 4e0:	80 e0       	ldi	r24, 0x00	; 0
+ 4e2:	0e 94 ea 00 	call	0x1d4	; 0x1d4 <set_ddram_y_addr>
 	set_pixel(10, 3, BLACK);
- 4da:	41 e0       	ldi	r20, 0x01	; 1
- 4dc:	63 e0       	ldi	r22, 0x03	; 3
- 4de:	8a e0       	ldi	r24, 0x0A	; 10
- 4e0:	0e 94 f0 00 	call	0x1e0	; 0x1e0 <set_pixel>
+ 4e6:	41 e0       	ldi	r20, 0x01	; 1
+ 4e8:	63 e0       	ldi	r22, 0x03	; 3
+ 4ea:	8a e0       	ldi	r24, 0x0A	; 10
+ 4ec:	0e 94 f0 00 	call	0x1e0	; 0x1e0 <set_pixel>
+	set_ddram_x_addr(10);
+ 4f0:	8a e0       	ldi	r24, 0x0A	; 10
+ 4f2:	0e 94 e4 00 	call	0x1c8	; 0x1c8 <set_ddram_x_addr>
+	set_ddram_y_addr(0/8);
+ 4f6:	80 e0       	ldi	r24, 0x00	; 0
+ 4f8:	0e 94 ea 00 	call	0x1d4	; 0x1d4 <set_ddram_y_addr>
 	set_pixel(10, 4, BLACK);
- 4e4:	41 e0       	ldi	r20, 0x01	; 1
- 4e6:	64 e0       	ldi	r22, 0x04	; 4
- 4e8:	8a e0       	ldi	r24, 0x0A	; 10
- 4ea:	0e 94 f0 00 	call	0x1e0	; 0x1e0 <set_pixel>
- 4ee:	0c c0       	rjmp	.+24     	; 0x508 <main+0x7e>
+ 4fc:	41 e0       	ldi	r20, 0x01	; 1
+ 4fe:	64 e0       	ldi	r22, 0x04	; 4
+ 500:	8a e0       	ldi	r24, 0x0A	; 10
+ 502:	0e 94 f0 00 	call	0x1e0	; 0x1e0 <set_pixel>
+ 506:	0c c0       	rjmp	.+24     	; 0x520 <main+0x96>
 	//draw_string(&tetris);
 	//draw_string(&sjsu);
 	//_delay_ms(10);
 	while(!(tmino.coll & 0b00001000))
 	{
 		tmino.x_pos--;
- 4f0:	8b 81       	ldd	r24, Y+3	; 0x03
- 4f2:	81 50       	subi	r24, 0x01	; 1
- 4f4:	8b 83       	std	Y+3, r24	; 0x03
+ 508:	8b 81       	ldd	r24, Y+3	; 0x03
+ 50a:	81 50       	subi	r24, 0x01	; 1
+ 50c:	8b 83       	std	Y+3, r24	; 0x03
 	#else
 		//round up by default
 		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
 	#endif
 
 	__builtin_avr_delay_cycles(__ticks_dc);
- 4f6:	2f ef       	ldi	r18, 0xFF	; 255
- 4f8:	80 e7       	ldi	r24, 0x70	; 112
- 4fa:	92 e0       	ldi	r25, 0x02	; 2
- 4fc:	21 50       	subi	r18, 0x01	; 1
- 4fe:	80 40       	sbci	r24, 0x00	; 0
- 500:	90 40       	sbci	r25, 0x00	; 0
- 502:	e1 f7       	brne	.-8      	; 0x4fc <main+0x72>
- 504:	00 c0       	rjmp	.+0      	; 0x506 <main+0x7c>
- 506:	00 00       	nop
+ 50e:	2f ef       	ldi	r18, 0xFF	; 255
+ 510:	80 e7       	ldi	r24, 0x70	; 112
+ 512:	92 e0       	ldi	r25, 0x02	; 2
+ 514:	21 50       	subi	r18, 0x01	; 1
+ 516:	80 40       	sbci	r24, 0x00	; 0
+ 518:	90 40       	sbci	r25, 0x00	; 0
+ 51a:	e1 f7       	brne	.-8      	; 0x514 <main+0x8a>
+ 51c:	00 c0       	rjmp	.+0      	; 0x51e <main+0x94>
+ 51e:	00 00       	nop
+	set_ddram_y_addr(0/8);
+	set_pixel(10, 3, BLACK);
 	set_ddram_x_addr(10);
 	set_ddram_y_addr(0/8);
-	set_pixel(10, 2, BLACK);
-	set_pixel(10, 3, BLACK);
 	set_pixel(10, 4, BLACK);
 	draw_sprite(&tmino);
- 508:	ce 01       	movw	r24, r28
- 50a:	01 96       	adiw	r24, 0x01	; 1
- 50c:	0e 94 cd 01 	call	0x39a	; 0x39a <draw_sprite>
+ 520:	ce 01       	movw	r24, r28
+ 522:	01 96       	adiw	r24, 0x01	; 1
+ 524:	0e 94 cd 01 	call	0x39a	; 0x39a <draw_sprite>
 	//draw_string(&tetris);
 	//draw_string(&sjsu);
 	//_delay_ms(10);
 	while(!(tmino.coll & 0b00001000))
- 510:	89 85       	ldd	r24, Y+9	; 0x09
- 512:	83 ff       	sbrs	r24, 3
- 514:	ed cf       	rjmp	.-38     	; 0x4f0 <main+0x66>
+ 528:	89 85       	ldd	r24, Y+9	; 0x09
+ 52a:	83 ff       	sbrs	r24, 3
+ 52c:	ed cf       	rjmp	.-38     	; 0x508 <main+0x7e>
 		tmino.x_pos--;
 		_delay_ms(50);
 		draw_sprite(&tmino);
 	}
 	//End execution of code
 	sleep_mode();
- 516:	83 b7       	in	r24, 0x33	; 51
- 518:	81 60       	ori	r24, 0x01	; 1
- 51a:	83 bf       	out	0x33, r24	; 51
- 51c:	88 95       	sleep
- 51e:	83 b7       	in	r24, 0x33	; 51
- 520:	8e 7f       	andi	r24, 0xFE	; 254
- 522:	83 bf       	out	0x33, r24	; 51
+ 52e:	83 b7       	in	r24, 0x33	; 51
+ 530:	81 60       	ori	r24, 0x01	; 1
+ 532:	83 bf       	out	0x33, r24	; 51
+ 534:	88 95       	sleep
+ 536:	83 b7       	in	r24, 0x33	; 51
+ 538:	8e 7f       	andi	r24, 0xFE	; 254
+ 53a:	83 bf       	out	0x33, r24	; 51
 	return(0);
- 524:	80 e0       	ldi	r24, 0x00	; 0
- 526:	90 e0       	ldi	r25, 0x00	; 0
- 528:	29 96       	adiw	r28, 0x09	; 9
- 52a:	0f b6       	in	r0, 0x3f	; 63
- 52c:	f8 94       	cli
- 52e:	de bf       	out	0x3e, r29	; 62
- 530:	0f be       	out	0x3f, r0	; 63
- 532:	cd bf       	out	0x3d, r28	; 61
- 534:	df 91       	pop	r29
- 536:	cf 91       	pop	r28
- 538:	08 95       	ret
+ 53c:	80 e0       	ldi	r24, 0x00	; 0
+ 53e:	90 e0       	ldi	r25, 0x00	; 0
+ 540:	29 96       	adiw	r28, 0x09	; 9
+ 542:	0f b6       	in	r0, 0x3f	; 63
+ 544:	f8 94       	cli
+ 546:	de bf       	out	0x3e, r29	; 62
+ 548:	0f be       	out	0x3f, r0	; 63
+ 54a:	cd bf       	out	0x3d, r28	; 61
+ 54c:	df 91       	pop	r29
+ 54e:	cf 91       	pop	r28
+ 550:	08 95       	ret
 
-0000053a <spi_init_master>:
+00000552 <spi_init_master>:
 
 // Initialize SPI Master Device (with SPI interrupt)
 void spi_init_master (void)
 {
 	// Set MOSI, SCK, SS as Output
 	DDR_SPI=(1<<DD_MOSI)|(1<<DD_SCK)|(1<<DD_SS);
- 53a:	8c e2       	ldi	r24, 0x2C	; 44
- 53c:	84 b9       	out	0x04, r24	; 4
+ 552:	8c e2       	ldi	r24, 0x2C	; 44
+ 554:	84 b9       	out	0x04, r24	; 4
 
 	// Enable SPI, Set as Master
 	// Prescaler: Fosc/16, Enable Interrupts
 	SPCR=(1<<SPE)|(1<<MSTR)|(1<<SPR0);
- 53e:	81 e5       	ldi	r24, 0x51	; 81
- 540:	8c bd       	out	0x2c, r24	; 44
- 542:	08 95       	ret
+ 556:	81 e5       	ldi	r24, 0x51	; 81
+ 558:	8c bd       	out	0x2c, r24	; 44
+ 55a:	08 95       	ret
 
-00000544 <_exit>:
- 544:	f8 94       	cli
+0000055c <_exit>:
+ 55c:	f8 94       	cli
 
-00000546 <__stop_program>:
- 546:	ff cf       	rjmp	.-2      	; 0x546 <__stop_program>
+0000055e <__stop_program>:
+ 55e:	ff cf       	rjmp	.-2      	; 0x55e <__stop_program>
