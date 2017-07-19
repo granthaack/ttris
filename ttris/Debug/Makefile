@@ -37,7 +37,10 @@ SUBDIRS :=
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS +=  \
-../main.c
+../game.c \
+../graphics.c \
+../main.c \
+../spi.c
 
 
 PREPROCESSING_SRCS += 
@@ -47,16 +50,28 @@ ASM_SRCS +=
 
 
 OBJS +=  \
-main.o
+game.o \
+graphics.o \
+main.o \
+spi.o
 
 OBJS_AS_ARGS +=  \
-main.o
+game.o \
+graphics.o \
+main.o \
+spi.o
 
 C_DEPS +=  \
-main.d
+game.d \
+graphics.d \
+main.d \
+spi.d
 
 C_DEPS_AS_ARGS +=  \
-main.d
+game.d \
+graphics.d \
+main.d \
+spi.d
 
 OUTPUT_FILE_PATH +=ttris.elf
 
@@ -72,6 +87,12 @@ LINKER_SCRIPT_DEP+=
 
 
 # AVR32/GNU C Compiler
+
+
+
+
+
+
 
 
 
