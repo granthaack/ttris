@@ -9,14 +9,10 @@
 int main(void)
 {
 	struct sprite tmino;
-	tmino.x_map = 49;
-	tmino.y_map = 9;
-	tmino.x_pos = 15;
-	tmino.y_pos = 0;
-	tmino.x_ppos = 15;
-	tmino.y_ppos = 0;
-	tmino.wdth = 6;
-	tmino.hght = 4;
+	tmino.x_pos = X_ORIGIN;
+	tmino.y_pos = Y_ORIGIN;
+	tmino.x_ppos = X_ORIGIN;
+	tmino.y_ppos = Y_ORIGIN;
 
 /*
 	struct string_sprite tetris;
@@ -34,8 +30,11 @@ int main(void)
 	spi_init_master();
 	//Initialize the screen
 	init_screen();
+	//Initialize the random number generator
+	init_rand();
+	//White out the display
 	blank_display();
-	//draw a test pattern
+	/*
 	set_ddram_x_addr(10);
 	set_ddram_y_addr(0/8);
 	set_pixel(10, 2, BLACK);
@@ -45,15 +44,22 @@ int main(void)
 	set_ddram_x_addr(10);
 	set_ddram_y_addr(0/8);
 	set_pixel(10, 4, BLACK);
-	draw_sprite(&tmino);
+	*/
+	spawn_new_tmino(&tmino);
 	//draw_string(&tetris);
 	//draw_string(&sjsu);
 	//_delay_ms(10);
-	while(!(tmino.coll & 0b00001000))
+	
+	while(1)
 	{
-		tmino.x_pos--;
-		_delay_ms(50);
-		draw_sprite(&tmino);
+		if(!(tmino.coll & LFT_COLL_BIT))
+		{
+			soft_drop(&tmino);
+		}
+		else
+		{
+			spawn_new_tmino(&tmino);
+		}
 	}
 	//End execution of code
 	sleep_mode();

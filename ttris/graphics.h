@@ -18,12 +18,122 @@
 #define PORT_DC         (1 << PB1)
 #define PORT_RST        (1 << PB0)
 
+//Tetrimino Sprite Definitions
+//J piece
+//Down
+#define J_D_H 4
+#define J_D_W 6
+#define J_D_X 1
+#define J_D_Y 13
+//Left
+#define J_L_H 6
+#define J_L_W 4
+#define J_L_X 18
+#define J_L_Y 13
+//Up
+#define J_U_H 4
+#define J_U_W 6
+#define J_U_X 13
+#define J_U_Y 13
+//Right
+#define J_R_H 6
+#define J_R_W 4
+#define J_R_X 20
+#define J_R_Y 13
+
+//L Piece
+//Up
+#define L_U_H 4
+#define L_U_W 6
+#define L_U_X 25
+#define L_U_Y 13
+//Left
+#define L_L_H 6
+#define L_L_W 4
+#define L_L_X 32
+#define L_L_Y 13
+//Down
+#define L_D_H 4
+#define L_D_W 6
+#define L_D_X 37
+#define L_D_Y 13
+//Right
+#define L_R_H 6
+#define L_R_W 4
+#define L_R_X 44
+#define L_R_Y 13
+
+//T Piece
+//Right
+#define T_R_H 4
+#define T_R_W 6
+#define T_R_X 49
+#define T_R_Y 13
+//Down
+#define T_D_H 6
+#define T_D_W 4
+#define T_D_X 68
+#define T_D_Y 13
+//Left
+#define T_L_H 4
+#define T_L_W 6
+#define T_L_X 49
+#define T_L_Y 13
+//Up
+#define T_U_H 6
+#define T_U_W 4
+#define T_U_X 63
+#define T_U_Y 13
+
+//I Piece
+//Right
+#define I_R_H 8
+#define I_R_W 2
+#define I_R_X 73
+#define I_R_Y 13
+//Up
+#define I_U_H 2
+#define I_U_W 8
+#define I_U_X 76
+#define I_U_Y 13
+
+//Z Piece
+//Right
+#define Z_R_H 6
+#define Z_R_W 4
+#define Z_R_X 11
+#define Z_R_Y 18
+//Up
+#define Z_U_H 4
+#define Z_U_W 6
+#define Z_U_X 1
+#define Z_U_Y 18
+
+//S Piece
+//Right
+#define S_R_H 6
+#define S_R_W 4
+#define S_R_X 25
+#define S_R_Y 18
+//Up
+#define S_U_H 4
+#define S_U_W 6
+#define S_U_X 17
+#define S_U_Y 20
+
+//O Piece
+//Up
+#define O_U_H 4
+#define O_U_W 4
+#define O_U_X 76
+#define O_U_Y 16
+
 //CONSTANTS
 //Declare the frame buffer
 uint8_t fbuff[6][84];
 
 //Declare the spritemap graphics
-uint8_t spritemap[2][84];
+uint8_t spritemap[3][84];
 
 //STRUCTS
 typedef struct sprite
